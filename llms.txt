@@ -1,0 +1,19 @@
+# TrooPerformance site audit by Troopod
+
+> Free audit for D2C and e-commerce stores. It checks a page's mobile and desktop speed (Google PageSpeed Insights plus Chrome real-user data), technical SEO, and AI answer readiness (AEO): which AI crawlers robots.txt allows, llms.txt, structured data, and how much of the page is readable without JavaScript. Results come with plain-English fixes.
+
+## What it checks
+- Speed: Lighthouse performance score, Core Web Vitals from real Chrome users (LCP, INP, CLS), a load filmstrip, causes grouped in plain English with Google's estimated time savings, and the cost of each third-party app.
+- Search: indexability, page title, meta description, canonical, H1, image alt text, product schema (price, stock, ratings), sitemap, Googlebot access, page language, share preview, HTTPS.
+- AI answers: access for OAI-SearchBot (ChatGPT search), GPTBot, PerplexityBot, ClaudeBot and Google-Extended (Gemini); llms.txt; readable text and price without JavaScript; structured data; FAQs; brand (Organization) schema.
+- Optional side-by-side comparison with up to two competitors.
+
+## Scoring
+Search and AI scores: pass = 1, warning = 0.5, fail = 0, averaged across the checks that apply, out of 100. Speed score is Google's Lighthouse performance score.
+
+## Links
+- Run an audit: https://purrieie.github.io/trooperformance/
+- Troopod: https://troopod.io/
+- TrooCRO (conversion rate optimisation): https://purrieie.github.io/troocro/
+- Book a demo: https://calendly.com/nj-troopod/troopod-demo
+- WhatsApp: +91 98104 83552
