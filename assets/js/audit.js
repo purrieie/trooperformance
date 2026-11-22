@@ -46,9 +46,16 @@
     var p = new URLSearchParams({ url: u, strategy: strategy });
     ["performance", "seo", "accessibility", "best-practices"].forEach(function (c) { p.append("category", c); });
     if (CFG.psiKey) p.set("key", CFG.psiKey);
-    return timeoutFetch("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?" + p, {}, 100000).then(function (r) { return r.json(); });
+    return timeoutFetch("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?" + p, {}, 150000).then(function (r) { return r.json(); });
   }
+  // Google sometimes fails a single Lighthouse run; retry once unless it's a quota error.
   function runPsi(u, strategy) {
+    return runPsiOnce(u, strategy).catch(function (e) {
+      if (e && e.message === "busy") throw e;
+      return runPsiOnce(u, strategy);
+    });
+  }
+  function runPsiOnce(u, strategy) {
     return api("/psi?url=" + encodeURIComponent(u) + "&strategy=" + strategy, null, 115000)
       .then(function (r) { return r.json().then(function (d) { return { status: r.status, d: d }; }); })
       .catch(function () { return { status: 0, d: null }; })
@@ -90,9 +97,14 @@
     if (field && field.lcp == null && field.inp == null && field.cls == null) field = null;
     var thumbs = ((a["screenshot-thumbnails"] || {}).details || {}).items || [];
     var shot = ((a["final-screenshot"] || {}).details || {}).data || "";
-    var third = (((a["third-party-summary"] || {}).details || {}).items || []).map(function (it) {
-      var e = it.entity; return { name: typeof e === "string" ? e : (e && (e.text || e.name)) || "Unknown", size: it.transferSize || 0, block: it.blockingTime || 0, main: it.mainThreadTime || 0 };
-    }).sort(function (x, y) { return (y.block - x.block) || (y.main - x.main); });
+    // Lighthouse 12 has third-party-summary (with blocking time); newer versions only have third-parties-insight (main-thread time).
+    var tpItems = (((a["third-party-summary"] || {}).details || {}).items || []);
+    if (!tpItems.length) tpItems = (((a["third-parties-insight"] || {}).details || {}).items || []);
+    var hasBlock = tpItems.some(function (it) { return typeof it.blockingTime === "number"; });
+    var third = tpItems.map(function (it) {
+      var e = it.entity, size = it.transferSize;
+      return { name: typeof e === "string" ? e : (e && (e.text || e.name)) || "Unknown", size: size || 0, main: it.mainThreadTime || 0, cost: hasBlock ? (it.blockingTime || 0) : (it.mainThreadTime || 0) };
+    }).sort(function (x, y) { return y.cost - x.cost; });
     var groups = {};
     Object.keys(a).forEach(function (k) {
       var x = a[k]; if (!x || SKIP.test(k) || x.score == null || x.score >= 0.9) return;
@@ -110,7 +122,7 @@
     return {
       perf: sc("performance"), seo: sc("seo"), a11y: sc("accessibility"), bp: sc("best-practices"),
       m: { fcp: nv("first-contentful-paint"), lcp: nv("largest-contentful-paint"), tbt: nv("total-blocking-time"), cls: nv("cumulative-layout-shift"), si: nv("speed-index") },
-      field: field, thumbs: thumbs.map(function (t) { return { t: t.timing, src: t.data }; }), shot: shot, third: third, causes: causes
+      field: field, thirdBlock: hasBlock, thumbs: thumbs.map(function (t) { return { t: t.timing, src: t.data }; }), shot: shot, third: third, causes: causes
     };
   }
 
@@ -197,7 +209,7 @@
     log("first paint " + sec(m.m.fcp), sec(m.m.fcp), mcol("fcp", m.m.fcp));
     log("main content (LCP)", sec(m.m.lcp), mcol("lcp", m.m.lcp));
     log("blocked time (TBT)", msf(m.m.tbt), mcol("tbt", m.m.tbt));
-    if (m.third.length) log(m.third.length + " third-party apps · " + msf(m.third.reduce(function (s, x) { return s + x.block; }, 0)) + " blocking", "", A);
+    if (m.third.length) log(m.third.length + " third-party services · " + msf(m.third.reduce(function (s, x) { return s + x.cost; }, 0)) + (m.thirdBlock ? " blocking" : " of phone CPU"), "", A);
     if (m.field) { stage("field", "done"); log("real shoppers: LCP " + sec(m.field.lcp) + " · INP " + msf(m.field.inp), m.field.scope === "site" ? "site-wide" : "this page", mcol("lcp", m.field.lcp)); }
     else { stage("field", "done"); log("real-shopper data: not enough Chrome traffic", "n/a", DIM); }
     meter("speed", "Speed", m.perf, bandName(m.perf) + " · mobile", band(m.perf));
@@ -210,9 +222,13 @@
   }).then(tick);
   stage("field", "active");
 
+  S.pendingDesktop = true;
   var pDesk = runPsi(URL0, "desktop").then(function (m) {
     S.psi.desktop = m; stage("desktop", "done"); log("desktop score", String(m.perf), band(m.perf));
-  }).catch(function (e) { S.psiErr.desktop = e && e.message || "failed"; stage("desktop", "err"); }).then(tick);
+  }).catch(function (e) { S.psiErr.desktop = e && e.message || "failed"; stage("desktop", "err"); }).then(function () {
+    S.pendingDesktop = false; tick();
+    if (S.shown) { var rep = $("#report"); rep.innerHTML = renderReport(); animateRings(rep); }
+  });
   stage("desktop", "active");
 
   var pComps = S.comps.map(function (c) {
@@ -225,7 +241,8 @@
     }).then(tick);
   });
 
-  Promise.all([pScan, pMob, pDesk].concat(pComps)).then(function () {
+  // Show the report once the phone test, the scan and competitors are in. Desktop fills in when it lands.
+  Promise.all([pScan, pMob].concat(pComps)).then(function () {
     if (VS.length) stage("comps", "done");
     clearInterval(clock); $("#spin").style.display = "none";
     log("report ready", "done", G, "head");
@@ -234,6 +251,7 @@
 
   // ---------- report ----------
   function showReport() {
+    S.shown = true;
     if (!S.psi.mobile && S.scan) S.tab = "search";
     doc.title = host(URL0) + " · site audit | TrooPerformance";
     $("#scan").hidden = true;
@@ -266,6 +284,7 @@
     var real = !!(m && m.field && m.field.lcp);
     var oai = d && d.robots.bots.filter(function (b) { return b.ua === "OAI-SearchBot"; })[0];
     if (lcp && lcp > 2500) return { h: "Your page takes <span class=\"hl\">" + (lcp / 1000).toFixed(1) + " seconds</span> to show up on a phone.", l: real ? "That's what your real shoppers wait, per Chrome's own data. It's your biggest leak. Below is everything else, sorted by what it costs you." : "That's Google's phone test. It's your biggest leak. Below is everything else, sorted by what it costs you." };
+    if (m && m.perf != null && m.perf < 50) return { h: "Google rates your phone speed <span class=\"hl\">" + m.perf + " out of 100.</span>", l: (real ? "Real shoppers see your main content in " + (lcp / 1000).toFixed(1) + " s, but the lab test shows how slow the page is on a mid-range phone. " : "") + "Below is everything we found, sorted by what it costs you." };
     if (d && d.blocked) return { h: "Your firewall turns <span class=\"hl\">automated visitors away.</span>", l: "We couldn't read the page, and AI assistants probably can't either. Here's what we could check." };
     if (oai && !oai.allowed) return { h: "ChatGPT <span class=\"hl\">can't read your store.</span>", l: "Your robots.txt blocks ChatGPT's search crawler. Below is everything we found, sorted by what it costs you." };
     if (d && d.ai.score != null && d.ai.score < 60) return { h: "AI assistants <span class=\"hl\">can barely see your store.</span>", l: "Below is everything we found, sorted by what it costs you." };
@@ -276,6 +295,9 @@
   function speedPanel() {
     var m = S.psi[S.device], err = S.psiErr[S.device];
     var toggle = '<span class="devtoggle no-print" role="group" aria-label="Device"><button type="button" data-dev="mobile" aria-pressed="' + (S.device === "mobile") + '">Mobile</button><button type="button" data-dev="desktop" aria-pressed="' + (S.device === "desktop") + '">Desktop</button></span>';
+    if (!m && S.device === "desktop" && S.pendingDesktop) {
+      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Speed · desktop</span>' + toggle + '</p><div class="notice">The desktop test is still running. It will show up here by itself in a few seconds.</div></div></div>';
+    }
     if (!m) {
       return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Speed · ' + S.device + "</span>" + toggle + '</p><div class="notice">' + (err === "busy" ? "Google PageSpeed is busy right now (it limits free tests per day)." : "Google PageSpeed didn't answer for this page.") + ' Try again in a minute.<button class="btn btn-ghost btn-sm" type="button" data-retry>Run speed test again</button></div></div></div>';
     }
@@ -303,10 +325,12 @@
     right += '<div class="pills"><span class="chip">Accessibility ' + (m.a11y == null ? "–" : m.a11y) + '</span><span class="chip">Best practices ' + (m.bp == null ? "–" : m.bp) + '</span><span class="chip">Lighthouse SEO ' + (m.seo == null ? "–" : m.seo) + "</span></div>";
     var apps = "";
     if (m.third.length) {
-      var top = m.third.filter(function (x) { return x.block >= 1 || x.main >= 50; }).slice(0, 8), mx = Math.max.apply(null, top.map(function (x) { return x.block || x.main || 1; }).concat([1]));
-      var tb = m.third.reduce(function (s, x) { return s + x.block; }, 0), tk = m.third.reduce(function (s, x) { return s + x.size; }, 0);
-      apps = '<div class="apps"><div class="head"><div><h3 class="h3" style="font-size:20px">App tax</h3><span class="small">Every third-party script on this page and what it costs a ' + S.device + " shopper</span></div><span class=\"mono\" style=\"font-size:13px;color:" + (tb > 500 ? R : A) + '">' + Math.round(tk / 1024).toLocaleString("en-IN") + " KB · " + msf(tb) + ' blocking</span></div><table><thead><tr><th scope="col">App / service</th><th scope="col" style="width:42%">Blocks the page for</th><th scope="col">Main thread</th><th scope="col">Size</th></tr></thead><tbody>' +
-        top.map(function (x, i) { var v = x.block || 0, col = v >= 250 ? R : v >= 50 ? A : "#8B8BA0"; return '<tr><th scope="row" style="font-weight:400;text-align:left">' + esc(x.name) + '</th><td><div class="bar"><div><i style="width:' + Math.max(2, (x.block || 0) / mx * 100) + "%;background:" + col + ";animation-delay:" + (i * 0.06) + 's"></i></div><span>' + msf(x.block) + '</span></div></td><td class="mono" style="color:#CFCCD9">' + msf(x.main) + '</td><td class="mono" style="color:#A09DAD">' + Math.round(x.size / 1024).toLocaleString("en-IN") + " KB</td></tr>"; }).join("") +
+      var top = m.third.filter(function (x) { return x.cost >= 1 || x.main >= 50; }).slice(0, 8), mx = Math.max.apply(null, top.map(function (x) { return x.cost || 1; }).concat([1]));
+      var tb = m.third.reduce(function (s, x) { return s + x.cost; }, 0), tk = m.third.reduce(function (s, x) { return s + x.size; }, 0);
+      var costLabel = m.thirdBlock ? "Blocks the page for" : "Phone CPU time";
+      var showSize = m.third.some(function (x) { return x.size > 0; });
+      apps = '<div class="apps"><div class="head"><div><h3 class="h3" style="font-size:20px">App tax</h3><span class="small">Every third-party script on this page and what it costs a ' + S.device + " shopper</span></div><span class=\"mono\" style=\"font-size:13px;color:" + (tb > 500 ? R : A) + '">' + (showSize ? Math.round(tk / 1024).toLocaleString("en-IN") + " KB · " : "") + msf(tb) + (m.thirdBlock ? " blocking" : " CPU") + '</span></div><table><thead><tr><th scope="col">App / service</th><th scope="col" style="width:' + (showSize ? 46 : 62) + '%">' + costLabel + '</th>' + (showSize ? '<th scope="col">Size</th>' : '') + '</tr></thead><tbody>' +
+        top.map(function (x, i) { var v = x.cost || 0, hi = m.thirdBlock ? 250 : 500, mid = m.thirdBlock ? 50 : 150, col = v >= hi ? R : v >= mid ? A : "#8B8BA0"; return '<tr><th scope="row" style="font-weight:400;text-align:left">' + esc(x.name) + '</th><td><div class="bar"><div><i style="width:' + Math.max(2, v / mx * 100) + "%;background:" + col + ";animation-delay:" + (i * 0.06) + 's"></i></div><span>' + msf(v) + '</span></div></td>' + (showSize ? '<td class="mono" style="color:#A09DAD">' + Math.round(x.size / 1024).toLocaleString("en-IN") + " KB</td>" : "") + "</tr>"; }).join("") +
         "</tbody></table></div>";
     }
     return '<div class="panel"><div class="panel-l">' + left + '</div><div class="panel-r">' + right + "</div></div>" + apps;
@@ -363,7 +387,7 @@
       ["Mobile speed score", function (c) { return c.psi ? cell(c.psi.perf, band(c.psi.perf)) : cell(null); }],
       ["Main content on a phone (lab)", function (c) { return c.psi ? cell(sec(c.psi.m.lcp), mcol("lcp", c.psi.m.lcp)) : cell(null); }],
       ["Real shoppers see content in", function (c) { return c.psi && c.psi.field && c.psi.field.lcp ? cell(sec(c.psi.field.lcp), mcol("lcp", c.psi.field.lcp)) : cell(null); }],
-      ["Third-party scripts blocking", function (c) { return c.psi ? cell(msf(c.psi.third.reduce(function (s, x) { return s + x.block; }, 0))) : cell(null); }],
+      ["Third-party scripts (phone CPU)", function (c) { return c.psi ? cell(msf(c.psi.third.reduce(function (s, x) { return s + x.main; }, 0))) : cell(null); }],
       ["Search score", function (c) { return c.scan ? cell(c.scan.search.score, band(c.scan.search.score)) : cell(null); }],
       ["AI answers score", function (c) { return c.scan ? cell(c.scan.ai.score, band(c.scan.ai.score)) : cell(null); }],
       ["ChatGPT search crawler", function (c) { if (!c.scan) return cell(null); var b = c.scan.robots.bots.filter(function (x) { return x.ua === "OAI-SearchBot"; })[0]; return cell(b.allowed ? "allowed" : "blocked", b.allowed ? G : R); }],
@@ -409,7 +433,7 @@
       '<div class="tagrow"><span class="eyebrow">Report · ' + esc(host(URL0)) + " · " + esc(date) + "</span>" + (d && d.platform ? '<span class="badge">' + esc(d.platform) + "</span>" : "") + "</div>" +
       '<h1 class="h1">' + hl.h + '</h1><p class="lead" style="max-width:580px">' + esc(hl.l) + '</p><div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" type="button" data-copy>Copy link</button><button class="btn btn-ghost btn-sm" type="button" data-print>Download PDF</button></div></div>' +
       '<div class="scores">' +
-      '<div class="score">' + ring(m ? m.perf : null, 92, 9) + "<b>Speed</b><span style=\"color:" + band(m && m.perf) + '">' + (m ? bandName(m.perf) : "No data") + '</span><span class="sub2">' + (dsk ? "desktop " + dsk.perf : "mobile") + "</span></div>" +
+      '<div class="score">' + ring(m ? m.perf : null, 92, 9) + "<b>Speed</b><span style=\"color:" + band(m && m.perf) + '">' + (m ? bandName(m.perf) : "No data") + '</span><span class="sub2">' + (dsk ? "desktop " + dsk.perf : S.pendingDesktop ? "desktop…" : "mobile") + "</span></div>" +
       '<div class="score">' + ring(d ? d.search.score : null, 92, 9) + "<b>Search</b><span style=\"color:" + band(d && d.search.score) + '">' + (d ? bandName(d.search.score) : "No data") + '</span><span class="sub2">' + (d ? d.search.checks.length + " checks" : "") + "</span></div>" +
       '<div class="score">' + ring(d ? d.ai.score : null, 92, 9) + "<b>AI answers</b><span style=\"color:" + band(d && d.ai.score) + '">' + (d ? bandName(d.ai.score) : "No data") + '</span><span class="sub2">' + (d ? d.ai.checks.length + " checks" : "") + "</span></div>" +
       "</div></div></section>" +
