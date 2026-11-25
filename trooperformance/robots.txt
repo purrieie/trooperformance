@@ -1,0 +1,21 @@
+# TrooPerformance site audit. All crawlers welcome, AI assistants included.
+User-agent: *
+Allow: /
+Disallow: /audit.html
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://purrieie.github.io/trooperformance/sitemap.xml

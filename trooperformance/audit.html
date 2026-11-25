@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your site audit | TrooPerformance by Troopod</title>
+<meta name="description" content="Speed, search and AI-answer audit for your store, with plain-English fixes. Free, by TrooPerformance from Troopod.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://purrieie.github.io/trooperformance/">
+<meta name="theme-color" content="#0A0A0C">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Site audit: speed, SEO and AI answers">
+<meta property="og:description" content="See what's slowing this store down, what Google sees and whether AI assistants can read it.">
+<meta property="og:image" content="https://purrieie.github.io/trooperformance/assets/og.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/config.js"></script>
+</head>
+<body>
+<header class="nav" id="nav">
+  <div class="wrap nav-bar">
+    <a class="brand" href="./" aria-label="TrooPerformance home"><img src="assets/mark.svg" alt="" width="24" height="21"><span>Troo<span class="sub">Performance</span></span></a>
+    <div class="nav-actions no-print">
+      <a class="btn btn-ghost btn-sm" href="./">New audit</a>
+      <a class="btn btn-light btn-sm" data-calendly href="https://calendly.com/nj-troopod/troopod-demo" target="_blank" rel="noopener">Book a demo</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="scan" id="scan" aria-live="polite">
+    <div class="scan-bg" aria-hidden="true"></div>
+    <div class="dots" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="scan-top">
+        <span class="proto" aria-hidden="true">https://</span>
+        <span class="u" id="scanUrl"></span>
+        <span class="scan-status" id="scanStatus"><svg class="spin" id="spin" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"/></svg><span id="scanPct">Starting</span></span>
+      </div>
+      <div class="progress" role="progressbar" aria-label="Scan progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog"><i id="progBar"></i></div>
+      <div class="scan-grid">
+        <div class="phone" aria-hidden="true">
+          <div class="phone-screen" id="phone">
+            <div class="beam" id="beam"></div>
+            <span class="phone-clock" id="clock">0.0 s</span>
+            <div class="ph" data-ph="1" style="height:12px;background:#CFCCD9"></div>
+            <div class="ph ph-img" data-ph="3"></div>
+            <div class="ph" data-ph="2" style="display:flex;flex-direction:column;gap:7px"><i style="display:block;height:11px;width:88%;border-radius:4px;background:#2B2A35"></i><i style="display:block;height:11px;width:36%;border-radius:4px;background:#8B6BF7"></i><i style="display:block;height:7px;border-radius:4px;background:#DCD8EA"></i><i style="display:block;height:7px;width:76%;border-radius:4px;background:#DCD8EA"></i></div>
+            <div class="ph" data-ph="5" style="margin-top:auto;height:40px;border-radius:10px;background:#0A0A0C"></div>
+            <img class="shot" id="shot" alt="">
+          </div>
+        </div>
+        <div class="log">
+          <div class="log-head"><i style="background:#EF6B57"></i><i style="background:#E5A93D"></i><i style="background:#4CC38A"></i><span>scan.log</span></div>
+          <div class="log-body" id="log"></div>
+        </div>
+        <div class="meters">
+          <div class="meter" id="m-speed"></div>
+          <div class="meter" id="m-search"></div>
+          <div class="meter" id="m-ai"></div>
+        </div>
+      </div>
+      <div class="stages" id="stages"></div>
+    </div>
+  </section>
+
+  <div id="report" hidden></div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>TrooPerformance · Speed, SEO and AEO for D2C brands. A Troopod company.</span>
+    <span><a data-wa href="https://wa.me/919810483552">WhatsApp +91 98104 83552</a></span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+<script src="assets/js/audit.js"></script>
+</body>
+</html>
