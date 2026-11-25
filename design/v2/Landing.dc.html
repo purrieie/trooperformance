@@ -52,9 +52,9 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 .tp-cs{position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.1);background:#121217;display:flex;flex-direction:column;box-sizing:border-box}
 .tp-cs-top{position:relative;padding:18px 22px 20px;display:flex;flex-direction:column;gap:10px;isolation:isolate}
 .tp-cs-top::after{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.22) 1px,transparent 1.4px);background-size:9px 9px;-webkit-mask-image:linear-gradient(225deg,#000,transparent 55%);mask-image:linear-gradient(225deg,#000,transparent 55%);opacity:.55}
-.tp-cs-a .tp-cs-top{background:linear-gradient(180deg,rgba(0,77,255,.28),rgba(20,28,60,.35))}
-.tp-cs-b .tp-cs-top{background:linear-gradient(180deg,rgba(76,195,138,.24),rgba(18,40,32,.35))}
-.tp-cs-c .tp-cs-top{background:linear-gradient(180deg,rgba(139,107,247,.38),rgba(36,26,70,.4))}
+.tp-cs-a .tp-cs-top{background:linear-gradient(180deg,rgba(139,107,247,.26),rgba(139,107,247,0))}
+.tp-cs-b .tp-cs-top{background:linear-gradient(180deg,rgba(139,107,247,.26),rgba(139,107,247,0))}
+.tp-cs-c .tp-cs-top{background:linear-gradient(180deg,rgba(139,107,247,.26),rgba(139,107,247,0))}
 .tp-cs-c{border-color:rgba(166,142,250,.45);box-shadow:0 30px 80px -40px rgba(139,107,247,.7)}
 .tp-cs-row{display:flex;justify-content:flex-end;align-items:center;gap:12px;height:50px}
 .tp-cs-eye{display:inline-flex;align-items:center;gap:9px;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;color:#CFCCD9;white-space:nowrap;margin-top:4px}
@@ -68,7 +68,7 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 .tp-cs-ba b{font-family:'DM Mono',ui-monospace,monospace;font-weight:400;font-size:19px;color:#8A8798;white-space:nowrap}
 .tp-cs-ba i{font-style:normal;color:#6F6C7C;margin:0 2px}
 .tp-cs-ba em{font-style:normal;color:#F4F3F8}
-.tp-cs-a .tp-cs-ba em{color:#9DB8FF}.tp-cs-b .tp-cs-ba em{color:#9FE3C1}.tp-cs-c .tp-cs-ba em{color:#CBBEFD}
+.tp-cs-a .tp-cs-ba em{color:#CBBEFD}.tp-cs-b .tp-cs-ba em{color:#CBBEFD}.tp-cs-c .tp-cs-ba em{color:#CBBEFD}
 @media (max-width:1279px){.tp-cs-h{min-height:2.16em}}
 .tp-cs-bot p{margin:0;font-size:14px;line-height:1.5;color:#CFCCD9;text-wrap:pretty}
 /* Page-by-page proof panels */
@@ -208,6 +208,34 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 }
 @media (prefers-reduced-motion:reduce){.tmq-track{animation:none!important}}
 </style>
+<style>
+/* Troopod purple cards with a soft, cute background: drifting glow, dot pattern, twinkling sparkles */
+.tp-pc{position:relative;overflow:hidden;isolation:isolate;border:1px solid rgba(166,142,250,.32)!important;background:radial-gradient(120% 90% at 100% 0%,rgba(139,107,247,.30),transparent 55%),linear-gradient(165deg,#1D1638 0%,#14111F 55%,#0F0D16 100%)!important;box-shadow:0 30px 80px -44px rgba(139,107,247,.75),inset 0 1px 0 rgba(255,255,255,.06)!important}
+.tp-pc>*:not(.tp-deco){position:relative;z-index:1}
+.tp-deco{position:absolute!important;inset:0;z-index:0!important;pointer-events:none;overflow:hidden;border-radius:inherit}
+.tp-deco::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(203,190,253,.38) 1px,transparent 1.5px);background-size:12px 12px;-webkit-mask-image:radial-gradient(65% 55% at 0% 100%,#000,transparent 72%);mask-image:radial-gradient(65% 55% at 0% 100%,#000,transparent 72%)}
+.tp-deco::after{content:"";position:absolute;right:14px;bottom:12px;width:72px;height:52px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2072%2052%22%20fill%3D%22%23CBBEFD%22%3E%3Cpath%20transform%3D%22translate%2854%2014%29%20scale%280.8333333333333334%29%22%20d%3D%22M0-12C1-4%204-1%2012%200C4%201%201%204%200%2012C-1%204-4%201-12%200C-4-1-1-4%200-12Z%22/%3E%3Cpath%20transform%3D%22translate%2830%2034%29%20scale%280.5%29%22%20d%3D%22M0-12C1-4%204-1%2012%200C4%201%201%204%200%2012C-1%204-4%201-12%200C-4-1-1-4%200-12Z%22/%3E%3Cpath%20transform%3D%22translate%2864%2040%29%20scale%280.3333333333333333%29%22%20d%3D%22M0-12C1-4%204-1%2012%200C4%201%201%204%200%2012C-1%204-4%201-12%200C-4-1-1-4%200-12Z%22/%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2212%22%20r%3D%221.6%22/%3E%3Ccircle%20cx%3D%2244%22%20cy%3D%2246%22%20r%3D%221.3%22/%3E%3C/svg%3E") no-repeat center/contain;opacity:.5;animation:tptwinkle 3.4s ease-in-out infinite}
+.tp-deco b{position:absolute;width:200px;height:200px;right:-70px;top:-80px;border-radius:50%;background:radial-gradient(closest-side,rgba(166,142,250,.42),rgba(166,142,250,0));animation:tporb 10s ease-in-out infinite alternate}
+.tp-pc:nth-child(2) .tp-deco::after{animation-delay:-1.1s}.tp-pc:nth-child(3) .tp-deco::after{animation-delay:-2.2s}
+.tp-pc:nth-child(2) .tp-deco b{animation-delay:-3s}.tp-pc:nth-child(3) .tp-deco b{animation-delay:-6s}
+@keyframes tptwinkle{0%,100%{opacity:.28;transform:scale(.9) rotate(0deg)}50%{opacity:.75;transform:scale(1) rotate(8deg)}}
+@keyframes tporb{from{transform:translate(0,0)}to{transform:translate(-46px,34px)}}
+.tp-cs-top::after{background-image:radial-gradient(rgba(203,190,253,.28) 1px,transparent 1.4px)!important}
+.tp-fact{border-radius:22px;padding:26px 24px 22px;display:flex;flex-direction:column;gap:12px;min-height:210px;box-sizing:border-box}
+.tp-fact-k{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;color:#CBBEFD}
+.tp-fact-n{font-family:'DM Mono',ui-monospace,monospace;font-size:clamp(54px,5vw,72px);line-height:1;letter-spacing:-.04em;color:#F4F3F8}
+.tp-fact-n em{font-style:normal;color:#CBBEFD}
+.tp-fact p{margin:0;font-size:15.5px;line-height:1.5;color:#CFCCD9;text-wrap:pretty;max-width:30ch}
+.tp-fact small{margin-top:auto;font-family:'DM Mono',ui-monospace,monospace;font-size:11px;color:#8A8798}
+@media (max-width:767px){.tp-fact{min-height:0;padding:22px 20px 20px}#facts{padding:64px 18px 8px!important;gap:26px!important}}
+/* sparkles sit in each card's empty corner, never on text */
+.tp-deco::after{right:auto;bottom:auto;left:14px;top:12px;transform-origin:center}
+.tp-fact .tp-deco::after{left:auto;right:14px;top:14px}
+.tp-cta .tp-deco::after{left:18px;top:16px}
+.tp-pp .tp-deco::after{display:none}
+.tp-deco::before{opacity:.6;-webkit-mask-image:radial-gradient(45% 40% at 0% 100%,#000,transparent 72%);mask-image:radial-gradient(45% 40% at 0% 100%,#000,transparent 72%)}
+@media (prefers-reduced-motion:reduce){.tp-deco::after,.tp-deco b{animation:none}}
+</style>
 </helmet>
 <div style="background: #0A0A0C; color: #F4F3F8; font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip">
 
@@ -252,7 +280,7 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 </div>
 <div class="tp-tiles" data-tiles style="margin-top: 14px; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; text-align: left">
 
-<article class="tp-rise tp-cs tp-cs-a" style="animation-delay: .24s">
+<article class="tp-rise tp-pc tp-cs tp-cs-a" style="animation-delay: .24s"><i class="tp-deco" aria-hidden="true"><b></b></i>
 <div class="tp-cs-top">
 <div class="tp-cs-row"><img class="tp-cs-logo" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTMzIDMzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNi4xMzM4IDAuNjgyNjE3QzI2LjQyODEgMC42ODI4MTUgMjYuNjY2OSAwLjkyMTQ1MSAyNi42NjcgMS4yMTU4MkwyNi42NjYgMjAuNDExMUMyNi42MzcyIDIzLjczMTkgMjQuNzgxMSAyNi43Njk4IDIxLjgzNCAyOC4zMDk2TDEzLjU4MDEgMzIuNjIyMUMxMy40MjU1IDMyLjcwMjYgMTMuMjQxNCAzMi43MDI3IDEzLjA4NjkgMzIuNjIyMUw0LjgzMjAzIDI4LjMwOTZDMS44ODUwOSAyNi43Njk4IDAuMDI4ODIxNCAyMy43MzE4IDAgMjAuNDExMVYxLjIxNTgyQzcuMTQ5NDFlLTA1IDAuOTIxMzczIDAuMjM4NzU1IDAuNjgyNjg5IDAuNTMzMjAzIDAuNjgyNjE3SDI2LjEzMzhaTTQuNTYxNTIgNy45NzE2OEM0LjUwMjQ2IDcuOTcxNzEgNC40NjAyOCA4LjAyODE4IDQuNDc2NTYgOC4wODQ5Nkw3LjY1MTM3IDE5LjE1NzJDOC4zNzgzNiAyMS42OTE2IDEwLjY5NjMgMjMuNDM4NSAxMy4zMzMgMjMuNDM4NUMxNS45Njk1IDIzLjQzODMgMTguMjg2NyAyMS42OTE1IDE5LjAxMzcgMTkuMTU3MkwyMi4xODg1IDguMDg0OTZDMjIuMjA0OCA4LjAyODE2IDIyLjE2MjYgNy45NzE2OCAyMi4xMDM1IDcuOTcxNjhIMTguNTEwN0MxNy45NTU3IDcuOTcxODEgMTcuNDY3NSA4LjMzOTQ3IDE3LjMxNDUgOC44NzMwNUwxMy40MzU1IDIyLjQwMjNDMTMuNDA2IDIyLjUwNTQgMTMuMjYgMjIuNTA1NCAxMy4yMzA1IDIyLjQwMjNMOS4zNTA1OSA4Ljg3MzA1QzkuMTk3NTggOC4zMzk0NSA4LjcwOTM4IDcuOTcxNzggOC4xNTQzIDcuOTcxNjhINC41NjE1MloiIGZpbGw9IiNGRkZGRkYiPjwvcGF0aD48cGF0aCBkPSJNNzEuNjYxMSAxMS4wOTc3Qzc1LjA1NTQgMTEuMDk3NyA3Ny4zMDEgMTIuNzcwNSA3Ny41MjU0IDE1LjQxMzFINzQuMzMyQzc0LjEyMDcgMTQuMjMwMiA3My4wNzEzIDEzLjUwNzkgNzEuNTU1NyAxMy41MDc4QzcwLjA0NjMgMTMuNTA3OCA2OS4wOTI5IDE0LjE5NTkgNjkuMDkyOCAxNS4yMjg1QzY5LjA5MjggMTYuMDIyOSA2OS41Njk4IDE2LjQ0NzMgNzAuODE0NSAxNi42NTkyTDc0LjA0NDkgMTcuMTYyMUM3Ni4zNzU0IDE3LjUzMjkgNzcuNTkzOCAxOC45MDk5IDc3LjU5MzggMjEuMDAyQzc3LjU5MzcgMjMuNzI5NSA3NS4yODk4IDI1LjUzMDEgNzEuNzE0OCAyNS41MzAzQzY4LjIxNTIgMjUuNTMwMyA2NS43NDE1IDIzLjY4IDY1LjUzMTIgMjAuOTc1Nkg2OC43Mjk1QzY4Ljk3MSAyMi4yNDQ1IDcwLjE1MDEgMjMuMDY3MyA3MS44NDY3IDIzLjA2NzRDNzMuNDM1NiAyMy4wNjc0IDc0LjQ0MjMgMjIuMzUyNCA3NC40NDI0IDIxLjI0MDJDNzQuNDQyNCAyMC4zNjY0IDczLjk5MTYgMTkuOTQyMyA3Mi43NzM0IDE5LjczMDVMNjkuNjIyMSAxOS4yMjc1QzY3LjE4NTkgMTguODMwMyA2NS45NDE1IDE3LjUwNTkgNjUuOTQxNCAxNS40NDA0QzY1Ljk0MTUgMTIuODQ1NCA2OC4yMTg3IDExLjA5NzggNzEuNjYxMSAxMS4wOTc3Wk01Ny42NDM2IDExLjA5NjdDNjEuNzIxOSAxMS4wOTY4IDY0LjQ3NTYgMTMuNzQ1NSA2NC40NzU2IDE3LjcxNzhWMTcuNzcwNUM2NC40NzU2IDE4LjM1MzEgNjQuNDQ5NiAxOC44NTY0IDY0LjM3MDEgMTkuMzMzSDU0LjAxNTZDNTQuMTQ4MSAyMS42MTA0IDU1LjYwNDUgMjIuOTg3MyA1Ny44NTU1IDIyLjk4NzNDNTkuNTIzOCAyMi45ODcyIDYwLjY2MjIgMjIuMjE5MiA2MS4wODU5IDIwLjk3NDZINjQuMjY0NkM2My41NzYxIDIzLjgwODEgNjEuMTkyMyAyNS41MjkxIDU3LjgwMjcgMjUuNTI5M0M1My41NjU0IDI1LjUyOTMgNTAuODM2OSAyMi42Njk2IDUwLjgzNjkgMTguMjQ3MUM1MC44MzY5IDE0LjAwOTkgNTMuNjE4MSAxMS4wOTY3IDU3LjY0MzYgMTEuMDk2N1pNMTE1LjU1NSAxMS4wOTU3QzExOS42MzMgMTEuMDk1NyAxMjIuMzg3IDEzLjc0NDcgMTIyLjM4OCAxNy43MTY4VjE3Ljc2OTVDMTIyLjM4OCAxOC4zNTE5IDEyMi4zNjEgMTguODU1NSAxMjIuMjgxIDE5LjMzMkgxMTEuOTI3QzExMi4wNTkgMjEuNjA5NSAxMTMuNTE2IDIyLjk4NjMgMTE1Ljc2NyAyMi45ODYzQzExNy40MzUgMjIuOTg2MyAxMTguNTczIDIyLjIxODMgMTE4Ljk5NyAyMC45NzM2SDEyMi4xNzZDMTIxLjQ4NyAyMy44MDcyIDExOS4xMDQgMjUuNTI5MiAxMTUuNzE0IDI1LjUyOTNDMTExLjQ3NyAyNS41MjkzIDEwOC43NDggMjIuNjY4NiAxMDguNzQ4IDE4LjI0NjFDMTA4Ljc0OCAxNC4wMDkzIDExMS41MyAxMS4wOTU3IDExNS41NTUgMTEuMDk1N1pNODMuNjk1MyAxMS40OTIySDg2LjI2MzdWMTQuMjE2OEg4My42OTUzVjIwLjc5NzlDODMuNjk1MyAyMS44NTcgODQuMTQ1OCAyMi4zMDc1IDg1LjA0NTkgMjIuMzA3Nkg4Ni4yNjQ2VjI1LjIxQzg2LjI2NDYgMjUuMjEgODUuMzYyOCAyNS4yOTk4IDg0LjE3MjkgMjUuMjk5OEM4MS44OTU0IDI1LjI5OTggODAuNTcwNSAyNC4xMzUxIDgwLjU3MDMgMjEuOTkwMlYxNC4yMTY4SDc4LjM3M1YxMS42Nzg3SDc5LjQzMTZDODAuNDM3OSAxMS42Nzg3IDgwLjc1NTggMTEuMzM2IDgwLjc1NTkgMTAuMzU2NFY4LjIzMTQ1SDgzLjY5NTNWMTEuNDkyMlpNNDIuODM4OSAxNi44NDI4TDQ0LjI5NDkgMjAuOTczNkw0NS42OTkyIDE2Ljg2OTFMNDkuMzc5OSA2LjQ2MDk0SDUzLjAwNzhMNDUuOTkwMiAyNS4xMzE4SDQyLjU3NDJMMzUuNTU1NyA2LjQ2MDk0SDM5LjE4MzZMNDIuODM4OSAxNi44NDI4Wk0xMjcuMTkzIDI1LjEzMThIMTI0LjA2OFY2LjQ2MDk0SDEyNy4xOTNWMjUuMTMxOFpNMTMyLjM5MSAyNS4xMzE4SDEyOS4yNjZWNi40NjA5NEgxMzIuMzkxVjI1LjEzMThaTTkyLjQ2NDggMTguMTEyM0w5My40MTggMjEuNTAyTDk0LjQ1MTIgMTguMDg1OUw5Ni40Mzc1IDExLjQ5MjJIOTkuNjY4TDEwMS42NTQgMTguMDg1OUwxMDIuNjg4IDIxLjUwMkwxMDMuNjQxIDE4LjExMjNMMTA1LjU3NCAxMS40OTIySDEwOC44MDVMMTA0LjM4MyAyNS4xMzA5SDEwMS4xNTFMOTkuMTM4NyAxOC40ODM0Qzk4Ljc2OCAxNy4yOTE4IDk4LjM5NyAxNi4xNTI1IDk4LjA1MjcgMTQuOTYwOUw5Ni45NjY4IDE4LjQ4MzRMOTQuOTU0MSAyNS4xMzA5SDkxLjcyMzZMODcuMzAwOCAxMS40OTIySDkwLjUzMjJMOTIuNDY0OCAxOC4xMTIzWk01Ny42Njk5IDEzLjU4NTlDNTUuNjMwOCAxMy41ODU5IDU0LjIwMTEgMTQuODU3MiA1NC4wMTU2IDE2Ljk3NTZINjEuMjcxNUM2MS4yMTg0IDE0LjkxMDIgNTkuNzg4NCAxMy41ODYgNTcuNjY5OSAxMy41ODU5Wk0xMTUuNTgxIDEzLjU4NTlDMTEzLjU0MiAxMy41ODYgMTEyLjExMiAxNC44NTczIDExMS45MjcgMTYuOTc1NkgxMTkuMTgzQzExOS4xMjkgMTQuOTEwMiAxMTcuNyAxMy41ODU5IDExNS41ODEgMTMuNTg1OVpNNzcuNTQxIDE1LjY1MjNINzQuMzYzM1YxNS42NTE0SDc3LjU0MVYxNS42NTIzWiIgZmlsbD0iI0ZGRkZGRiI+PC9wYXRoPjwvc3ZnPg==" alt="Vestwell" style="height: 30px"></div>
 <span class="tp-cs-eye">Case study · Vestwell</span>
@@ -263,7 +291,7 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 </div>
 </article>
 
-<article class="tp-rise tp-cs tp-cs-b" style="animation-delay: .32s">
+<article class="tp-rise tp-pc tp-cs tp-cs-b" style="animation-delay: .32s"><i class="tp-deco" aria-hidden="true"><b></b></i>
 <div class="tp-cs-top">
 <div class="tp-cs-row"><img class="tp-cs-logo" src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" style="height: 50px"></div>
 <span class="tp-cs-eye">Case study · Wellbeing Nutrition</span>
@@ -274,7 +302,7 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 </div>
 </article>
 
-<article class="tp-rise tp-cs tp-cs-c" style="animation-delay: .4s">
+<article class="tp-rise tp-pc tp-cs tp-cs-c" style="animation-delay: .4s"><i class="tp-deco" aria-hidden="true"><b></b></i>
 <div class="tp-cs-top">
 <div class="tp-cs-row"><span class="tp-cs-name">A billion-dollar<br>house of brands</span></div>
 <span class="tp-cs-eye">Case study · D2C house of brands</span>
@@ -307,22 +335,22 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 <h2 style="margin: 0; font-size: clamp(32px, 3.9vw, 50px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">Not just your homepage. <span style="color: #A68EFA">The pages that actually sell.</span></h2>
 </div>
 <div class="stag tp-pages {{rv.pages}}" data-k="pages" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 14px">
-<article class="spot tp-pp">
+<article class="spot tp-pc tp-pp"><i class="tp-deco" aria-hidden="true"><b></b></i>
 <div class="tp-pp-h"><img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTMzIDMzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNi4xMzM4IDAuNjgyNjE3QzI2LjQyODEgMC42ODI4MTUgMjYuNjY2OSAwLjkyMTQ1MSAyNi42NjcgMS4yMTU4MkwyNi42NjYgMjAuNDExMUMyNi42MzcyIDIzLjczMTkgMjQuNzgxMSAyNi43Njk4IDIxLjgzNCAyOC4zMDk2TDEzLjU4MDEgMzIuNjIyMUMxMy40MjU1IDMyLjcwMjYgMTMuMjQxNCAzMi43MDI3IDEzLjA4NjkgMzIuNjIyMUw0LjgzMjAzIDI4LjMwOTZDMS44ODUwOSAyNi43Njk4IDAuMDI4ODIxNCAyMy43MzE4IDAgMjAuNDExMVYxLjIxNTgyQzcuMTQ5NDFlLTA1IDAuOTIxMzczIDAuMjM4NzU1IDAuNjgyNjg5IDAuNTMzMjAzIDAuNjgyNjE3SDI2LjEzMzhaTTQuNTYxNTIgNy45NzE2OEM0LjUwMjQ2IDcuOTcxNzEgNC40NjAyOCA4LjAyODE4IDQuNDc2NTYgOC4wODQ5Nkw3LjY1MTM3IDE5LjE1NzJDOC4zNzgzNiAyMS42OTE2IDEwLjY5NjMgMjMuNDM4NSAxMy4zMzMgMjMuNDM4NUMxNS45Njk1IDIzLjQzODMgMTguMjg2NyAyMS42OTE1IDE5LjAxMzcgMTkuMTU3MkwyMi4xODg1IDguMDg0OTZDMjIuMjA0OCA4LjAyODE2IDIyLjE2MjYgNy45NzE2OCAyMi4xMDM1IDcuOTcxNjhIMTguNTEwN0MxNy45NTU3IDcuOTcxODEgMTcuNDY3NSA4LjMzOTQ3IDE3LjMxNDUgOC44NzMwNUwxMy40MzU1IDIyLjQwMjNDMTMuNDA2IDIyLjUwNTQgMTMuMjYgMjIuNTA1NCAxMy4yMzA1IDIyLjQwMjNMOS4zNTA1OSA4Ljg3MzA1QzkuMTk3NTggOC4zMzk0NSA4LjcwOTM4IDcuOTcxNzggOC4xNTQzIDcuOTcxNjhINC41NjE1MloiIGZpbGw9IiNGRkZGRkYiPjwvcGF0aD48cGF0aCBkPSJNNzEuNjYxMSAxMS4wOTc3Qzc1LjA1NTQgMTEuMDk3NyA3Ny4zMDEgMTIuNzcwNSA3Ny41MjU0IDE1LjQxMzFINzQuMzMyQzc0LjEyMDcgMTQuMjMwMiA3My4wNzEzIDEzLjUwNzkgNzEuNTU1NyAxMy41MDc4QzcwLjA0NjMgMTMuNTA3OCA2OS4wOTI5IDE0LjE5NTkgNjkuMDkyOCAxNS4yMjg1QzY5LjA5MjggMTYuMDIyOSA2OS41Njk4IDE2LjQ0NzMgNzAuODE0NSAxNi42NTkyTDc0LjA0NDkgMTcuMTYyMUM3Ni4zNzU0IDE3LjUzMjkgNzcuNTkzOCAxOC45MDk5IDc3LjU5MzggMjEuMDAyQzc3LjU5MzcgMjMuNzI5NSA3NS4yODk4IDI1LjUzMDEgNzEuNzE0OCAyNS41MzAzQzY4LjIxNTIgMjUuNTMwMyA2NS43NDE1IDIzLjY4IDY1LjUzMTIgMjAuOTc1Nkg2OC43Mjk1QzY4Ljk3MSAyMi4yNDQ1IDcwLjE1MDEgMjMuMDY3MyA3MS44NDY3IDIzLjA2NzRDNzMuNDM1NiAyMy4wNjc0IDc0LjQ0MjMgMjIuMzUyNCA3NC40NDI0IDIxLjI0MDJDNzQuNDQyNCAyMC4zNjY0IDczLjk5MTYgMTkuOTQyMyA3Mi43NzM0IDE5LjczMDVMNjkuNjIyMSAxOS4yMjc1QzY3LjE4NTkgMTguODMwMyA2NS45NDE1IDE3LjUwNTkgNjUuOTQxNCAxNS40NDA0QzY1Ljk0MTUgMTIuODQ1NCA2OC4yMTg3IDExLjA5NzggNzEuNjYxMSAxMS4wOTc3Wk01Ny42NDM2IDExLjA5NjdDNjEuNzIxOSAxMS4wOTY4IDY0LjQ3NTYgMTMuNzQ1NSA2NC40NzU2IDE3LjcxNzhWMTcuNzcwNUM2NC40NzU2IDE4LjM1MzEgNjQuNDQ5NiAxOC44NTY0IDY0LjM3MDEgMTkuMzMzSDU0LjAxNTZDNTQuMTQ4MSAyMS42MTA0IDU1LjYwNDUgMjIuOTg3MyA1Ny44NTU1IDIyLjk4NzNDNTkuNTIzOCAyMi45ODcyIDYwLjY2MjIgMjIuMjE5MiA2MS4wODU5IDIwLjk3NDZINjQuMjY0NkM2My41NzYxIDIzLjgwODEgNjEuMTkyMyAyNS41MjkxIDU3LjgwMjcgMjUuNTI5M0M1My41NjU0IDI1LjUyOTMgNTAuODM2OSAyMi42Njk2IDUwLjgzNjkgMTguMjQ3MUM1MC44MzY5IDE0LjAwOTkgNTMuNjE4MSAxMS4wOTY3IDU3LjY0MzYgMTEuMDk2N1pNMTE1LjU1NSAxMS4wOTU3QzExOS42MzMgMTEuMDk1NyAxMjIuMzg3IDEzLjc0NDcgMTIyLjM4OCAxNy43MTY4VjE3Ljc2OTVDMTIyLjM4OCAxOC4zNTE5IDEyMi4zNjEgMTguODU1NSAxMjIuMjgxIDE5LjMzMkgxMTEuOTI3QzExMi4wNTkgMjEuNjA5NSAxMTMuNTE2IDIyLjk4NjMgMTE1Ljc2NyAyMi45ODYzQzExNy40MzUgMjIuOTg2MyAxMTguNTczIDIyLjIxODMgMTE4Ljk5NyAyMC45NzM2SDEyMi4xNzZDMTIxLjQ4NyAyMy44MDcyIDExOS4xMDQgMjUuNTI5MiAxMTUuNzE0IDI1LjUyOTNDMTExLjQ3NyAyNS41MjkzIDEwOC43NDggMjIuNjY4NiAxMDguNzQ4IDE4LjI0NjFDMTA4Ljc0OCAxNC4wMDkzIDExMS41MyAxMS4wOTU3IDExNS41NTUgMTEuMDk1N1pNODMuNjk1MyAxMS40OTIySDg2LjI2MzdWMTQuMjE2OEg4My42OTUzVjIwLjc5NzlDODMuNjk1MyAyMS44NTcgODQuMTQ1OCAyMi4zMDc1IDg1LjA0NTkgMjIuMzA3Nkg4Ni4yNjQ2VjI1LjIxQzg2LjI2NDYgMjUuMjEgODUuMzYyOCAyNS4yOTk4IDg0LjE3MjkgMjUuMjk5OEM4MS44OTU0IDI1LjI5OTggODAuNTcwNSAyNC4xMzUxIDgwLjU3MDMgMjEuOTkwMlYxNC4yMTY4SDc4LjM3M1YxMS42Nzg3SDc5LjQzMTZDODAuNDM3OSAxMS42Nzg3IDgwLjc1NTggMTEuMzM2IDgwLjc1NTkgMTAuMzU2NFY4LjIzMTQ1SDgzLjY5NTNWMTEuNDkyMlpNNDIuODM4OSAxNi44NDI4TDQ0LjI5NDkgMjAuOTczNkw0NS42OTkyIDE2Ljg2OTFMNDkuMzc5OSA2LjQ2MDk0SDUzLjAwNzhMNDUuOTkwMiAyNS4xMzE4SDQyLjU3NDJMMzUuNTU1NyA2LjQ2MDk0SDM5LjE4MzZMNDIuODM4OSAxNi44NDI4Wk0xMjcuMTkzIDI1LjEzMThIMTI0LjA2OFY2LjQ2MDk0SDEyNy4xOTNWMjUuMTMxOFpNMTMyLjM5MSAyNS4xMzE4SDEyOS4yNjZWNi40NjA5NEgxMzIuMzkxVjI1LjEzMThaTTkyLjQ2NDggMTguMTEyM0w5My40MTggMjEuNTAyTDk0LjQ1MTIgMTguMDg1OUw5Ni40Mzc1IDExLjQ5MjJIOTkuNjY4TDEwMS42NTQgMTguMDg1OUwxMDIuNjg4IDIxLjUwMkwxMDMuNjQxIDE4LjExMjNMMTA1LjU3NCAxMS40OTIySDEwOC44MDVMMTA0LjM4MyAyNS4xMzA5SDEwMS4xNTFMOTkuMTM4NyAxOC40ODM0Qzk4Ljc2OCAxNy4yOTE4IDk4LjM5NyAxNi4xNTI1IDk4LjA1MjcgMTQuOTYwOUw5Ni45NjY4IDE4LjQ4MzRMOTQuOTU0MSAyNS4xMzA5SDkxLjcyMzZMODcuMzAwOCAxMS40OTIySDkwLjUzMjJMOTIuNDY0OCAxOC4xMTIzWk01Ny42Njk5IDEzLjU4NTlDNTUuNjMwOCAxMy41ODU5IDU0LjIwMTEgMTQuODU3MiA1NC4wMTU2IDE2Ljk3NTZINjEuMjcxNUM2MS4yMTg0IDE0LjkxMDIgNTkuNzg4NCAxMy41ODYgNTcuNjY5OSAxMy41ODU5Wk0xMTUuNTgxIDEzLjU4NTlDMTEzLjU0MiAxMy41ODYgMTEyLjExMiAxNC44NTczIDExMS45MjcgMTYuOTc1NkgxMTkuMTgzQzExOS4xMjkgMTQuOTEwMiAxMTcuNyAxMy41ODU5IDExNS41ODEgMTMuNTg1OVpNNzcuNTQxIDE1LjY1MjNINzQuMzYzM1YxNS42NTE0SDc3LjU0MVYxNS42NTIzWiIgZmlsbD0iI0ZGRkZGRiI+PC9wYXRoPjwvc3ZnPg==" alt="Vestwell" style="height: 22px; width: auto"><small>Mobile score, out of 100</small></div>
 <div class="tp-pp-big"><b>+95%</b><span>Homepage performance score, 40 to 78</span></div>
-<div class="tp-pp-r"><div><span>Homepage</span><b>40 <i>&#8594;</i> 78</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 78%; background: #9DB8FF"></div></div></div>
-<div class="tp-pp-r"><div><span>ABLE product page</span><b>53 <i>&#8594;</i> 72</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 72%; background: #9DB8FF"></div></div></div>
-<div class="tp-pp-r"><div><span>Blog article</span><b>52 <i>&#8594;</i> 77</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77%; background: #9DB8FF"></div></div></div>
+<div class="tp-pp-r"><div><span>Homepage</span><b>40 <i>&#8594;</i> 78</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 78%; background: #A68EFA"></div></div></div>
+<div class="tp-pp-r"><div><span>ABLE product page</span><b>53 <i>&#8594;</i> 72</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 72%; background: #A68EFA"></div></div></div>
+<div class="tp-pp-r"><div><span>Blog article</span><b>52 <i>&#8594;</i> 77</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77%; background: #A68EFA"></div></div></div>
 </article>
-<article class="spot tp-pp">
+<article class="spot tp-pc tp-pp"><i class="tp-deco" aria-hidden="true"><b></b></i>
 <div class="tp-pp-h"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" style="height: 28px; width: auto"><small>Speed Index today<br>line marks the 12s target</small></div>
 <div class="tp-pp-big"><b>15.3s &#8594; 10.8s</b><span>Average across all 61 pages, 30% faster</span></div>
-<div class="tp-pp-r"><div><span>Homepage</span><b>11.8s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77.1%; background: #4CC38A"></div><span class="tick" style="left: 78.4%"></span></div></div>
-<div class="tp-pp-r"><div><span>Product pages</span><b>11.4s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 74.5%; background: #4CC38A"></div><span class="tick" style="left: 78.4%"></span></div></div>
-<div class="tp-pp-r"><div><span>Fastest category</span><b>9.4s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 61.4%; background: #4CC38A"></div><span class="tick" style="left: 78.4%"></span></div></div>
-<div class="tp-pp-r"><div><span>Slowest category</span><b>11.9s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77.8%; background: #4CC38A"></div><span class="tick" style="left: 78.4%"></span></div></div>
+<div class="tp-pp-r"><div><span>Homepage</span><b>11.8s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77.1%; background: #A68EFA"></div><span class="tick" style="left: 78.4%"></span></div></div>
+<div class="tp-pp-r"><div><span>Product pages</span><b>11.4s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 74.5%; background: #A68EFA"></div><span class="tick" style="left: 78.4%"></span></div></div>
+<div class="tp-pp-r"><div><span>Fastest category</span><b>9.4s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 61.4%; background: #A68EFA"></div><span class="tick" style="left: 78.4%"></span></div></div>
+<div class="tp-pp-r"><div><span>Slowest category</span><b>11.9s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77.8%; background: #A68EFA"></div><span class="tick" style="left: 78.4%"></span></div></div>
 </article>
-<article class="spot tp-pp">
+<article class="spot tp-pc tp-pp"><i class="tp-deco" aria-hidden="true"><b></b></i>
 <div class="tp-pp-h"><span style="font-size: 15px; font-weight: 500; line-height: 1.2">A billion-dollar house of brands</span><small>Score gain and load time</small></div>
 <div class="tp-pp-big"><b>1.51% &#8594; 1.79%</b><span>Conversion rate, 6 weeks after launch, 113 pages</span></div>
 <div class="tp-pp-r"><div><span>Product pages</span><b>+99% <i>&#183;</i> 54% faster</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 99%; background: linear-gradient(90deg, #6A4BE6, #CBBEFD)"></div></div></div>
@@ -334,6 +362,18 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 <p class="rv {{rv.pages}}" style="margin: 0; text-align: center; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; line-height: 1.6; color: #6F6C7C">Google PageSpeed Insights, mobile. Vestwell: live site vs optimised build, 3 runs per page.</p>
 </section>
 
+<section id="facts" data-k="facts" style="max-width: 1200px; margin: 0 auto; padding: 90px 28px 20px; display: flex; flex-direction: column; gap: 36px">
+<div class="rv {{rv.facts}}" style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">What Google found</span>
+<h2 style="margin: 0; font-size: clamp(32px, 3.9vw, 50px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">Speed is sales. <span style="color: #A68EFA">Google's own numbers say so.</span></h2>
+</div>
+<div class="rv {{rv.facts}}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; transition-delay: .12s">
+<article class="tp-pc tp-fact"><i class="tp-deco" aria-hidden="true"><b></b></i><span class="tp-fact-k">Core Web Vitals</span><span class="tp-fact-n">24<em>%</em></span><p>fewer shoppers abandon stores that pass Google's Core Web Vitals.</p><small>Google Chromium, 2020</small></article>
+<article class="tp-pc tp-fact"><i class="tp-deco" aria-hidden="true"><b></b></i><span class="tp-fact-k">Load time</span><span class="tp-fact-n">32<em>%</em></span><p>more likely to bounce when a page takes 3 seconds to load instead of 1.</p><small>Google / SOASTA, 2017</small></article>
+<article class="tp-pc tp-fact"><i class="tp-deco" aria-hidden="true"><b></b></i><span class="tp-fact-k">Conversion rate</span><span class="tp-fact-n">8.4<em>%</em></span><p>more retail conversions for every 0.1 seconds faster.</p><small>Deloitte &#215; Google, 2020</small></article>
+</div>
+</section>
+
 <section id="what" data-k="what" style="max-width: 1200px; margin: 0 auto; padding: 90px 28px 40px; display: flex; flex-direction: column; gap: 48px">
 <div class="rv {{rv.what}}" style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px">
 <span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">What your audit checks</span>
@@ -342,8 +382,8 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 
 <div class="stag tp-what {{rv.whatCards}}" data-k="whatCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px">
 
-<article class="spot" style="position: relative; border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column">
-<div style="height: 260px; position: relative; background: radial-gradient(120% 90% at 50% 0%, #241B45 0%, #0E0E12 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px">
+<article class="spot tp-pc" style="position: relative; border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column"><i class="tp-deco" aria-hidden="true"><b></b></i>
+<div style="height: 260px; position: relative; background: radial-gradient(120% 90% at 50% 0%, rgba(139,107,247,0.22) 0%, rgba(139,107,247,0) 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px">
 <svg width="150" height="90" viewBox="0 0 220 120" role="img" aria-label="Speed gauge">
 <path d="M14 110 A96 96 0 0 1 206 110" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12" stroke-linecap="round"></path>
 <path class="tp-gauge" d="M14 110 A96 96 0 0 1 206 110" fill="none" stroke="#EF6B57" stroke-width="12" stroke-linecap="round" stroke-dasharray="115 302"></path>
@@ -364,8 +404,8 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 </div>
 </article>
 
-<article class="spot" style="position: relative; border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column">
-<div style="height: 260px; background: radial-gradient(120% 90% at 50% 0%, #1F2B4F 0%, #0E0E12 70%); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box">
+<article class="spot tp-pc" style="position: relative; border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column"><i class="tp-deco" aria-hidden="true"><b></b></i>
+<div style="height: 260px; background: radial-gradient(120% 90% at 50% 0%, rgba(139,107,247,0.22) 0%, rgba(139,107,247,0) 70%); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box">
 <div style="width: 100%; max-width: 290px; border-radius: 12px; background: #F4F3F8; padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 24px 50px -20px rgba(0,0,0,0.8)">
 <div style="display: flex; align-items: center; gap: 8px"><div style="width: 18px; height: 18px; border-radius: 50%; background: #DCD8EA"></div><span style="font-size: 11px; color: #5E5B6B">yourstore.com › products</span></div>
 <span style="font-size: 15px; color: #2B4EC9; line-height: 1.3">Vitamin C Serum 30 ml | yourstore</span>
@@ -380,8 +420,8 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 </div>
 </article>
 
-<article class="spot" style="position: relative; border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column">
-<div style="height: 260px; background: radial-gradient(120% 90% at 50% 0%, #2C2157 0%, #0E0E12 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; box-sizing: border-box">
+<article class="spot tp-pc" style="position: relative; border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column"><i class="tp-deco" aria-hidden="true"><b></b></i>
+<div style="height: 260px; background: radial-gradient(120% 90% at 50% 0%, rgba(139,107,247,0.22) 0%, rgba(139,107,247,0) 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; box-sizing: border-box">
 <div role="group" aria-label="View as" style="display: flex; padding: 3px; border-radius: 999px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1)">
 <button type="button" aria-pressed="{{isHuman}}" onClick="{{toHuman}}" style="height: 28px; padding: 0 12px; border: 0; border-radius: 999px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; background: {{hBg}}; color: {{hFg}}; cursor: pointer">HUMAN</button>
 <button type="button" aria-pressed="{{isAgent}}" onClick="{{toAgent}}" style="height: 28px; padding: 0 12px; border: 0; border-radius: 999px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; background: {{aBg}}; color: {{aFg}}; cursor: pointer">AGENT</button>
@@ -425,7 +465,7 @@ description: Brightening se…
 </section>
 
 <section style="max-width: 1200px; margin: 0 auto; padding: 40px 28px 110px">
-<div class="rv spot tp-cta {{rv.cta}}" data-k="cta" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: radial-gradient(90% 120% at 50% 100%, #2C2157 0%, #0E0E12 65%); padding: 72px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; isolation: isolate">
+<div class="rv spot tp-pc tp-cta {{rv.cta}}" data-k="cta" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: radial-gradient(90% 120% at 50% 100%, #2C2157 0%, #0E0E12 65%); padding: 72px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; isolation: isolate"><i class="tp-deco" aria-hidden="true"><b></b></i>
 <canvas class="tp-halftone" data-ht="cta" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1"></canvas>
 <h2 style="margin: 0; font-size: clamp(30px, 4vw, 44px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">See what's slowing your store down.</h2>
 <p style="margin: 0; font-size: 17px; color: #CFCCD9">Want the fixes built for you? Get them built and tested on your store.</p>
@@ -454,7 +494,7 @@ class Component extends DCLogic {
     // Hide below-the-fold sections before first paint; each one comes in as it scrolls into view.
     if (this.useIO && typeof document !== 'undefined') document.documentElement.classList.add('io');
   }
-  revealAll() { const all = {}; ['proof', 'pages', 'what', 'whatCards', 'steps', 'cta'].forEach((k) => { all[k] = true; }); this.setState({ seen: all, lp: 1 }); }
+  revealAll() { const all = {}; ['proof', 'pages', 'facts', 'what', 'whatCards', 'steps', 'cta'].forEach((k) => { all[k] = true; }); this.setState({ seen: all, lp: 1 }); }
   tweenLp() {
     const t0 = Date.now();
     const id = setInterval(() => { const x = Math.min(1, (Date.now() - t0) / 1500); this.setState({ lp: 1 - Math.pow(1 - x, 3) }); if (x >= 1) clearInterval(id); }, 30);
@@ -588,7 +628,7 @@ class Component extends DCLogic {
       { name: 'Homepage', tag: '', score: 73, load: 45 }
     ].map((x, i) => Object.assign(x, { scoreW: x.score, delay: (0.2 + i * 0.12).toFixed(2), scoreNow: Math.round(x.score * this.state.lp), loadNow: Math.round(x.load * this.state.lp), scoreBar: x.score, loadBar: x.load }));
     const seen = this.state.seen, rv = {};
-    ['proof', 'pages', 'what', 'whatCards', 'steps', 'cta'].forEach((k) => { rv[k] = seen[k] ? 'in' : ''; });
+    ['proof', 'pages', 'facts', 'what', 'whatCards', 'steps', 'cta'].forEach((k) => { rv[k] = seen[k] ? 'in' : ''; });
     const stuck = this.state.stuck, tile = this.state.tile;
     return {
       rv,
