@@ -181,7 +181,7 @@
     S.scan = d; stage("google", "done"); stage("ai", "active");
     log("→ " + host(d.finalUrl || URL0) + " · status " + d.status + (d.platform ? " · " + d.platform : ""), "", "", "head");
     if (d.limited) {
-      log(d.blocked ? "firewall turned our check away" : "page returns " + d.status, "fail", R);
+      log(d.blocked ? "your firewall blocked the check" : "page returns " + d.status, "fail", R);
     } else {
       var h = d.html;
       log("title: " + (h.title || "(none)").slice(0, 46), h.title.length && h.title.length <= 65 ? "ok" : "check", h.title.length && h.title.length <= 65 ? G : A);
@@ -316,12 +316,12 @@
     var real = !!(m && m.field && m.field.lcp);
     var oai = d && d.robots.bots.filter(function (b) { return b.ua === "OAI-SearchBot"; })[0];
     if (lcp && lcp > 2500) return { h: "Your page takes <span class=\"hl\">" + (lcp / 1000).toFixed(1) + " seconds</span> to show up on a phone.", l: real ? "That's what your real shoppers wait, per Chrome's own data. It's your biggest leak. Below is everything else, sorted by what it costs you." : "That's Google's phone test. It's your biggest leak. Below is everything else, sorted by what it costs you." };
-    if (m && m.perf != null && m.perf < 50) return { h: "Google rates your mobile performance <span class=\"hl\">" + m.perf + " out of 100.</span>", l: (real ? "Real shoppers see your main content in " + (lcp / 1000).toFixed(1) + " s, but the lab test shows how slow the page is on a mid-range phone. " : "") + "Below is everything we found, sorted by what it costs you." };
-    if (d && d.blocked) return { h: "Your firewall turns <span class=\"hl\">automated visitors away.</span>", l: "We couldn't read the page, and AI assistants probably can't either. Here's what we could check." };
-    if (oai && !oai.allowed) return { h: "ChatGPT <span class=\"hl\">can't read your store.</span>", l: "Your robots.txt blocks ChatGPT's search crawler. Below is everything we found, sorted by what it costs you." };
-    if (d && d.ai.score != null && d.ai.score < 60) return { h: "AI assistants <span class=\"hl\">can barely see your store.</span>", l: "Below is everything we found, sorted by what it costs you." };
-    if (d && d.search.score != null && d.search.score < 70) return { h: "Google sees <span class=\"hl\">a weaker version of your store.</span>", l: "Below is everything we found, sorted by what it costs you." };
-    return { h: "Your store is in good shape. <span class=\"hl\">Here's what's left.</span>", l: "Below is everything we found, sorted by what it costs you." };
+    if (m && m.perf != null && m.perf < 50) return { h: "Google rates your mobile performance <span class=\"hl\">" + m.perf + " out of 100.</span>", l: (real ? "Real shoppers see your main content in " + (lcp / 1000).toFixed(1) + " s, but the lab test shows how slow the page is on a mid-range phone. " : "") + "Below is everything holding your store back, sorted by what it costs you." };
+    if (d && d.blocked) return { h: "Your firewall turns <span class=\"hl\">automated visitors away.</span>", l: "Your page couldn't be read, and AI assistants probably can't read it either. Here's what your store shows from the outside." };
+    if (oai && !oai.allowed) return { h: "ChatGPT <span class=\"hl\">can't read your store.</span>", l: "Your robots.txt blocks ChatGPT's search crawler. Below is everything holding your store back, sorted by what it costs you." };
+    if (d && d.ai.score != null && d.ai.score < 60) return { h: "AI assistants <span class=\"hl\">can barely see your store.</span>", l: "Below is everything holding your store back, sorted by what it costs you." };
+    if (d && d.search.score != null && d.search.score < 70) return { h: "Google sees <span class=\"hl\">a weaker version of your store.</span>", l: "Below is everything holding your store back, sorted by what it costs you." };
+    return { h: "Your store is in good shape. <span class=\"hl\">Here's what's left.</span>", l: "Below is everything holding your store back, sorted by what it costs you." };
   }
 
   function appsBlock(m) {
@@ -390,9 +390,9 @@
       bigRing(score, band(score), "Today", bandName(score), band(score), 0) +
       '<div class="sp-arrow"><span>+' + up.gain + '</span><svg viewBox="0 0 64 20" fill="none" stroke="#A68EFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10h58M52 3l8 7-8 7"/></svg></div>' +
       bigRing(up.target, P, "With", "TrooPerformance", "#CBBEFD", 0.4) +
-      '</div><div class="sp-copy"><span class="vis-label">Overall performance score · Google PageSpeed, ' + S.device + '</span><h3>We can take ' + esc(dom) + ' from <span style="color:' + band(score) + '">' + score + '</span> to <span style="color:#CBBEFD">' + up.target + '</span>.</h3>' +
+      '</div><div class="sp-copy"><span class="vis-label">Overall performance score · Google PageSpeed, ' + S.device + '</span><h3>See ' + esc(dom) + ' go from <span style="color:' + band(score) + '">' + score + '</span> to <span style="color:#CBBEFD">' + up.target + '</span>.</h3>' +
       '<div class="sp-lift"><span class="c"><b>+' + up.conv + '%</b> conversions</span><span class="r"><b>+' + up.rev + '%</b> revenue</span></div>' +
-      '<p class="small" style="margin:0;font-size:13px">Conversions: from our billion-dollar house of brands case, where +29 points lifted conversion rate 19%. Revenue adds bigger orders: Deloitte \u00d7 Google saw order value rise 9.2% alongside 8.4% more conversions. Same traffic. Estimate, not a guarantee.</p>' +
+      '<p class="small" style="margin:0;font-size:13px">Conversions: based on a billion-dollar house of brands case, where +29 points lifted conversion rate 19%. Revenue adds bigger orders: Deloitte \u00d7 Google saw order value rise 9.2% alongside 8.4% more conversions. Same traffic. Estimate, not a guarantee.</p>' +
       '<a class="btn btn-primary" data-calendly href="' + esc(CFG.calendly || "#") + '" target="_blank" rel="noopener" style="align-self:flex-start">Get to ' + up.target + ' <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>' +
       '<div class="sp-quote"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF6B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/></svg><div><span>' + abandon + '</span><small>Google, Speed matters (Google Ads blog), 2018</small></div></div></section>';
     // vitals
@@ -418,12 +418,12 @@
     if (film.length) right += '<span class="vis-label">Your page loading, frame by frame' + (lcpT ? " · main content at " + sec(lcpT) : "") + '</span><div class="film">' + film.map(function (x, i) { return '<figure class="' + (i === lcpIdx ? "lcp" : "") + '"><img src="' + esc(x.src) + '" alt="Page at ' + sec(x.t) + '" loading="lazy"><figcaption>' + sec(x.t) + "</figcaption></figure>"; }).join("") + "</div>";
     right += '<div class="pills"><span class="chip">Accessibility ' + (m.a11y == null ? "–" : m.a11y) + '</span><span class="chip">Best practices ' + (m.bp == null ? "–" : m.bp) + '</span><span class="chip">Lighthouse SEO ' + (m.seo == null ? "–" : m.seo) + "</span></div>";
     return '<div class="sp">' + head + hero + vitals + lab + '<div class="panel" style="margin-top:6px"><div class="panel-l">' + left + '</div><div class="panel-r">' + right + "</div></div>" + appsBlock(m) +
-      (S.cmp.state === "empty" ? '<button type="button" class="cp-banner no-print" data-cmp-go><span><b>Where do you rank against your competitors?</b><span>Add up to 3 brands and we\u2019ll run the same phone test on each.</span></span><span class="btn btn-primary btn-sm">Compare now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>' : "") + "</div>";
+      (S.cmp.state === "empty" ? '<button type="button" class="cp-banner no-print" data-cmp-go><span><b>Where do you rank against your competitors?</b><span>Add up to 3 brands and see how your store stacks up on the same phone test.</span></span><span class="btn btn-primary btn-sm">Compare now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>' : "") + "</div>";
   }
 
   function searchPanel() {
     var d = S.scan;
-    if (!d) return '<div class="panel"><div class="panel-l"><div class="notice">We couldn\'t read this page\'s HTML, so search checks didn\'t run. <button class="btn btn-ghost btn-sm" type="button" onclick="location.reload()">Run the audit again</button></div></div></div>';
+    if (!d) return '<div class="panel"><div class="panel-l"><div class="notice">Your page\'s HTML couldn\'t be read, so search checks didn\'t run. <button class="btn btn-ghost btn-sm" type="button" onclick="location.reload()">Run the audit again</button></div></div></div>';
     var h = d.html, right = "";
     if (h) {
       var u; try { u = new URL(d.finalUrl); } catch (e) { u = null; }
@@ -438,14 +438,14 @@
       right += '<span class="vis-label">Structured data Google can read</span><div class="pills">' + (h.jsonld.types.length ? h.jsonld.types.slice(0, 10).map(function (x) { return '<span class="chip">' + esc(x) + "</span>"; }).join("") : '<span class="chip" style="color:' + R + '">None found</span>') + "</div>";
       right += '<div class="labm"><div><span>Sitemap</span><b style="color:' + (d.sitemap.found ? G : A) + '">' + (d.sitemap.found ? (d.sitemap.urls + (d.sitemap.index ? " maps" : " URLs")) : "missing") + "</b></div><div><span>Images with alt</span><b>" + (h.imgs ? Math.round((h.imgs - h.imgsNoAlt) / h.imgs * 100) + "%" : "—") + "</b></div><div><span>H1 headings</span><b>" + h.h1Count + "</b></div>" + (S.psi.mobile && S.psi.mobile.seo != null ? "<div><span>Lighthouse SEO</span><b style=\"color:" + band(S.psi.mobile.seo) + '">' + S.psi.mobile.seo + "</b></div>" : "") + "</div>";
     } else {
-      right += '<div class="notice">' + (d.blocked ? "Your server turned our check away (status " + esc(d.status) + "), so we could only read robots.txt and your sitemap." : "This page returns " + esc(d.status) + ". Check the address and run the audit again.") + "</div>";
+      right += '<div class="notice">' + (d.blocked ? "Your server blocked the check (status " + esc(d.status) + "), so only your robots.txt and sitemap could be read." : "This page returns " + esc(d.status) + ". Check the address and run the audit again.") + "</div>";
     }
     return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Search checks · score ' + d.search.score + "/100</span><span>" + d.search.checks.length + " checks</span></p>" + checksBlock(d.search.checks) + '</div><div class="panel-r">' + right + "</div></div>";
   }
 
   function aiPanel() {
     var d = S.scan;
-    if (!d) return '<div class="panel"><div class="panel-l"><div class="notice">We couldn\'t read this page, so AI checks didn\'t run. <button class="btn btn-ghost btn-sm" type="button" onclick="location.reload()">Run the audit again</button></div></div></div>';
+    if (!d) return '<div class="panel"><div class="panel-l"><div class="notice">Your page couldn\'t be read, so AI checks didn\'t run. <button class="btn btn-ghost btn-sm" type="button" onclick="location.reload()">Run the audit again</button></div></div></div>';
     var right = '<span class="vis-label">Which AI crawlers your robots.txt lets in' + (d.robots.found ? "" : " · no robots.txt, so all are allowed") + '</span><div class="bots">' +
       d.robots.bots.map(function (b) { return '<div class="bot"><span>' + esc(b.ua) + "<small>" + esc(b.who) + '</small></span><span class="' + (b.allowed ? "y" : "n") + '">' + (b.allowed ? "allowed" : "blocked") + "</span></div>"; }).join("") + "</div>";
     var h = d.html;
@@ -480,7 +480,7 @@
       (c.state === "done" ? '<button class="btn btn-ghost btn-sm no-print" type="button" data-cmp-edit>Change competitors</button>' : "") + "</div>";
     if (!S.psi.mobile) return head + '<div class="notice">The phone test for your store didn’t finish, so there’s nothing to compare yet. Run the speed test again from the Speed tab first.</div>';
     if (c.state === "empty") {
-      return head + '<form class="cp-card cp-form" data-cmp-form novalidate><div class="sp-dots" aria-hidden="true"></div><div style="display:flex;flex-direction:column;gap:8px;max-width:620px"><h3 class="h3">See where ' + esc(dom) + ' ranks</h3><p class="small" style="margin:0;font-size:15px;color:var(--text-2)">Add up to 3 competitors. We run the exact same phone test on each, so the comparison is fair.</p></div>' +
+      return head + '<form class="cp-card cp-form" data-cmp-form novalidate><div class="sp-dots" aria-hidden="true"></div><div style="display:flex;flex-direction:column;gap:8px;max-width:620px"><h3 class="h3">See where ' + esc(dom) + ' ranks</h3><p class="small" style="margin:0;font-size:15px;color:var(--text-2)">Add up to 3 competitors and see where your store ranks on the exact same phone test.</p></div>' +
         '<div class="cp-inputs">' + [0, 1, 2].map(function (i) { return '<div><label for="cmp' + i + '">Competitor ' + (i + 1) + '</label><input id="cmp' + i + '" data-cmp-in="' + i + '" type="text" inputmode="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="competitor' + (i + 1) + '.com" value="' + esc(c.inputs[i]) + '"></div>'; }).join("") + "</div>" +
         '<p class="form-error" data-cmp-err role="alert"' + (c.err ? "" : " hidden") + ">" + esc(c.err || "") + "</p>" +
         '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><button class="btn btn-primary" type="submit">Compare speed <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="small" style="font-size:13px">About a minute. Your own result is already in.</span></div>' +
@@ -490,13 +490,13 @@
       return head + '<div class="cp-card"><div class="sp-dots" aria-hidden="true"></div><h3 class="h3">Testing ' + c.list.length + " competitor" + (c.list.length > 1 ? "s" : "") + ' on a phone…</h3><div class="cp-run">' +
         '<div><span>' + esc(dom) + ' <small>You</small></span><b style="color:' + band(S.psi.mobile.perf) + '">' + S.psi.mobile.perf + "</b></div>" +
         c.list.map(function (x) { return "<div><span>" + esc(host(x.url)) + "</span>" + (x.pending ? '<b class="cp-spin" aria-label="testing"></b>' : x.psi ? '<b style="color:' + band(x.psi.perf) + '">' + x.psi.perf + "</b>" : '<b style="color:' + DIM + '">no answer</b>') + "</div>"; }).join("") +
-        '</div><span class="small" style="font-size:13px">Google takes 30 to 90 seconds per page. Results fill in as they finish, and we stop waiting after 100 seconds.</span></div>';
+        '</div><span class="small" style="font-size:13px">Google takes 30 to 90 seconds per page. Results fill in as they finish, and the wait stops at 100 seconds.</span></div>';
     }
     // done
     var rows = cmpRows(), n = rows.length, me = 0;
     rows.forEach(function (r, i) { if (r.you) me = i; });
     var best = rows[0], youP = S.psi.mobile, faster = me;
-    var title = n < 2 ? "We couldn’t test your competitors." : me === 0 ? "You’re the fastest on a phone." : faster === 1 ? "One competitor loads faster than you on a phone." : (["", "", "Two", "Three"][faster] || faster) + " competitors load faster than you on a phone.";
+    var title = n < 2 ? "Your competitors couldn’t be tested." : me === 0 ? "You’re the fastest on a phone." : faster === 1 ? "One competitor loads faster than you on a phone." : (["", "", "Two", "Three"][faster] || faster) + " competitors load faster than you on a phone.";
     var lcpGap = best && !best.you && youP.m.lcp != null && best.psi.m.lcp != null ? youP.m.lcp - best.psi.m.lcp : null;
     var sub = n < 2 ? "Google PageSpeed didn’t answer for them. Try again in a minute." : me === 0 ? (rows[1] ? host(rows[1].url) + " is next, " + (youP.perf - rows[1].psi.perf) + " points behind you. Keep the lead." : "") :
       host(best.url) + (lcpGap != null && lcpGap > 0 ? " shows its main content " + sec(lcpGap) + " sooner." : " scores " + (best.psi.perf - youP.perf) + " points higher.") + " Close that gap and you move to #" + me + ".";
@@ -621,7 +621,7 @@
       '<div class="lk-f"><label for="ldPhone">Phone <small>(WhatsApp or text)</small></label><div class="lk-phone"><select name="cc" aria-label="Country code">' + CCS.map(function (c) { return '<option value="' + c[1] + '"' + (c[0] === defaultCC() ? " selected" : "") + ">" + c[0] + (c[1] === "other" ? "" : " " + c[1]) + "</option>"; }).join("") + '</select><input id="ldPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="' + (defaultCC() === "IN" ? "98765 43210" : "(415) 555 0132") + '"></div><span class="lk-e" data-e="phone"></span></div>' +
       '<div class="lk-f"><label for="ldSite">Store website</label><input id="ldSite" name="website" autocapitalize="none" spellcheck="false" value="' + esc(dom) + '" placeholder="yourbrand.com"><span class="lk-e" data-e="website"></span></div>' +
       '<div class="lk-f"><label for="ldOrders">Monthly orders</label><select id="ldOrders" name="orders"><option value="" selected disabled>Pick a range</option>' + ["Under 500", "500 to 2,000", "2,000 to 10,000", "10,000 to 25,000", "25,000 to 50,000", "50,000+"].map(function (o) { return "<option>" + o + "</option>"; }).join("") + '</select><span class="lk-e" data-e="orders"></span></div>' +
-      '<div class="lk-f"><label for="ldHeard">Where did you hear about us?</label><select id="ldHeard" name="heard_from"><option value="" selected>Pick one</option>' + ["Instagram", "Facebook", "LinkedIn", "Google", "Other"].map(function (o) { return "<option>" + o + "</option>"; }).join("") + '</select></div>' +
+      '<div class="lk-f"><label for="ldHeard">How did you find TrooPerformance?</label><select id="ldHeard" name="heard_from"><option value="" selected>Pick one</option>' + ["Instagram", "Facebook", "LinkedIn", "Google", "Other"].map(function (o) { return "<option>" + o + "</option>"; }).join("") + '</select></div>' +
       '<input type="text" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true" class="lk-hp">' +
       '</div><p class="form-error" data-lead-err role="alert" hidden></p><button class="btn btn-primary lk-btn" type="submit">Unlock full report <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>' +
       '<span class="lk-note">Free. Work email only. No spam, ever.</span></form></div>';
@@ -659,10 +659,10 @@
     var ph = function () { var cc = el("cc").value, d = el("phone").value.replace(/\D/g, ""); if (cc === "+1" && d.length === 11 && d[0] === "1") d = d.slice(1); if (cc !== "+1" && cc !== "other" && d[0] === "0") d = d.slice(1); return d; };
     return {
       digits: ph,
-      name: function () { var v = el("name").value.trim(); if (!v) return "Tell us what to call you."; if (v.replace(/[^a-z\u00C0-\u024F]/gi, "").length < 2) return "Please enter your name."; if (/[0-9@#$%^&*()_+=<>{}\[\]\\/|~`!?;:]/.test(v)) return "Names only have letters."; return ""; },
-      email: function () { var v = el("email").value.trim().toLowerCase(), d = v.split("@")[1] || ""; if (!v) return "We need your work email."; if (!/^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/.test(v) || /\.\.|^\.|\.@|@-/.test(v)) return "That email looks a bit off. Like jamie@yourbrand.com"; if (TYPOS[d] || personalMail(v)) return LEAD_ERR.personal_email; return ""; },
-      phone: function () { var cc = el("cc").value, raw = el("phone").value, d = ph(), L = PH_LEN[cc]; if (!raw.replace(/\D/g, "")) return "We need a number we can reach you on."; if (cc === "other") return /^\+?\d[\d\s().-]{6,18}$/.test(raw.trim()) ? "" : "Add your country code, like +49 30 1234567"; if (d.length < L[0] || d.length > L[1]) return "That number should have " + L[0] + " digits. This one has " + d.length + "."; if (/^(\d)\1+$/.test(d)) return "Please enter a real number."; return ""; },
-      website: function () { var v = el("website").value.trim(); if (!v) return "We need your store website."; if (/@/.test(v)) return "That looks like an email. We need your store website, like yourbrand.com"; return clean(v) ? "" : "That doesn\u2019t look like a website. Like yourbrand.com"; },
+      name: function () { var v = el("name").value.trim(); if (!v) return "Add your name."; if (v.replace(/[^a-z\u00C0-\u024F]/gi, "").length < 2) return "Please enter your name."; if (/[0-9@#$%^&*()_+=<>{}\[\]\\/|~`!?;:]/.test(v)) return "Names only have letters."; return ""; },
+      email: function () { var v = el("email").value.trim().toLowerCase(), d = v.split("@")[1] || ""; if (!v) return "Add your work email."; if (!/^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/.test(v) || /\.\.|^\.|\.@|@-/.test(v)) return "That email looks a bit off. Like jamie@yourbrand.com"; if (TYPOS[d] || personalMail(v)) return LEAD_ERR.personal_email; return ""; },
+      phone: function () { var cc = el("cc").value, raw = el("phone").value, d = ph(), L = PH_LEN[cc]; if (!raw.replace(/\D/g, "")) return "Add a number you can be reached on."; if (cc === "other") return /^\+?\d[\d\s().-]{6,18}$/.test(raw.trim()) ? "" : "Add your country code, like +49 30 1234567"; if (d.length < L[0] || d.length > L[1]) return "That number should have " + L[0] + " digits. This one has " + d.length + "."; if (/^(\d)\1+$/.test(d)) return "Please enter a real number."; return ""; },
+      website: function () { var v = el("website").value.trim(); if (!v) return "Add your store website."; if (/@/.test(v)) return "That looks like an email. Add your store website, like yourbrand.com"; return clean(v) ? "" : "That doesn\u2019t look like a website. Like yourbrand.com"; },
       orders: function () { return el("orders").value ? "" : "Pick a range, a rough guess is fine."; }
     };
   }
@@ -729,9 +729,9 @@
       '<div class="score">' + ring(d ? d.search.score : null, 92, 9) + "<b>Search</b><span style=\"color:" + band(d && d.search.score) + '">' + (d ? bandName(d.search.score) : "No data") + '</span><span class="sub2">' + (d ? d.search.checks.length + " checks" : "") + "</span></div>" +
       '<div class="score">' + ring(d ? d.ai.score : null, 92, 9) + "<b>AI answers</b><span style=\"color:" + band(d && d.ai.score) + '">' + (d ? bandName(d.ai.score) : "No data") + '</span><span class="sub2">' + (d ? d.ai.checks.length + " checks" : "") + "</span></div>" +
       "</div></div></section>" +
-      '<section class="rep-sec"><div class="wrap"><div class="rep-sec-head"><h2 class="h2">What we found</h2><div class="tabs no-print" role="tablist" aria-label="Report area" id="tabs">' + tabsHtml() + '</div></div><div id="panel">' + panelHtml() + "</div></div></section>" +
+      '<section class="rep-sec"><div class="wrap"><div class="rep-sec-head"><h2 class="h2">What\u2019s holding your store back</h2><div class="tabs no-print" role="tablist" aria-label="Report area" id="tabs">' + tabsHtml() + '</div></div><div id="panel">' + panelHtml() + "</div></div></section>" +
       fullSection() +
-      '<section class="rep-sec no-print"><div class="wrap"><div class="cta-band"><div class="dots" aria-hidden="true"></div><h2 class="h2" style="font-size:clamp(28px,3.2vw,40px)">Want these fixed for you?</h2><p class="lead">TrooPerformance builds and tests the fixes on your store: speed, SEO and AI answers.</p><div class="row"><a class="btn btn-primary" href="' + esc(CFG.calendly || "#") + '" target="_blank" rel="noopener">Book a demo</a></div></div></div></section>' +
+      '<section class="rep-sec no-print"><div class="wrap"><div class="cta-band"><div class="dots" aria-hidden="true"></div><h2 class="h2" style="font-size:clamp(28px,3.2vw,40px)">Want these fixed?</h2><p class="lead">Get every fix built and tested on your store: speed, SEO and AI answers.</p><div class="row"><a class="btn btn-primary" href="' + esc(CFG.calendly || "#") + '" target="_blank" rel="noopener">Book a demo</a></div></div></div></section>' +
       '<section class="rep-sec"><div class="wrap"><p class="small" style="max-width:760px">Speed comes from Google PageSpeed Insights (Lighthouse lab test on an emulated phone, plus Chrome real-user data where Google has enough visits). Search and AI checks read your page\'s raw HTML, robots.txt, sitemap and llms.txt. Scores: pass = 1, warning = 0.5, fail = 0, averaged out of 100. Time savings are Google\'s own estimates.</p></div></section>';
   }
 
