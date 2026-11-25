@@ -3,12 +3,13 @@
 // POST /email {to, name, data}                        -> queues the report (one pending row per email + store; a competitor test updates it).
 //                                                        Sending happens after approval, twice a day, from tools/report-queue/queue.mjs.
 // GET  /queue, POST /queue/mark {results}             -> private (x-admin-token): pending list, mark sent/rejected/failed
+// POST /admin/set {k:"groq_key", v}                    -> private (x-admin-token): Jaanya saves the Groq key from her Terminal
 // GET  /                                              -> health
 // Only numbers and short strings are stored (cleanData); the email HTML is built at send time by assets/js/report-doc.js.
 
 const CORS = { "access-control-allow-origin": "*", "access-control-allow-methods": "GET, POST, OPTIONS", "access-control-allow-headers": "content-type, authorization, apikey, x-client-info" };
 const json = (d: unknown, status = 200) => new Response(JSON.stringify(d), { status, headers: { ...CORS, "content-type": "application/json" } });
-const GROQ = Deno.env.get("GROQ_API_KEY") || "";
+const GROQ_ENV = Deno.env.get("GROQ_API_KEY") || "";
 
 // ---------- tiny in-memory rate limits (reset when the function cold-starts; enough to stop casual abuse) ----------
 const hits = new Map<string, number[]>();
@@ -115,7 +116,17 @@ async function resolves(domain: string) {
   } catch { /* fall through */ }
   return false;
 }
+let GROQ_DB = "", GROQ_AT = 0;
+async function groqKey() {
+  if (GROQ_ENV) return GROQ_ENV;
+  if (!GROQ_DB || Date.now() - GROQ_AT > 600_000) {
+    const d = await fetch(SB_URL + "/rest/v1/trooperformance_admin?select=v&k=eq.groq_key", { headers: QH }).then((r) => r.json()).catch(() => []);
+    GROQ_DB = (Array.isArray(d) && d[0] && d[0].v) || ""; GROQ_AT = Date.now();
+  }
+  return GROQ_DB;
+}
 async function groq(model: string, messages: unknown[]) {
+  const GROQ = await groqKey();
   const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST", signal: AbortSignal.timeout(20000), headers: { authorization: "Bearer " + GROQ, "content-type": "application/json" },
     body: JSON.stringify({ model, messages, temperature: 0.2, max_completion_tokens: 900, response_format: { type: "json_object" }, ...(/gpt-oss/.test(model) ? { reasoning_effort: "low" } : {}) }),
@@ -125,7 +136,7 @@ async function groq(model: string, messages: unknown[]) {
   return JSON.parse(d.choices[0].message.content || "{}");
 }
 async function handleCompetitors(req: Request) {
-  if (!GROQ) return json({ error: "not_configured" }, 503);
+  if (!(await groqKey())) return json({ error: "not_configured" }, 503);
   if (limited("cmp:" + ipOf(req), 12, 3600_000)) return json({ error: "rate_limited" }, 429);
   const b = await req.json().catch(() => ({}));
   const site = str(b.url, 200).toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/.*$/, "");
@@ -154,7 +165,15 @@ Deno.serve(async (req) => {
       if (req.method === "GET") return await handleQueueList();
       if (req.method === "POST" && route.startsWith("/queue/mark")) return await handleQueueMark(req);
     }
-    return json({ ok: true, service: "trooperformance-report", queue: !!(SB_URL && SB_KEY), groq: !!GROQ });
+    if (route.startsWith("/admin/set")) {
+      if (!(await adminOk(req))) return json({ error: "forbidden" }, 403);
+      const b = await req.json().catch(() => ({}));
+      if (b.k !== "groq_key" || !/^gsk_[A-Za-z0-9]{20,80}$/.test(String(b.v || ""))) return json({ error: "bad_value" }, 400);
+      const r = await fetch(SB_URL + "/rest/v1/trooperformance_admin?on_conflict=k", { method: "POST", headers: { ...QH, prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify({ k: "groq_key", v: b.v }) });
+      GROQ_DB = ""; GROQ_AT = 0;
+      return r.ok ? json({ ok: true, saved: "groq_key" }) : json({ error: "save_failed" }, 502);
+    }
+    return json({ ok: true, service: "trooperformance-report", queue: !!(SB_URL && SB_KEY), groq: !!(await groqKey()) });
   } catch (e) {
     return json({ error: "server_error", detail: String((e as Error)?.message || e).slice(0, 200) }, 500);
   }
