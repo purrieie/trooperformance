@@ -160,6 +160,7 @@
   }
   // live view: the real page with the agents working on it (assets/js/live.js)
   var LV = win.TPLive || { start: function () {}, agent: function () {}, result: function () {}, shot: function () {}, finish: function () { return Promise.resolve(); } };
+  function startScan() {
   var t0 = Date.now();
   var clock = setInterval(function () { var c = $("#clock"); if (c) c.textContent = ((Date.now() - t0) / 1000).toFixed(1) + " s"; }, 100);
   LV.start(URL0);
@@ -252,6 +253,55 @@
     setTimeout(function () { LV.finish().then(go); }, 2600);
     setTimeout(go, 7000);
   });
+  }
+
+  // ---------- saved reports: audit.html?url=..&r=<id> reopens the report the visitor already got, no new scan ----------
+  // Saved when they unlock the full report (and again after a competitor test); kept 30 days, then the link runs a fresh scan.
+  var RH = function () { return { authorization: "Bearer " + CFG.anonKey, apikey: CFG.anonKey, "content-type": "application/json" }; };
+  var RID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(qs.get("r") || "") ? qs.get("r") : "";
+  S.snapId = "";
+  function openSaved(id) {
+    $("#scanPct").textContent = "Opening your report\u2026";
+    timeoutFetch(CFG.reportApi + "/snap?id=" + id, { headers: RH() }, 12000)
+      .then(function (r) { if (!r.ok) throw new Error("gone"); return r.json(); })
+      .then(function (d) {
+        var s = d && d.snap;
+        if (!s || s.v !== 1 || host(s.url) !== host(URL0)) throw new Error("bad");
+        S.psi = { mobile: (s.psi && s.psi.mobile) || null, desktop: (s.psi && s.psi.desktop) || null }; S.psiErr = s.psiErr || {};
+        S.scan = s.scan || null; S.scanErr = s.scanErr || null; S.comps = Array.isArray(s.comps) ? s.comps : [];
+        S.cmp = { state: s.cmp && s.cmp.state === "done" && s.cmp.list && s.cmp.list.length ? "done" : "empty", inputs: ((s.cmp && s.cmp.inputs) || []).concat(["", "", ""]).slice(0, 3), list: (s.cmp && s.cmp.list) || [], auto: !!(s.cmp && s.cmp.auto) };
+        S.pendingDesktop = false; S.unlocked = true; S.snapId = id; S.saved = { at: d.at || s.at };
+        $("#spin").style.display = "none";
+        showReport();
+      })
+      .catch(function () {
+        try { var q = new URLSearchParams(location.search); q.delete("r"); history.replaceState(null, "", "?" + q.toString()); } catch (e) {}
+        startScan();
+        setTimeout(function () { toast("That saved report has expired, so here\u2019s a fresh scan."); }, 600);
+      });
+  }
+  function snapshot() {
+    var lite = function (p, film) { if (!p) return p; var o = Object.assign({}, p); delete o.shot; if (!film) o.thumbs = []; return o; };
+    var done = S.cmp && S.cmp.state === "done";
+    return {
+      v: 1, url: URL0, at: new Date().toISOString(),
+      psi: { mobile: lite(S.psi.mobile, true), desktop: lite(S.psi.desktop, true) }, psiErr: S.psiErr || {}, scan: S.scan, scanErr: S.scanErr || null,
+      comps: S.comps.map(function (c) { return { url: c.url, psi: lite(c.psi), scan: c.scan }; }),
+      cmp: { state: done ? "done" : "empty", inputs: (S.cmp && S.cmp.inputs) || [], auto: !!(S.cmp && S.cmp.auto), list: done ? S.cmp.list.map(function (x) { return { url: x.url, psi: lite(x.psi), pending: false }; }) : [] }
+    };
+  }
+  function saveSnap() {
+    if (!CFG.reportApi || !win.fetch) return Promise.resolve();
+    return timeoutFetch(CFG.reportApi + "/snap", { method: "POST", headers: RH(), body: JSON.stringify({ site: host(URL0), snap: snapshot() }) }, 20000)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.id) return;
+        S.snapId = d.id;
+        try { var q = new URLSearchParams(location.search); q.set("r", d.id); history.replaceState(null, "", "?" + q.toString()); } catch (e) {}
+      })
+      .catch(function () {});
+  }
+  if (RID && CFG.reportApi) openSaved(RID); else startScan();
 
   // what the agents pin on the live page
   function kindOf(c) { return c === G ? "ok" : c === A ? "warn" : "bad"; }
@@ -606,7 +656,7 @@
     var up = m && m.perf != null ? uplift(m.perf, dom) : null;
     var chk = function (c) { return { status: c.status, title: c.title, why: c.why }; };
     return {
-      site: dom, date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }), platform: (d && d.platform) || "",
+      site: dom, date: new Date(S.saved ? S.saved.at : Date.now()).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }), platform: (d && d.platform) || "",
       scores: { perf: m ? m.perf : null, desk: dsk ? dsk.perf : null, search: d ? d.search.score : null, ai: d ? d.ai.score : null, searchN: d ? d.search.checks.length : null, aiN: d ? d.ai.checks.length : null },
       uplift: up ? { target: up.target, conv: up.conv, rev: up.rev } : null,
       cwv: f ? (f.lcp != null && f.lcp <= 2500 && (f.inp == null || f.inp <= 200) && (f.cls == null || f.cls <= 0.1)) : null,
@@ -616,7 +666,7 @@
       bots: d ? d.robots.bots.filter(function (b) { return !b.allowed && b.ua !== "Googlebot" && b.ua !== "Bingbot"; }).map(function (b) { return b.ua; }) : [],
       apps: m ? m.third.filter(function (x) { return x.cost >= 1; }).slice(0, 5).map(function (x) { return { name: x.name, ms: x.cost }; }) : [],
       comps: S.cmp && S.cmp.state === "done" ? cmpRows().map(function (r) { return { site: host(r.url), perf: r.psi.perf, si: sec(r.psi.m.si), lcp: sec(r.psi.m.lcp), you: !!r.you }; }) : [],
-      reportUrl: location.origin + location.pathname.replace(/[^/]*$/, "") + "audit.html?url=" + encodeURIComponent(shortUrl(URL0)), demoUrl: CFG.calendly,
+      reportUrl: location.origin + location.pathname.replace(/[^/]*$/, "") + "audit.html?url=" + encodeURIComponent(shortUrl(URL0)) + (S.snapId ? "&r=" + S.snapId : ""), demoUrl: CFG.calendly,
       // for picking competitors at send time, when the visitor didn't run the comparison
       ctx: d && d.html ? { title: d.html.title || "", desc: d.html.desc || "", h1: d.html.h1 || "", price: d.html.jsonld && d.html.jsonld.product && d.html.jsonld.product.price ? (d.html.jsonld.product.currency || "") + " " + d.html.jsonld.product.price : d.html.price || "", text: String(d.html.agentText || "").slice(0, 900), platform: d.platform || "" } : null,
       lab: m ? { si: m.m.si, lcp: m.m.lcp } : null
@@ -638,17 +688,19 @@
   }
   // Report email: queued on the server at unlock (one pending entry per email + store). A competitor test updates it.
   // Nothing is sent from here: the queue is reviewed and approved twice a day (12 PM, 6 PM IST), then sent.
-  win.TPReport = { data: reportData, pdf: downloadPdf };
+  win.TPReport = { data: reportData, pdf: downloadPdf, save: function () { return saveSnap().then(function () { return S.snapId; }); } };
   var MAIL_KEY = "tp_mail";
   function mailRec() { try { return (JSON.parse(localStorage.getItem(MAIL_KEY) || "{}") || {})[host(URL0)] || null; } catch (e) { return null; } }
   function saveMail(r) { try { var all = JSON.parse(localStorage.getItem(MAIL_KEY) || "{}") || {}; all[host(URL0)] = r; localStorage.setItem(MAIL_KEY, JSON.stringify(all)); } catch (e) {} }
   function scheduleReportEmail(to, name) {
     if (!CFG.reportApi || !to || !win.fetch) return;
+    saveSnap().then(function () {
     var body = { to: to, name: name || "", data: reportData() };
     timeoutFetch(CFG.reportApi + "/email", { method: "POST", headers: { authorization: "Bearer " + CFG.anonKey, apikey: CFG.anonKey, "content-type": "application/json" }, body: JSON.stringify(body), keepalive: true }, 20000)
       .then(function (r) { return r.json(); })
       .then(function (d) { if (d && d.id) saveMail({ id: d.id, to: to, name: name || "", at: Date.now() }); })
       .catch(function () {});
+    });
   }
 
   // ---------- full report (fix plan + competitor rank), unlocked with a short form ----------
@@ -793,10 +845,10 @@
 
   function renderReport() {
     var hl = headline(), m = S.psi.mobile, dsk = S.psi.desktop, d = S.scan;
-    var date = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    var date = new Date(S.saved ? S.saved.at : Date.now()).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
     return '<section class="rep-hero"><div class="dots" aria-hidden="true"></div><div class="glow2" aria-hidden="true"></div><div class="wrap"><div class="txt">' +
       '<div class="tagrow"><span class="eyebrow">Report · ' + esc(host(URL0)) + " · " + esc(date) + "</span>" + (d && d.platform ? '<span class="badge">' + esc(d.platform) + "</span>" : "") + "</div>" +
-      '<h1 class="h1">' + hl.h + '</h1><p class="lead" style="max-width:580px">' + esc(hl.l) + '</p><div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" type="button" data-copy>Copy link</button><button class="btn btn-ghost btn-sm" type="button" data-print>Download PDF</button></div></div>' +
+      '<h1 class="h1">' + hl.h + '</h1><p class="lead" style="max-width:580px">' + esc(hl.l) + '</p><div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" type="button" data-copy>Copy link</button><button class="btn btn-ghost btn-sm" type="button" data-print>Download PDF</button>' + (S.saved ? '<a class="btn btn-ghost btn-sm" href="audit.html?url=' + encodeURIComponent(shortUrl(URL0)) + '">Run a fresh scan</a>' : "") + "</div></div>" +
       '<div class="scores">' +
       '<div class="score">' + ring(m ? m.perf : null, 92, 9) + "<b>Performance</b><span style=\"color:" + band(m && m.perf) + '">' + (m ? bandName(m.perf) : "No data") + '</span><span class="sub2">' + (dsk ? "desktop " + dsk.perf : S.pendingDesktop ? "desktop…" : "mobile") + "</span></div>" +
       '<div class="score">' + ring(d ? d.search.score : null, 92, 9) + "<b>Search</b><span style=\"color:" + band(d && d.search.score) + '">' + (d ? bandName(d.search.score) : "No data") + '</span><span class="sub2">' + (d ? d.search.checks.length + " checks" : "") + "</span></div>" +

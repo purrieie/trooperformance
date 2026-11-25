@@ -49,7 +49,7 @@ async function psi(site) {
     const d = await fetch("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?" + u, { signal: ctl.signal }).then((r) => r.json());
     const lr = d.lighthouseResult || {}, a = lr.audits || {}, sc = lr.categories && lr.categories.performance && lr.categories.performance.score;
     if (typeof sc !== "number") return null;
-    return { perf: Math.round(sc * 100), si: a["speed-index"] && a["speed-index"].numericValue, lcp: a["largest-contentful-paint"] && a["largest-contentful-paint"].numericValue };
+    return { perf: Math.round(sc * 100), si: a["speed-index"] && a["speed-index"].numericValue, lcp: a["largest-contentful-paint"] && a["largest-contentful-paint"].numericValue, tbt: a["total-blocking-time"] && a["total-blocking-time"].numericValue };
   } catch { return null; } finally { clearTimeout(t); }
 }
 async function ensureComps(r) {
@@ -66,6 +66,9 @@ async function ensureComps(r) {
   if (rows.length < 2) return "rivals didn't load";
   rows.sort((a, b) => (b.perf ?? -1) - (a.perf ?? -1));
   d.comps = rows; d.compsAuto = true;
+  // the email's "Open report" link reopens the saved report: give it the same competitors
+  const rid = (String(d.reportUrl || "").match(/[?&]r=([0-9a-f-]{36})/i) || [])[1];
+  if (rid) await fetch(API + "/queue/snapcomps", { method: "POST", headers: H, body: JSON.stringify({ id: rid, list: res.filter((x) => x.p).map((x) => ({ site: x.site, perf: x.p.perf, si: x.p.si, lcp: x.p.lcp, tbt: x.p.tbt })) }) }).catch(() => {});
   return "auto-picked: " + rows.filter((x) => !x.you).map((x) => x.site).join(", ");
 }
 const nums = (s) => new Set(String(s || "").split(",").map((x) => parseInt(x, 10)).filter(Boolean));

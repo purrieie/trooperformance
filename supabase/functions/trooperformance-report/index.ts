@@ -4,6 +4,10 @@
 //                                                        Sending happens after approval, twice a day, from tools/report-queue/queue.mjs.
 // GET  /queue, POST /queue/mark {results}             -> private (x-admin-token): pending list, mark sent/rejected/failed
 // POST /admin/set {k:"groq_key", v}                    -> private (x-admin-token): Jaanya saves the Groq key from her Terminal
+// POST /snap {site, snap}                             -> saves the whole report so the email link reopens it without re-scanning: {id}
+// GET  /snap?id=<uuid>                                -> {snap, at}   (audit.html?url=..&r=<id>). Saved reports last 30 days, then
+//                                                        they're deleted (swept on every save) and the link just runs a fresh scan.
+// POST /queue/snapcomps {id, list}                     -> private: adds the competitors picked at send time to a saved report
 // GET  /                                              -> health
 // Only numbers and short strings are stored (cleanData); the email HTML is built at send time by assets/js/report-doc.js.
 
@@ -79,6 +83,44 @@ async function handleEmail(req: Request) {
   const r = await fetch(QURL(), { method: "POST", headers: { ...QH, prefer: "return=representation" }, body: JSON.stringify({ email: to, name: name || null, site: data.site, data, ip: ipOf(req), user_agent: str(req.headers.get("user-agent"), 300) }) });
   const d = await r.json().catch(() => null);
   return r.ok && Array.isArray(d) && d[0] ? json({ ok: true, id: d[0].id, queued: true }) : json({ error: "save_failed" }, 502);
+}
+
+// ---------- saved reports (audit.html?url=..&r=<id>) ----------
+const SURL = () => SB_URL + "/rest/v1/trooperformance_report_snaps";
+const KEEP_DAYS = 30, cutoff = () => new Date(Date.now() - KEEP_DAYS * 86400_000).toISOString();
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+async function handleSnapSave(req: Request) {
+  if (limited("snap:" + ipOf(req), 30, 3600_000)) return json({ error: "rate_limited" }, 429);
+  const raw = await req.text();
+  if (raw.length > 1_500_000) return json({ error: "too_big" }, 413);
+  let b: any; try { b = JSON.parse(raw); } catch { return json({ error: "bad_json" }, 400); }
+  const site = str(b?.site, 120).toLowerCase().replace(/^www\./, ""), snap = b?.snap;
+  if (!hostOk(site) || !snap || typeof snap !== "object" || snap.v !== 1) return json({ error: "bad_snap" }, 400);
+  const sh = String(snap.url || "").replace(/^https?:\/\//i, "").replace(/[\/:].*$/, "").toLowerCase().replace(/^www\./, "");
+  if (sh !== site) return json({ error: "bad_snap" }, 400);
+  await fetch(SURL() + "?created_at=lt." + cutoff(), { method: "DELETE", headers: QH }).catch(() => {}); // sweep expired ones
+  const r = await fetch(SURL(), { method: "POST", headers: { ...QH, prefer: "return=representation" }, body: JSON.stringify({ site, snap, ip: ipOf(req) }) });
+  const d = await r.json().catch(() => null);
+  return r.ok && Array.isArray(d) && d[0] ? json({ ok: true, id: d[0].id }) : json({ error: "save_failed" }, 502);
+}
+async function handleSnapGet(req: Request) {
+  const id = new URL(req.url).searchParams.get("id") || "";
+  if (!UUID.test(id)) return json({ error: "bad_id" }, 400);
+  const d = await fetch(SURL() + "?select=snap,created_at&id=eq." + id + "&created_at=gte." + cutoff(), { headers: QH }).then((r) => r.json()).catch(() => []);
+  return Array.isArray(d) && d[0] ? json({ snap: d[0].snap, at: d[0].created_at }) : json({ error: "not_found" }, 404);
+}
+async function handleSnapComps(req: Request) {
+  const b = await req.json().catch(() => ({}));
+  if (!UUID.test(String(b.id || "")) || !Array.isArray(b.list)) return json({ error: "bad_input" }, 400);
+  const d = await fetch(SURL() + "?select=snap&id=eq." + b.id, { headers: QH }).then((r) => r.json()).catch(() => []);
+  if (!Array.isArray(d) || !d[0]) return json({ error: "not_found" }, 404);
+  const snap = d[0].snap, n = (v: unknown) => (typeof v === "number" && isFinite(v) ? v : null);
+  // deno-lint-ignore no-explicit-any
+  const list = b.list.slice(0, 3).map((x: any) => ({ url: "https://" + str(x.site, 80), psi: { perf: num(x.perf), m: { si: n(x.si), lcp: n(x.lcp), tbt: n(x.tbt) }, field: null }, pending: false })).filter((x: any) => hostOk(x.url.slice(8)) && x.psi.perf != null);
+  if (!list.length) return json({ ok: true, updated: false });
+  snap.cmp = { state: "done", list, inputs: list.map((x: any) => x.url.slice(8)), auto: true };
+  const r = await fetch(SURL() + "?id=eq." + b.id, { method: "PATCH", headers: QH, body: JSON.stringify({ snap }) });
+  return r.ok ? json({ ok: true, updated: true }) : json({ error: "save_failed" }, 502);
 }
 
 // ---------- private queue routes for tools/report-queue/queue.mjs (x-admin-token = the queue_token row) ----------
@@ -163,10 +205,13 @@ Deno.serve(async (req) => {
   try {
     if (req.method === "POST" && route.startsWith("/email")) return await handleEmail(req);
     if (req.method === "POST" && route.startsWith("/competitors")) return await handleCompetitors(req);
+    if (req.method === "POST" && route.startsWith("/snap")) return await handleSnapSave(req);
+    if (req.method === "GET" && route.startsWith("/snap")) return await handleSnapGet(req);
     if (route.startsWith("/queue")) {
       if (!(await adminOk(req))) return json({ error: "forbidden" }, 403);
       if (req.method === "GET") return await handleQueueList();
       if (req.method === "POST" && route.startsWith("/queue/mark")) return await handleQueueMark(req);
+      if (req.method === "POST" && route.startsWith("/queue/snapcomps")) return await handleSnapComps(req);
     }
     if (route.startsWith("/admin/set")) {
       if (!(await adminOk(req))) return json({ error: "forbidden" }, 403);
