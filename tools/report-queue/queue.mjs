@@ -7,6 +7,7 @@
 //   node tools/report-queue/queue.mjs preview [outDir]       writes each email as HTML to look at
 //   node tools/report-queue/queue.mjs send [--skip 2,5]      sends all except the skipped numbers (those are marked rejected)
 //   node tools/report-queue/queue.mjs reject 2,5             marks those as rejected without sending anything
+//   node tools/report-queue/queue.mjs direct report.json to@x.com [Name]   one report, outside the queue
 // Sent ones are marked sent; a failed send stays pending, so the next batch retries it.
 //
 // Resend key: RESEND_API_KEY env var, else tools/report-queue/.resend-key (git-ignored), else the outreach .env (never printed).
@@ -109,9 +110,7 @@ if (cmd === "reject") {
   process.exit(0);
 }
 
-if (cmd === "send") {
-  const skip = nums(rest.indexOf("--skip") >= 0 ? rest[rest.indexOf("--skip") + 1] : "");
-  if (!rows.length) { console.log(JSON.stringify({ sent: 0, note: "nothing pending" })); process.exit(0); }
+function sender() {
   let key = process.env.RESEND_API_KEY || "";
   const keyFile = path.join(here, ".resend-key"); // the reports' own Resend key (git-ignored), set with: read -s K; printf %s "$K" > tools/report-queue/.resend-key
   if (!key && fs.existsSync(keyFile)) key = fs.readFileSync(keyFile, "utf8").trim();
@@ -121,8 +120,32 @@ if (cmd === "send") {
     key = m ? m[1].trim() : "";
   }
   if (!key) { console.error("No Resend key found."); process.exit(1); }
-  const from = process.env.REPORT_FROM || "Jaanya from Troopod <jaanya@troopod.io>";
-  const replyTo = process.env.REPORT_REPLY_TO || "jaanya@troopod.io", bcc = (process.env.REPORT_BCC || "").split(",").map((s) => s.trim()).filter(Boolean);
+  return { key, from: process.env.REPORT_FROM || "Jaanya from Troopod <jaanya@troopod.io>", replyTo: process.env.REPORT_REPLY_TO || "jaanya@troopod.io", bcc: (process.env.REPORT_BCC || "").split(",").map((s) => s.trim()).filter(Boolean) };
+}
+
+// One report straight to one address, outside the queue (internal demos, a resend Jaanya asked for).
+//   node tools/report-queue/queue.mjs direct report.json someone@company.com [FirstName]
+if (cmd === "direct") {
+  const [file, to, name] = rest;
+  if (!file || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(to || "")) { console.error("usage: direct report.json to@company.com [Name]"); process.exit(2); }
+  const data = JSON.parse(fs.readFileSync(file, "utf8"));
+  if (name) data.name = name;
+  const r = { id: "direct-" + Date.now(), site: data.site, data };
+  const compNote = await ensureComps(r);
+  const { key, from, replyTo, bcc } = sender();
+  const body = { from, to: [to], subject: TP.subject(data), html: TP.render(data, { mode: "email", assetBase: ASSETS }), tags: [{ name: "source", value: "trooperformance" }] };
+  if (replyTo) body.reply_to = replyTo;
+  if (bcc.length) body.bcc = bcc;
+  const res = await fetch("https://api.resend.com/emails", { method: "POST", headers: { authorization: "Bearer " + key, "content-type": "application/json" }, body: JSON.stringify(body) });
+  const d = await res.json().catch(() => ({}));
+  console.log(JSON.stringify(res.ok ? { sent: 1, resend_id: d.id, competitors: compNote } : { sent: 0, error: String(d.message || res.status).slice(0, 200) }));
+  process.exit(res.ok ? 0 : 1);
+}
+
+if (cmd === "send") {
+  const skip = nums(rest.indexOf("--skip") >= 0 ? rest[rest.indexOf("--skip") + 1] : "");
+  if (!rows.length) { console.log(JSON.stringify({ sent: 0, note: "nothing pending" })); process.exit(0); }
+  const { key, from, replyTo, bcc } = sender();
   const results = [];
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
