@@ -47,6 +47,9 @@ function cleanData(d: any) {
     comps: arr(d.comps, 4).map((c: any) => ({ site: str(c.site, 80), perf: num(c.perf), si: str(c.si, 12), lcp: str(c.lcp, 12), you: !!c.you })).filter((c: any) => hostOk(c.site)),
     reportUrl: /^https:\/\/purrieie\.github\.io\/trooperformance\//.test(String(d.reportUrl || "")) ? str(d.reportUrl, 400) : "",
     demoUrl: "https://calendly.com/nj-troopod/troopod-demo",
+    ctx: d.ctx ? { title: str(d.ctx.title, 160), desc: str(d.ctx.desc, 300), h1: str(d.ctx.h1, 160), price: str(d.ctx.price, 40), text: str(d.ctx.text, 900), platform: str(d.ctx.platform, 30) } : null,
+    lab: d.lab ? { si: Math.max(0, Math.min(120000, Number(d.lab.si) || 0)) || null, lcp: Math.max(0, Math.min(120000, Number(d.lab.lcp) || 0)) || null } : null,
+    compsAuto: false,
   };
 }
 

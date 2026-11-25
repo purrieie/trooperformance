@@ -32,6 +32,18 @@
     }).join("");
   }
 
+  // email opening: who they are, what they checked, what's in it for them, one button
+  function intro(d, site, sc, up) {
+    var hi = d.name ? "Hi " + esc(d.name) + "," : "Hi there,";
+    var l1 = hi + " you just checked <b style=\"color:" + C.text + ";font-weight:500\">" + site + "</b> on TrooPerformance. Here’s your full report.";
+    var l2 = sc.perf != null && up && up.target > sc.perf
+      ? "Your site scores <b style=\"color:" + band(sc.perf) + ";font-weight:500\">" + sc.perf + "/100</b> on a phone. Getting it to <b style=\"color:" + C.lilac + ";font-weight:500\">" + up.target + "</b> could mean about <b style=\"color:" + C.lilac + ";font-weight:500\">+" + up.conv + "% more conversions</b> from the same traffic."
+      : sc.perf != null ? "Your site scores <b style=\"color:" + band(sc.perf) + ";font-weight:500\">" + sc.perf + "/100</b> on a phone. The fixes below keep it ahead of your competitors." : "Below are the fixes that matter most, ranked by what they cost you.";
+    var l3 = "Want it done for you? Book a quick call and see exactly how.";
+    return '<div style="margin-top:14px;font-family:' + F + ';font-size:15.5px;line-height:24px;color:' + C.text2 + '">' + l1 + "<br>" + l2 + "<br>" + l3 + "</div>" +
+      '<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:16px"><tr><td style="border-radius:10px;background:' + C.purple + '"><a href="' + esc(d.demoUrl || "https://calendly.com/nj-troopod/troopod-demo") + '" style="display:inline-block;padding:12px 20px;font-family:' + F + ';font-size:15px;font-weight:500;color:#FFFFFF;text-decoration:none">Book a demo &rarr;</a></td></tr></table>';
+  }
+
   function render(d, opt) {
     opt = opt || {};
     var base = opt.assetBase || "https://purrieie.github.io/trooperformance/", print = opt.mode === "print";
@@ -41,7 +53,7 @@
     // cover
     rows += '<tr><td style="padding:0"><img src="' + base + 'assets/email/holo-header.png" width="600" height="220" alt="TrooPerformance site audit by Troopod" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>';
     rows += '<tr><td style="padding:30px 32px 6px"><div style="font-family:' + M + ';font-size:12px;color:' + C.muted + '">Report · ' + esc(d.date || "") + (d.platform ? " · " + esc(d.platform) : "") + '</div><div style="margin-top:10px;font-family:' + F + ';font-size:30px;line-height:36px;letter-spacing:-.03em;color:' + C.text + '">Your performance report for <span style="color:#A68EFA">' + site + "</span></div>" +
-      (d.name && !print ? '<div style="margin-top:14px;font-family:' + F + ';font-size:15.5px;line-height:24px;color:' + C.text2 + '">Hi ' + esc(d.name) + ", here’s everything holding " + site + " back, with the fixes ranked by what they cost you.</div>" : '<div style="margin-top:14px;font-family:' + F + ';font-size:15.5px;line-height:24px;color:' + C.text2 + '">Everything holding ' + site + " back, with the fixes ranked by what they cost you.</div>") + "</td></tr>";
+      (!print ? intro(d, site, sc, up) : '<div style="margin-top:14px;font-family:' + F + ';font-size:15.5px;line-height:24px;color:' + C.text2 + '">Everything holding ' + site + " back, with the fixes ranked by what they cost you.</div>") + "</td></tr>";
     rows += '<tr><td style="padding:18px 18px 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
       scoreTile(sc.perf, "Performance", sc.desk != null ? "desktop " + sc.desk : "phone") + scoreTile(sc.search, "Search", sc.searchN ? sc.searchN + " checks" : "") + scoreTile(sc.ai, "AI answers", sc.aiN ? sc.aiN + " checks" : "") +
       "</tr></table></td></tr>";
@@ -89,7 +101,7 @@
     // search + AI
     if (d.search && d.search.length) {
       var sFail = d.search.filter(function (c) { return c.status !== "pass"; }), sPass = d.search.length - sFail.length;
-      rows += '<tr><td style="' + pb + 'padding:0"></td></tr>' + rule(base) + h2("Search · score " + (sc.search == null ? "–" : sc.search) + "/100", "How Google", "sees your store");
+      rows += '<tr><td style="' + pb + 'padding:0"></td></tr>' + rule(base) + h2("Search · score " + (sc.search == null ? "–" : sc.search) + "/100", "How Google", "sees your site");
       rows += card('<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + checkRows(sFail) + "</table>" + '<div style="margin-top:10px;font-family:' + M + ';font-size:11.5px;color:' + C.good + '">✓ ' + sPass + " checks passed</div>");
     }
     if (d.ai && d.ai.length) {
@@ -102,7 +114,7 @@
     // competitors
     if (d.comps && d.comps.length > 1) {
       var me = 0; d.comps.forEach(function (c, i) { if (c.you) me = i; });
-      rows += '<tr><td style="' + pb + 'padding:0"></td></tr>' + rule(base) + h2("Phone test · same moment", "You vs", "your competitors");
+      rows += '<tr><td style="' + pb + 'padding:0"></td></tr>' + rule(base) + h2(d.compsAuto ? "Auto-picked rivals · same phone test" : "Phone test · same moment", "You vs", "your competitors");
       rows += card('<div style="font-family:' + F + ';font-size:20px;color:' + C.text + '">You rank <span style="color:#A68EFA">#' + (me + 1) + "</span> of " + d.comps.length + "</div>" +
         '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:12px"><tr><td style="padding:0 0 8px;font-family:' + M + ';font-size:11px;color:' + C.dim + '">Brand</td><td align="right" style="padding:0 0 8px;font-family:' + M + ';font-size:11px;color:' + C.dim + '">Score</td><td align="right" style="padding:0 0 8px;font-family:' + M + ';font-size:11px;color:' + C.dim + '">Speed Index</td><td align="right" style="padding:0 0 8px;font-family:' + M + ';font-size:11px;color:' + C.dim + '">LCP</td></tr>' +
         d.comps.map(function (c, i) {
@@ -116,7 +128,7 @@
 
     // CTA
     rows += rule(base) + '<tr><td style="padding:30px 24px 8px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#1B1532;border:1px solid #4A3D86;border-radius:18px"><tr><td align="center" style="padding:32px 24px">' +
-      '<div style="font-family:' + F + ';font-size:26px;line-height:32px;letter-spacing:-.02em;color:' + C.text + '">Want your store fixed?</div><div style="margin-top:8px;font-family:' + F + ';font-size:15px;line-height:22px;color:' + C.text2 + '">Get every fix built and tested on your store: speed, SEO and AI answers.</div>' +
+      '<div style="font-family:' + F + ';font-size:26px;line-height:32px;letter-spacing:-.02em;color:' + C.text + '">Want your site fixed?</div><div style="margin-top:8px;font-family:' + F + ';font-size:15px;line-height:22px;color:' + C.text2 + '">Get every fix built and tested on your site: speed, SEO and AI answers.</div>' +
       '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:20px auto 0"><tr><td style="border-radius:10px;background:' + C.purple + '"><a href="' + esc(d.demoUrl || "https://calendly.com/nj-troopod/troopod-demo") + '" style="display:inline-block;padding:13px 22px;font-family:' + F + ';font-size:15px;font-weight:500;color:#FFFFFF;text-decoration:none">Book a demo</a></td>' +
       (d.reportUrl && !print ? '<td width="10"></td><td style="border-radius:10px;border:1px solid #4A3D86"><a href="' + esc(d.reportUrl) + '" style="display:inline-block;padding:12px 18px;font-family:' + F + ';font-size:15px;color:' + C.text + ';text-decoration:none">Open live report</a></td>' : "") +
       "</tr></table></td></tr></table></td></tr>";

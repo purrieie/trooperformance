@@ -35,6 +35,37 @@ async function mark(results) {
   const r = await fetch(API + "/queue/mark", { method: "POST", headers: H, body: JSON.stringify({ results }) });
   return r.ok ? (await r.json()).marked : 0;
 }
+const PSI_KEY = (cfg.match(/psiKey:\s*"([^"]+)"/) || [])[1] || "";
+const sec = (ms) => (ms == null ? "–" : (ms / 1000).toFixed(1) + " s");
+// Every email gets a competitor section. If the visitor didn't run the comparison, pick 3 close rivals
+// (same finder as the site's Auto-detect button) and run the same Google phone test on them now.
+async function psi(site) {
+  const u = new URLSearchParams({ url: "https://" + site, strategy: "mobile", category: "performance" });
+  if (PSI_KEY) u.set("key", PSI_KEY);
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 110000);
+  try {
+    const d = await fetch("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?" + u, { signal: ctl.signal }).then((r) => r.json());
+    const lr = d.lighthouseResult || {}, a = lr.audits || {}, sc = lr.categories && lr.categories.performance && lr.categories.performance.score;
+    if (typeof sc !== "number") return null;
+    return { perf: Math.round(sc * 100), si: a["speed-index"] && a["speed-index"].numericValue, lcp: a["largest-contentful-paint"] && a["largest-contentful-paint"].numericValue };
+  } catch { return null; } finally { clearTimeout(t); }
+}
+async function ensureComps(r) {
+  const d = r.data || {};
+  if (Array.isArray(d.comps) && d.comps.length > 1) return "tested by visitor";
+  const ctx = d.ctx || {};
+  const found = await fetch(API + "/competitors", { method: "POST", headers: H, body: JSON.stringify({ url: d.site, ...ctx }) }).then((x) => x.json()).catch(() => ({}));
+  const list = (found.competitors || []).slice(0, 3);
+  if (!list.length) return "no rivals found";
+  const res = await Promise.all(list.map(async (site) => ({ site, p: await psi(site) })));
+  const vit = (name) => ((d.vitals || []).find((v) => v.name === name) || {}).value || "–";
+  const you = { site: d.site, perf: d.scores && d.scores.perf, si: d.lab && d.lab.si ? sec(d.lab.si) : vit("Page fills in"), lcp: d.lab && d.lab.lcp ? sec(d.lab.lcp) : vit("Main content shows"), you: true };
+  const rows = [you].concat(res.filter((x) => x.p).map((x) => ({ site: x.site, perf: x.p.perf, si: sec(x.p.si), lcp: sec(x.p.lcp), you: false })));
+  if (rows.length < 2) return "rivals didn't load";
+  rows.sort((a, b) => (b.perf ?? -1) - (a.perf ?? -1));
+  d.comps = rows; d.compsAuto = true;
+  return "auto-picked: " + rows.filter((x) => !x.you).map((x) => x.site).join(", ");
+}
 const nums = (s) => new Set(String(s || "").split(",").map((x) => parseInt(x, 10)).filter(Boolean));
 
 // ---------- junk flags ----------
@@ -56,7 +87,7 @@ function flags(r, all) {
 if (cmd === "review") {
   if (!rows.length) { console.log("No reports waiting."); process.exit(0); }
   rows.forEach((r, i) => {
-    const sc = (r.data && r.data.scores) || {}, f = flags(r, rows), c = r.data && r.data.comps && r.data.comps.length > 1 ? " · competitors " + (r.data.comps.length - 1) : "";
+    const sc = (r.data && r.data.scores) || {}, f = flags(r, rows), c = r.data && r.data.comps && r.data.comps.length > 1 ? " · competitors " + (r.data.comps.length - 1) + " (they ran it)" : " · competitors auto-added at send";
     console.log(`${i + 1}. ${r.site}  →  ${r.name || "(no name)"} <${r.email}>  ·  perf ${sc.perf ?? "–"} · search ${sc.search ?? "–"} · AI ${sc.ai ?? "–"}${c}  ·  ${new Date(r.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" })}`);
     if (f.length) console.log(`   ⚠ ${f.join(" · ")}`);
   });
@@ -66,7 +97,7 @@ if (cmd === "review") {
 if (cmd === "preview") {
   const out = rest[0] || path.join(os.tmpdir(), "tp-report-preview");
   fs.mkdirSync(out, { recursive: true });
-  rows.forEach((r, i) => { fs.writeFileSync(path.join(out, `${i + 1}-${r.site}.html`), TP.render(r.data, { mode: "email", assetBase: ASSETS })); });
+  for (let i = 0; i < rows.length; i++) { const r = rows[i]; console.error(`${i + 1}. ${r.site}: ${await ensureComps(r)}`); fs.writeFileSync(path.join(out, `${i + 1}-${r.site}.html`), TP.render(r.data, { mode: "email", assetBase: ASSETS })); }
   console.log(out);
   process.exit(0);
 }
@@ -96,13 +127,14 @@ if (cmd === "send") {
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
     if (skip.has(i + 1)) { results.push({ n: i + 1, id: r.id, status: "rejected", note: "rejected in review" }); continue; }
+    const compNote = await ensureComps(r);
     const body = { from, to: [r.email], subject: TP.subject(r.data), html: TP.render(r.data, { mode: "email", assetBase: ASSETS }), tags: [{ name: "source", value: "trooperformance" }] };
     if (replyTo) body.reply_to = replyTo;
     if (bcc.length) body.bcc = bcc;
     try {
       const res = await fetch("https://api.resend.com/emails", { method: "POST", headers: { authorization: "Bearer " + key, "content-type": "application/json", "idempotency-key": "tp-report-" + r.id }, body: JSON.stringify(body) });
       const d = await res.json().catch(() => ({}));
-      results.push(res.ok ? { n: i + 1, id: r.id, status: "sent", resend_id: d.id } : { n: i + 1, id: r.id, status: "failed", error: String(d.message || res.status).slice(0, 200) });
+      results.push(res.ok ? { n: i + 1, id: r.id, status: "sent", resend_id: d.id, competitors: compNote } : { n: i + 1, id: r.id, status: "failed", error: String(d.message || res.status).slice(0, 200) });
     } catch (e) { results.push({ n: i + 1, id: r.id, status: "failed", error: String(e.message || e).slice(0, 200) }); }
     await new Promise((ok) => setTimeout(ok, 600)); // Resend allows 2 requests a second
   }

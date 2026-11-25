@@ -616,7 +616,10 @@
       bots: d ? d.robots.bots.filter(function (b) { return !b.allowed && b.ua !== "Googlebot" && b.ua !== "Bingbot"; }).map(function (b) { return b.ua; }) : [],
       apps: m ? m.third.filter(function (x) { return x.cost >= 1; }).slice(0, 5).map(function (x) { return { name: x.name, ms: x.cost }; }) : [],
       comps: S.cmp && S.cmp.state === "done" ? cmpRows().map(function (r) { return { site: host(r.url), perf: r.psi.perf, si: sec(r.psi.m.si), lcp: sec(r.psi.m.lcp), you: !!r.you }; }) : [],
-      reportUrl: "https://purrieie.github.io/trooperformance/audit.html?url=" + encodeURIComponent(shortUrl(URL0)), demoUrl: CFG.calendly
+      reportUrl: "https://purrieie.github.io/trooperformance/audit.html?url=" + encodeURIComponent(shortUrl(URL0)), demoUrl: CFG.calendly,
+      // for picking competitors at send time, when the visitor didn't run the comparison
+      ctx: d && d.html ? { title: d.html.title || "", desc: d.html.desc || "", h1: d.html.h1 || "", price: d.html.jsonld && d.html.jsonld.product && d.html.jsonld.product.price ? (d.html.jsonld.product.currency || "") + " " + d.html.jsonld.product.price : d.html.price || "", text: String(d.html.agentText || "").slice(0, 900), platform: d.platform || "" } : null,
+      lab: m ? { si: m.m.si, lcp: m.m.lcp } : null
     };
   }
   // PDF: the branded report in its own window, then the browser's Save as PDF
