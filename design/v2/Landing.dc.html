@@ -176,6 +176,17 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
  .tp-sticky{position:absolute;left:16px;right:16px;top:12px;background:#1D1733!important}
  .tp-demo.hide{display:none!important}
 }
+/* phone sticky bar, like the laptop one: logo, URL box with Check, Book a demo */
+@media (max-width:767px){
+ .tp-sticky{position:static!important;flex:1 1 auto!important;padding:3px 3px 3px 12px!important}
+ .tp-sticky:not(.on){flex:0 1 0px!important;padding:0!important;border-width:0!important}
+ .tp-sticky input{height:34px!important;font-size:16px!important}
+ .tp-sticky .tp-btn{height:32px!important;padding:0 10px!important;font-size:13px!important;gap:4px!important}
+ .tp-hdr:has(.tp-sticky.on)>div{padding-left:14px!important;padding-right:14px!important;gap:8px!important}
+ .tp-hdr:has(.tp-sticky.on) a[href="#"]>:not(svg){display:none}
+ .tp-demo.hide{display:flex!important;height:36px!important;padding:0 10px!important;font-size:13px!important;border-radius:9px!important}
+}
+@media (max-width:380px){.tp-sticky .tp-btn svg{display:none}.tp-sticky{padding-left:10px!important}}
 @media (prefers-reduced-motion: reduce){.tp-b,.tp-rise,.tp-draw,.tp-grow,.tp-track,.tp-bounce,.tp-wheel,.tp-pulse,.tp-f,.tp-stars,.tp-caret,.tp-gauge{animation:none!important;opacity:1!important}.tp-sticky{transition:none}}
 </style>
 <style>
