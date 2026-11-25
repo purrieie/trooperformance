@@ -18,7 +18,7 @@
   }
   var qs = new URLSearchParams(location.search);
   var URL0 = clean(qs.get("url"));
-  if (!URL0) { location.replace("./"); return; }
+  if (!URL0) { location.replace("design/"); return; }
   var VS = String(qs.get("vs") || "").split(",").map(clean).filter(Boolean).slice(0, 2);
   var host = function (u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return u; } };
   var shortUrl = function (u) { return String(u).replace(/^https?:\/\//, "").replace(/\/$/, ""); };
@@ -292,37 +292,7 @@
     return { h: "Your store is in good shape. <span class=\"hl\">Here's what's left.</span>", l: "Below is everything we found, sorted by what it costs you." };
   }
 
-  function speedPanel() {
-    var m = S.psi[S.device], err = S.psiErr[S.device];
-    var toggle = '<span class="devtoggle no-print" role="group" aria-label="Device"><button type="button" data-dev="mobile" aria-pressed="' + (S.device === "mobile") + '">Mobile</button><button type="button" data-dev="desktop" aria-pressed="' + (S.device === "desktop") + '">Desktop</button></span>';
-    if (!m && S.device === "desktop" && S.pendingDesktop) {
-      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Speed · desktop</span>' + toggle + '</p><div class="notice">The desktop test is still running. It will show up here by itself in a few seconds.</div></div></div>';
-    }
-    if (!m) {
-      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Speed · ' + S.device + "</span>" + toggle + '</p><div class="notice">' + (err === "busy" ? "Google PageSpeed is busy right now (it limits free tests per day)." : "Google PageSpeed didn't answer for this page.") + ' Try again in a minute.<button class="btn btn-ghost btn-sm" type="button" data-retry>Run speed test again</button></div></div></div>';
-    }
-    var left = '<p class="panel-title"><span>Speed · ' + S.device + " · Google PageSpeed " + m.perf + "/100</span>" + toggle + "</p>" +
-      (m.causes.length ? m.causes.map(function (c) { var im = impactOf(c); return checkRow({ status: c.status, title: c.title, why: c.plain + " Who fixes it: " + c.who + ".", detail: c.audits.slice(0, 2).join(" | ") }, im[0], im[1]); }).join("")
-        : '<div class="check"><span class="st pass">Pass</span><div class="ct"><b>No big savings left</b><span>Google found nothing major to fix on this page.</span></div><span></span></div>');
-    var lcpT = m.m.lcp, film = m.thumbs.slice(0, 8), lcpIdx = -1;
-    film.forEach(function (f, i) { if (lcpIdx < 0 && lcpT != null && f.t >= lcpT) lcpIdx = i; });
-    var right = "";
-    if (film.length) right += '<span class="vis-label">Your page loading, frame by frame' + (lcpT ? " · main content at " + sec(lcpT) : "") + '</span><div class="film">' + film.map(function (f, i) { return '<figure class="' + (i === lcpIdx ? "lcp" : "") + '"><img src="' + esc(f.src) + '" alt="Page at ' + sec(f.t) + '" loading="lazy"><figcaption>' + sec(f.t) + "</figcaption></figure>"; }).join("") + "</div>";
-    var f = m.field;
-    if (f) {
-      var bar = function (label, v, k, max, fmt) {
-        if (v == null) return "";
-        var t = TH[k], pos = Math.min(98, v / max * 100);
-        return '<div class="fbar"><div class="row"><span>' + label + '</span><b style="color:' + mcol(k, v) + '">' + fmt(v) + '</b></div><div class="track"><i style="width:' + (t[0] / max * 100) + '%"></i><i style="width:' + ((t[1] - t[0]) / max * 100) + '%"></i><i></i><em style="left:' + pos + '%"></em></div></div>';
-      };
-      var passed = f.lcp != null && f.lcp <= 2500 && (f.inp == null || f.inp <= 200) && (f.cls == null || f.cls <= 0.1);
-      right += '<div class="box"><div class="row" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span class="vis-label">Real shoppers · last 28 days' + (f.scope === "site" ? " · whole site" : "") + '</span><span class="badge" style="color:' + (passed ? G : R) + ";border-color:" + (passed ? "rgba(76,195,138,.4)" : "rgba(239,107,87,.4)") + '">Core Web Vitals: ' + (passed ? "passed" : "failed") + "</span></div>" +
-        bar("Main content shows (LCP)", f.lcp, "lcp", 6000, sec) + bar("Response to taps (INP)", f.inp, "inp", 700, msf) + bar("Layout jumps (CLS)", f.cls, "cls", 0.4, function (v) { return v.toFixed(2); }) + "</div>";
-    } else {
-      right += '<div class="box"><span class="vis-label">Real shoppers</span><span class="small">Chrome doesn\'t have enough visits to this page yet to report real-shopper speed. The lab test below is what we have.</span></div>';
-    }
-    right += '<div class="labm">' + [["First paint", "fcp", sec], ["Main content", "lcp", sec], ["Blocked time", "tbt", msf], ["Layout jumps", "cls", function (v) { return v == null ? "—" : v.toFixed(2); }], ["Speed Index", "si", sec]].map(function (x) { var v = m.m[x[1]]; return '<div><span>' + x[0] + '</span><b style="color:' + mcol(x[1], v) + '">' + x[2](v) + "</b></div>"; }).join("") + "</div>";
-    right += '<div class="pills"><span class="chip">Accessibility ' + (m.a11y == null ? "–" : m.a11y) + '</span><span class="chip">Best practices ' + (m.bp == null ? "–" : m.bp) + '</span><span class="chip">Lighthouse SEO ' + (m.seo == null ? "–" : m.seo) + "</span></div>";
+  function appsBlock(m) {
     var apps = "";
     if (m.third.length) {
       var top = m.third.filter(function (x) { return x.cost >= 1 || x.main >= 50; }).slice(0, 8), mx = Math.max.apply(null, top.map(function (x) { return x.cost || 1; }).concat([1]));
@@ -333,7 +303,87 @@
         top.map(function (x, i) { var v = x.cost || 0, hi = m.thirdBlock ? 250 : 500, mid = m.thirdBlock ? 50 : 150, col = v >= hi ? R : v >= mid ? A : "#8B8BA0"; return '<tr><th scope="row" style="font-weight:400;text-align:left">' + esc(x.name) + '</th><td><div class="bar"><div><i style="width:' + Math.max(2, v / mx * 100) + "%;background:" + col + ";animation-delay:" + (i * 0.06) + 's"></i></div><span>' + msf(v) + '</span></div></td>' + (showSize ? '<td class="mono" style="color:#A09DAD">' + Math.round(x.size / 1024).toLocaleString("en-IN") + " KB</td>" : "") + "</tr>"; }).join("") +
         "</tbody></table></div>";
     }
-    return '<div class="panel"><div class="panel-l">' + left + '</div><div class="panel-r">' + right + "</div></div>" + apps;
+    return apps;
+  }
+
+  // ---------- speed card (v3 design): score today → with TrooPerformance, Core Web Vitals cards with Google impact lines ----------
+  S.open = { si: false, lcp: true, inp: false };
+  function uplift(score, domain) {
+    var h = 0; for (var i = 0; i < domain.length; i++) h = (h * 31 + domain.charCodeAt(i)) >>> 0;
+    var jit = [-2, -1, 1, 2][h % 4];
+    var base = score < 20 ? 15 + (h % 6) : score < 50 ? 15 + jit : score < 60 ? 10 + jit : 5 + jit;
+    var gain = Math.max(1, Math.min(base, 99 - score));
+    // Case study (a billion-dollar house of brands): +29.2 points lifted conversion rate 19%.
+    return { gain: gain, target: score + gain, conv: Math.round(gain * (19 / 29.2) * 10) / 10 };
+  }
+  function bigRing(v, color, label, sub, subColor, delay) {
+    var C = 2 * Math.PI * 86, d = (Math.max(0, Math.min(100, v)) / 100 * C).toFixed(1) + " " + C.toFixed(1);
+    return '<div class="sp-ringw"><svg viewBox="0 0 200 200" class="sp-ring" role="img" aria-label="' + esc(label) + " " + v + ' out of 100"><circle cx="100" cy="100" r="86" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14"/><circle class="val" cx="100" cy="100" r="86" fill="none" stroke="' + color + '" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 ' + C.toFixed(1) + '" data-dash="' + d + '" transform="rotate(-90 100 100)" style="transition-delay:' + (delay || 0) + 's"/><text x="100" y="112" text-anchor="middle" font-size="54" fill="' + (color === P ? "#CBBEFD" : "#F4F3F8") + '" font-family="DM Mono, monospace">' + v + '</text><text x="100" y="138" text-anchor="middle" font-size="13" fill="#A09DAD" font-family="DM Mono, monospace">/ 100</text></svg><span class="sp-ringl">' + label + '<br><span style="color:' + subColor + '">' + sub + "</span></span></div>";
+  }
+  var DEFS = {
+    si: "How quickly the visible part of your page fills in while it loads. A page that shows most of its content early scores better than one that pops in all at the end. Google calls it good under 3.4 s on a phone.",
+    lcp: "The moment the biggest thing on screen, usually your product photo or banner, finishes showing. It is when shoppers feel the page has loaded. Good is 2.5 s or less; over 4 s is poor.",
+    inp: "How long the page takes to react after a shopper taps, clicks or types, like Add to cart or picking a shade. Measured on real visits. Good is 200 ms or less; over 500 ms is poor.",
+    tbt: "How long the page is frozen while scripts run, so taps can't respond. It's the lab stand-in for INP until Chrome has enough real visits. Good is 200 ms or less; over 600 ms is poor."
+  };
+  function vitalCard(k, abbr, name, v, thKey, fmt, field, impact, source) {
+    var t = TH[thKey], col = mcol(thKey, v), bn = v == null ? "No data" : v <= t[0] ? "Good" : v <= t[1] ? "Needs work" : "Poor";
+    var max = Math.max((v || 0) * 1.15, t[1] * 1.6), open = !!S.open[k];
+    var pos = v == null ? 0 : Math.min(97, v / max * 100);
+    return '<article class="sp-vital"><div class="sp-vh"><div><span class="sp-abbr">' + abbr + '</span><h4>' + name + '</h4></div><button type="button" class="sp-plus" data-def="' + k + '" aria-expanded="' + open + '" aria-label="What is ' + esc(name) + '?">' + (open ? "−" : "+") + "</button></div>" +
+      (open ? '<div class="sp-def">' + DEFS[k === "inp" && thKey === "tbt" ? "tbt" : k] + "</div>" : "") +
+      '<div class="sp-val"><span style="color:' + col + '">' + (v == null ? "—" : fmt(v)) + '</span><em style="color:' + col + ";border-color:" + col + '">' + bn + "</em></div>" +
+      (v == null ? "" : '<div class="sp-bar"><div class="sp-track"><i style="width:' + (t[0] / max * 100).toFixed(1) + '%"></i><i style="width:' + ((t[1] - t[0]) / max * 100).toFixed(1) + '%"></i><i></i><b style="left:' + pos.toFixed(1) + '%"></b></div><div class="sp-scale"><span>Good ≤ ' + fmt(t[0]) + "</span><span>Poor &gt; " + fmt(t[1]) + "</span></div></div>") +
+      (field ? '<div class="sp-field"><span>Real shoppers, last 28 days</span><b style="color:' + mcol(thKey, field) + '">' + fmt(field) + "</b></div>" : "") +
+      '<div class="sp-impact"><span>' + impact + '</span><small>' + source + "</small></div></article>";
+  }
+  function speedPanel() {
+    var m = S.psi[S.device], err = S.psiErr[S.device], dom = host(URL0);
+    var toggle = '<span class="devtoggle no-print" role="group" aria-label="Device"><button type="button" data-dev="mobile" aria-pressed="' + (S.device === "mobile") + '">Mobile</button><button type="button" data-dev="desktop" aria-pressed="' + (S.device === "desktop") + '">Desktop</button></span>';
+    if (!m && S.device === "desktop" && S.pendingDesktop) {
+      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Speed · desktop</span>' + toggle + '</p><div class="notice">The desktop test is still running. It will show up here by itself in a few seconds.</div></div></div>';
+    }
+    if (!m) {
+      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Speed · ' + S.device + "</span>" + toggle + '</p><div class="notice">' + (err === "busy" ? "Google PageSpeed is busy right now (it limits free tests per day)." : "Google PageSpeed didn't answer for this page.") + ' Try again in a minute.<button class="btn btn-ghost btn-sm" type="button" data-retry>Run speed test again</button></div></div></div>';
+    }
+    var score = m.perf == null ? 0 : m.perf, up = uplift(score, dom), f = m.field, other = S.device === "mobile" ? S.psi.desktop : S.psi.mobile;
+    var cwvPass = f ? (f.lcp != null && f.lcp <= 2500 && (f.inp == null || f.inp <= 200) && (f.cls == null || f.cls <= 0.1)) : null;
+    var head = '<div class="sp-head"><div><span class="eyebrow">Speed · ' + esc(dom) + " · tested on a " + (S.device === "mobile" ? "phone" : "desktop") + '</span><h3 class="h3" style="font-size:clamp(24px,2.6vw,32px);margin-top:8px">How fast your store feels</h3></div><div class="sp-chips">' + toggle +
+      (other ? '<span class="sp-chip">' + (S.device === "mobile" ? "Desktop" : "Mobile") + ' score <b style="color:' + band(other.perf) + '">' + other.perf + "</b></span>" : "") +
+      (cwvPass == null ? "" : '<span class="sp-chip" style="color:' + (cwvPass ? G : R) + ";border-color:" + (cwvPass ? "rgba(76,195,138,.4)" : "rgba(239,107,87,.4)") + '">Core Web Vitals: ' + (cwvPass ? "passed" : "failed") + "</span>") + "</div></div>";
+    var abandon = score >= 90 ? "A score of " + score + " is fast. Google found <b>more than half of mobile visits are abandoned</b> past 3 seconds, and you're well clear of that." : "A score of " + score + " means your page is " + (score < 50 ? "slow" : "only middling") + " on a " + (S.device === "mobile" ? "phone" : "computer") + ". Google found <b>more than half of mobile visits are abandoned</b> when a page takes over 3 seconds to load.";
+    var hero = '<section class="sp-hero" aria-label="Overall performance score"><div class="sp-dots" aria-hidden="true"></div><div class="sp-hero-row"><div class="sp-rings">' +
+      bigRing(score, band(score), "Today", bandName(score), band(score), 0) +
+      '<div class="sp-arrow"><span>+' + up.gain + '</span><svg viewBox="0 0 64 20" fill="none" stroke="#A68EFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10h58M52 3l8 7-8 7"/></svg></div>' +
+      bigRing(up.target, P, "With", "TrooPerformance", "#CBBEFD", 0.4) +
+      '</div><div class="sp-copy"><span class="vis-label">Overall performance score · Google PageSpeed, ' + S.device + '</span><h3>We can take ' + esc(dom) + ' from <span style="color:' + band(score) + '">' + score + '</span> to <span style="color:#CBBEFD">' + up.target + '</span>.</h3>' +
+      '<div class="sp-lift"><span class="c"><b>+' + up.conv + '%</b> conversions</span><span class="r"><b>+' + up.conv + '%</b> revenue</span></div>' +
+      '<p class="small" style="margin:0;font-size:13px">Estimated from our billion-dollar house of brands case, where +29 points lifted conversion rate 19%. Same traffic and order value. Not a guarantee.</p>' +
+      '<a class="btn btn-primary" data-calendly href="' + esc(CFG.calendly || "#") + '" target="_blank" rel="noopener" style="align-self:flex-start">Get to ' + up.target + ' <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>' +
+      '<div class="sp-quote"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF6B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/></svg><div><span>' + abandon + '</span><small>Google, Speed matters (Google Ads blog), 2018</small></div></div></section>';
+    // vitals
+    var si = m.m.si, lcp = m.m.lcp, inpF = f && f.inp, tbt = m.m.tbt, s1 = function (ms) { return (ms / 1000).toFixed(1) + " s"; };
+    var siImp = si == null ? "Google couldn't measure this one." : si > 3400 ? "Your page fills in " + s1(si - 3400) + " slower than Google’s 3.4 s line. Every 0.1 s faster lifts retail conversions by 8.4%, so every extra second is sales you lose each day." : "You fill in under Google’s 3.4 s line. Worth keeping: every 0.1 s faster lifts retail conversions by 8.4%.";
+    var lcpImp = lcp == null ? "Google couldn't measure this one." : lcp > 2500 ? "Your LCP is " + s1(lcp - 2500) + " over Google’s 2.5 s line. Google: every 1 s of delay can cut conversions by up to 20%. That’s up to 20% of sales lost, every day." : "Your main content shows inside Google’s 2.5 s line. Google: every 1 s of delay can cut conversions by up to 20%, so this is worth protecting.";
+    var cards = vitalCard("si", "SPEED INDEX", "How fast the page fills in", si, "si", s1, null, siImp, "Deloitte × Google, Milliseconds Make Millions, 2020") +
+      vitalCard("lcp", "LCP · LARGEST CONTENTFUL PAINT", "When your main content shows", lcp, "lcp", s1, f && f.lcp, lcpImp, "Google, retail page-load data, 2018");
+    if (inpF != null) {
+      cards += vitalCard("inp", "INP · INTERACTION TO NEXT PAINT", "How fast taps respond, real shoppers", inpF, "inp", msf, null, inpF > 200 ? "Your INP is " + Math.round(inpF - 200) + " ms over Google’s 200 ms line. When redBus fixed theirs, sales went up 7%. Slow taps cost you that every day." : "Taps respond inside Google’s 200 ms line. When redBus fixed theirs, sales went up 7%, so keep it here.", "Google web.dev case study, redBus, 2023");
+    } else {
+      cards += vitalCard("inp", "TBT · STAND-IN FOR INP", "How long taps are blocked, lab test", tbt, "tbt", msf, null, (tbt != null && tbt > 200 ? "Scripts block taps for " + msf(tbt) + ", over Google’s 200 ms line." : "Scripts barely block taps.") + " Chrome doesn’t have enough real visits for INP yet. When redBus fixed tap speed, sales went up 7%.", "Google web.dev case study, redBus, 2023");
+    }
+    var vitals = '<div class="sp-vhead"><h3 class="h3">Core Web Vitals that are costing you sales</h3><span class="small">Tap + to see what each one means</span></div><div class="sp-vitals">' + cards + "</div>";
+    var lab = '<div class="sp-other">' + [["First paint", "fcp", sec], ["Blocked time", "tbt", msf], ["Layout jumps", "cls", function (v) { return v == null ? "—" : v.toFixed(2); }]].map(function (x) { var v = m.m[x[1]]; return '<div><span>' + x[0] + '</span><b style="color:' + mcol(x[1], v) + '">' + x[2](v) + "</b></div>"; }).join("") + "</div>";
+    // what's slowing it down + filmstrip
+    var left = '<p class="panel-title"><span>What is slowing it down</span><span>Time saved, Google’s estimate</span></p>' +
+      (m.causes.length ? m.causes.map(function (c) { var im = impactOf(c); return checkRow({ status: c.status, title: c.title, why: c.plain + " Who fixes it: " + c.who + ".", detail: c.audits.slice(0, 2).join(" | ") }, im[0], im[1]); }).join("")
+        : '<div class="check"><span class="st pass">Pass</span><div class="ct"><b>No big savings left</b><span>Google found nothing major to fix on this page.</span></div><span></span></div>');
+    var lcpT = m.m.lcp, film = m.thumbs.slice(0, 8), lcpIdx = -1;
+    film.forEach(function (x, i) { if (lcpIdx < 0 && lcpT != null && x.t >= lcpT) lcpIdx = i; });
+    var right = "";
+    if (film.length) right += '<span class="vis-label">Your page loading, frame by frame' + (lcpT ? " · main content at " + sec(lcpT) : "") + '</span><div class="film">' + film.map(function (x, i) { return '<figure class="' + (i === lcpIdx ? "lcp" : "") + '"><img src="' + esc(x.src) + '" alt="Page at ' + sec(x.t) + '" loading="lazy"><figcaption>' + sec(x.t) + "</figcaption></figure>"; }).join("") + "</div>";
+    right += '<div class="pills"><span class="chip">Accessibility ' + (m.a11y == null ? "–" : m.a11y) + '</span><span class="chip">Best practices ' + (m.bp == null ? "–" : m.bp) + '</span><span class="chip">Lighthouse SEO ' + (m.seo == null ? "–" : m.seo) + "</span></div>";
+    return '<div class="sp">' + head + hero + vitals + lab + '<div class="panel" style="margin-top:6px"><div class="panel-l">' + left + '</div><div class="panel-r">' + right + "</div></div>" + appsBlock(m) + "</div>";
   }
 
   function searchPanel() {
@@ -445,12 +495,14 @@
   function rerenderPanel() {
     $("#tabs").innerHTML = tabsHtml();
     $("#panel").innerHTML = panelHtml();
+    $("#panel").querySelectorAll("circle.val[data-dash]").forEach(function (c) { c.style.transition = "none"; c.setAttribute("stroke-dasharray", c.getAttribute("data-dash")); });
   }
   function bindReport() {
     var rep = $("#report");
     rep.addEventListener("click", function (e) {
       var t = e.target.closest("[data-tab]"); if (t) { S.tab = t.getAttribute("data-tab"); rerenderPanel(); return; }
-      var dv = e.target.closest("[data-dev]"); if (dv) { S.device = dv.getAttribute("data-dev"); rerenderPanel(); return; }
+      var dv = e.target.closest("[data-dev]"); if (dv) { S.device = dv.getAttribute("data-dev"); rerenderPanel(); animateRings($("#panel")); return; }
+      var df = e.target.closest("[data-def]"); if (df) { var k = df.getAttribute("data-def"); S.open[k] = !S.open[k]; rerenderPanel(); var b2 = $('[data-def="' + k + '"]'); if (b2) b2.focus(); return; }
       if (e.target.closest("[data-copy]")) { (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(function () { toast("Link copied"); }, function () { toast(location.href); }); return; }
       if (e.target.closest("[data-print]")) { win.print(); return; }
       var rt = e.target.closest("[data-retry]"); if (rt) {

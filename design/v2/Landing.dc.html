@@ -45,9 +45,9 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 .tp-shine{background:linear-gradient(100deg,#F4F3F8 0%,#CBBEFD 40%,#F4F3F8 60%,#F4F3F8 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tpshine 5s linear infinite}
 @keyframes tpshine{from{background-position:120% 0}to{background-position:-100% 0}}
 
-.tp-logo{height:24px;width:auto;opacity:.8}.tp-logo.t{height:34px}
+.tp-logo{height:22px;width:auto;opacity:.8}.tp-logo.t{height:30px}
 @media (hover:hover){.tp-marq:hover .tp-track{animation-play-state:paused}}
-@media (max-width:767px){.tp-logo{height:19px}.tp-logo.t{height:27px}.tp-track{gap:40px!important}.tp-proofrow{margin-top:32px!important}}
+@media (max-width:767px){.tp-logo{height:19px}.tp-logo.t{height:27px}.tp-track{gap:40px!important}.tp-proofrow{margin-top:32px!important;gap:20px!important}}
 /* Mobile: the three result tiles become a swipe carousel with peeking neighbours and arrow buttons */
 .tp-carctl{display:none}
 @media (max-width:767px){
@@ -65,13 +65,14 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
  .tp-dotsnav span.on{width:18px;background:#A68EFA}
 }
 /* Sticky analyse bar: hidden while the big hero input is on screen, slides into the header after it scrolls away */
-.tp-sticky{opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transition:opacity .35s cubic-bezier(.16,1,.3,1),transform .35s cubic-bezier(.16,1,.3,1),visibility 0s linear .35s;box-shadow:0 0 0 4px rgba(139,107,247,.18)}
+.tp-sticky{opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transition:opacity .35s cubic-bezier(.16,1,.3,1),transform .35s cubic-bezier(.16,1,.3,1),visibility 0s linear .35s;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .tp-sticky.on{opacity:1;visibility:visible;transform:none;transition-delay:0s}
 .tp-btn{transition:background-color .2s,transform .2s}
 .tp-btn:active{transform:scale(.98)}
 @media (hover:hover){.tp-btn:hover{background:#7A58F0!important}.tp-demo:hover{background:#FFFFFF!important}}
-.tp-big:focus-within{box-shadow:0 0 0 3px #A68EFA,0 30px 80px -30px rgba(139,107,247,.7)!important}
-.tp-big input::placeholder,.tp-sticky input::placeholder{color:#8A8798}
+.tp-big:focus-within,.tp-sticky:focus-within{border-color:#CBBEFD!important;box-shadow:0 0 0 3px rgba(166,142,250,.35),0 24px 70px -30px rgba(139,107,247,.9)!important}
+.tp-big input::placeholder,.tp-sticky input::placeholder{color:#A79CCB}
+.tp-big input,.tp-sticky input{caret-color:#CBBEFD}
 /* Headline: each word lights up violet, then settles (TrooCRO-style burst) */
 .tp-b{display:inline-block;animation:tpburst 1.15s ease-in-out both}
 .tp-h1 .tp-b:nth-child(2){animation-delay:.06s}.tp-h1 .tp-b:nth-child(3){animation-delay:.12s}.tp-h1 .tp-b:nth-child(4){animation-delay:.18s}.tp-h1 .tp-b:nth-child(5){animation-delay:.24s}.tp-h1 .tp-b:nth-child(6){animation-delay:.3s}.tp-h1 .tp-b:nth-child(7){animation-delay:.36s}.tp-h1 .tp-b:nth-child(8){animation-delay:.42s}
@@ -82,11 +83,11 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
  .tp-hero .tp-eye{font-size:11px!important;white-space:nowrap}
  .tp-big{padding:6px 6px 6px 14px!important;border-radius:14px!important}
  .tp-big .tp-pre{display:none}
- .tp-big input{height:48px!important;font-size:16px!important}
- .tp-big .tp-btn{height:48px!important;padding:0 16px!important;font-size:15px!important}
+ .tp-big input{height:44px!important;font-size:16px!important}
+ .tp-big .tp-btn{height:44px!important;padding:0 16px!important;font-size:15px!important}
  .tp-tiles{margin-top:36px!important}
  .tp-sticky .tp-pre{display:none}
- .tp-sticky{position:absolute;left:16px;right:16px;top:12px}
+ .tp-sticky{position:absolute;left:16px;right:16px;top:12px;background:#1D1733!important}
  .tp-demo.hide{display:none!important}
 }
 @media (prefers-reduced-motion: reduce){.tp-b,.tp-rise,.tp-draw,.tp-grow,.tp-track,.tp-bounce,.tp-wheel,.tp-pulse,.tp-f,.tp-stars,.tp-caret,.tp-gauge{animation:none!important;opacity:1!important}.tp-sticky{transition:none}}
@@ -98,11 +99,11 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 <div style="max-width: 1200px; margin: 0 auto; padding: 10px 28px; min-height: 68px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 16px">
 <a href="#" style="display: flex; align-items: center; gap: 9px; color: #F4F3F8; text-decoration: none; font-size: 18px; font-weight: 500; letter-spacing: -0.02em; flex: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 13l4.5-4.5"/><path d="M3.5 17a9 9 0 1 1 17 0"/></svg><span>Troo<span style="color: #A68EFA">Performance</span></span></a>
 <div style="flex: 1; min-width: 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px">
-<form class="tp-sticky {{stickyCls}}" aria-label="Analyse your site" aria-hidden="{{stickyHidden}}" style="flex: 0 1 440px; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 4px 4px 4px 14px; border-radius: 12px; background: #F4F3F8">
+<form class="tp-sticky {{stickyCls}}" aria-label="Analyse your site" aria-hidden="{{stickyHidden}}" style="flex: 0 1 440px; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 4px 4px 4px 14px; border-radius: 12px; background: linear-gradient(180deg, rgba(139,107,247,0.24), rgba(139,107,247,0.12)); border: 1px solid rgba(166,142,250,0.5)">
 <label for="stickyUrl" style="position: absolute; left: -9999px">Your website</label>
-<span class="tp-pre" aria-hidden="true" style="font-size: 14px; color: #6B6878">https://</span>
-<input id="stickyUrl" type="url" inputmode="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="yourstore.com" tabindex="{{stickyTab}}" style="flex: 1; min-width: 0; height: 38px; border: 0; outline: 0; background: transparent; font-size: 16px; color: #121218; font-family: inherit">
-<a href="Scan.dc.html" tabindex="{{stickyTab}}" class="tp-btn" style="height: 38px; padding: 0 14px; border-radius: 9px; background: #8B6BF7; color: #FFFFFF; font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap">Analyse<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<span class="tp-pre" aria-hidden="true" style="font-size: 14px; color: #A79CCB">https://</span>
+<input id="stickyUrl" type="url" inputmode="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="yourstore.com" tabindex="{{stickyTab}}" style="flex: 1; min-width: 0; height: 36px; border: 0; outline: 0; background: transparent; font-size: 16px; color: #F4F3F8; font-family: inherit">
+<a href="Scan.dc.html" tabindex="{{stickyTab}}" class="tp-btn" style="height: 36px; padding: 0 14px; border-radius: 9px; background: #8B6BF7; color: #FFFFFF; font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap">Analyse<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </form>
 <a href="https://calendly.com/nj-troopod/troopod-demo" class="tp-demo {{demoCls}}" style="height: 42px; padding: 0 16px; border-radius: 10px; background: #F4F3F8; color: #0A0A0C; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; white-space: nowrap; flex: none">Book a demo</a>
 </div>
@@ -115,13 +116,13 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 
 <div style="max-width: 1200px; width: 100%; box-sizing: border-box; padding: 0 28px; display: flex; flex-direction: column; align-items: center; text-align: center">
 <span class="tp-eye tp-rise" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Case study · a billion-dollar house of brands</span>
-<h1 class="tp-h1" aria-label="We made their store fast in one week. Sales followed." style="margin: 20px 0 0; max-width: 900px; font-size: clamp(34px, min(4.8vw, 7.2vh), 66px); line-height: 1.04; font-weight: 400; letter-spacing: -0.04em; text-wrap: balance"><span aria-hidden="true"><span class="tp-b">We</span> <span class="tp-b">made</span> <span class="tp-b">their</span> <span class="tp-b">store</span> <span class="tp-b">fast</span> <span class="tp-b">in</span> <span class="tp-b">one</span> <span class="tp-b">week.</span> <span style="color: #A68EFA"><span class="tp-b">Sales</span> <span class="tp-b">followed.</span></span></span></h1>
-<p class="tp-rise" style="margin: 20px 0 0; max-width: 600px; font-size: 18px; line-height: 1.6; color: #CFCCD9; animation-delay: .16s">Same products, same ads. Only the speed changed.</p>
-<form class="tp-big tp-rise" data-hero-form aria-label="Analyse your site" style="margin-top: clamp(20px, 3.2vh, 30px); width: 100%; max-width: 680px; display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 22px; border-radius: 16px; background: #F4F3F8; box-sizing: border-box; box-shadow: 0 0 0 8px rgba(139,107,247,0.16), 0 30px 80px -30px rgba(139,107,247,0.7); animation-delay: .22s">
-<span class="tp-pre" aria-hidden="true" style="font-size: 18px; color: #6B6878; flex: none">https://</span>
+<h1 class="tp-h1" aria-label="Faster store. More sales." style="margin: 20px 0 0; max-width: 900px; font-size: clamp(42px, min(6vw, 9vh), 84px); line-height: 1.02; font-weight: 400; letter-spacing: -0.04em; text-wrap: balance"><span aria-hidden="true"><span class="tp-b">Faster</span> <span class="tp-b">store.</span> <span style="color: #A68EFA"><span class="tp-b">More</span> <span class="tp-b">sales.</span></span></span></h1>
+<p class="tp-rise" style="margin: 20px 0 0; max-width: 600px; font-size: 18px; line-height: 1.6; color: #CFCCD9; animation-delay: .16s">Same products, same ads. We made the site fast in one week.</p>
+<form class="tp-big tp-rise" data-hero-form aria-label="Analyse your site" style="margin-top: clamp(20px, 3.2vh, 30px); width: 100%; max-width: 640px; display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 20px; border-radius: 14px; background: linear-gradient(180deg, rgba(139,107,247,0.22), rgba(139,107,247,0.10)); border: 1px solid rgba(166,142,250,0.5); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-sizing: border-box; box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 70px -30px rgba(139,107,247,0.9); animation-delay: .22s">
+<span class="tp-pre" aria-hidden="true" style="font-size: 16px; color: #A79CCB; flex: none">https://</span>
 <label for="heroUrl" style="position: absolute; left: -9999px">Your website</label>
-<input id="heroUrl" name="url" type="url" inputmode="url" enterkeyhint="go" autocomplete="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="yourstore.com" style="flex: 1; min-width: 0; height: 56px; border: 0; outline: 0; background: transparent; font-size: 18px; color: #121218; font-family: inherit">
-<a href="Scan.dc.html" class="tp-btn" style="height: 56px; padding: 0 24px; border-radius: 11px; background: #8B6BF7; color: #FFFFFF; font-size: 17px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)">Analyse<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<input id="heroUrl" name="url" type="url" inputmode="url" enterkeyhint="go" autocomplete="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="yourstore.com" style="flex: 1; min-width: 0; height: 46px; border: 0; outline: 0; background: transparent; font-size: 17px; color: #F4F3F8; font-family: inherit">
+<a href="Scan.dc.html" class="tp-btn" style="height: 46px; padding: 0 20px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 16px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)">Analyse<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </form>
 <span class="tp-rise" style="margin-top: 14px; font-size: 14.5px; color: #A09DAD; animation-delay: .28s">Free audit. Takes about 2 minutes.</span>
 
@@ -165,15 +166,15 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 <button type="button" class="tp-arrow {{nextCls}}" aria-label="Next result" onClick="{{nextTile}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
 </div>
 
-<div class="tp-proofrow tp-rise" style="margin-top: clamp(24px, 4vh, 44px); width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; animation-delay: .5s">
+<div class="tp-proofrow tp-rise" style="margin-top: clamp(24px, 4vh, 44px); width: 100%; display: flex; flex-direction: column; align-items: center; gap: 26px; animation-delay: .5s">
 <p style="margin: 0; font-size: 14px; color: #A09DAD">Building revenue for <strong style="color: #F4F3F8; font-weight: 500">50+ D2C brands</strong></p>
 <div class="tp-marq" style="width: 100%; overflow: hidden; -webkit-mask-image: linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); mask-image: linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)">
-<div class="tp-track" style="display: flex; align-items: center; gap: 64px; width: max-content">
+<div class="tp-track" style="display: flex; align-items: center; gap: 72px; width: max-content; padding: 4px 0">
 <img src="https://purrieie.github.io/troocro/assets/logos/titan.png" alt="Titan" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/mia-by-tanishq.png" alt="Mia by Tanishq" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/durex.png" alt="Durex" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/bombay-shaving-company.png" alt="Bombay Shaving Company" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/essor.png" alt="ESSOR Group" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/damensch.png" alt="Damensch" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/homelane.png" alt="HomeLane" class="tp-logo" loading="lazy" decoding="async">
 <img src="https://purrieie.github.io/troocro/assets/logos/titan.png" alt="" aria-hidden="true" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/mia-by-tanishq.png" alt="" aria-hidden="true" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/durex.png" alt="" aria-hidden="true" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/bombay-shaving-company.png" alt="" aria-hidden="true" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="" aria-hidden="true" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/essor.png" alt="" aria-hidden="true" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/damensch.png" alt="" aria-hidden="true" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/homelane.png" alt="" aria-hidden="true" class="tp-logo" loading="lazy" decoding="async">
 </div>
 </div>
-<a href="#proof" aria-label="Scroll to see how we did it" class="tp-cue" style="margin-top: 6px; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: rgba(14,14,18,0.6); color: #CFCCD9; font-size: 13px; text-decoration: none">See how we did it<svg class="tp-bounce" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+<a href="#proof" aria-label="Scroll to see how we did it" class="tp-cue" style="margin-top: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: rgba(14,14,18,0.6); color: #CFCCD9; font-size: 13px; text-decoration: none">See how we did it<svg class="tp-bounce" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
 </div>
 </section>
 
@@ -433,6 +434,29 @@ class Component extends DCLogic {
     };
   }
 }
+</script>
+<script>
+/* Preview only: send the URL typed on this landing to the real audit (Google PageSpeed + Search/AI scan). */
+(function () {
+  function clean(v) { v = String(v || "").trim().replace(/\s+/g, "").replace(/^https?:\/\//i, ""); return /^[a-z0-9-]+(\.[a-z0-9-]+)+(:\d+)?(\/.*)?$/i.test(v) ? v : ""; }
+  function go(input) {
+    var v = clean(input && input.value);
+    if (!v) { if (input) { input.focus(); input.setAttribute("aria-invalid", "true"); input.placeholder = "Enter your store, e.g. yourstore.com"; } return; }
+    location.href = "../../audit.html?url=" + encodeURIComponent(v);
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href="Scan.dc.html"]');
+    if (!a) return;
+    e.preventDefault();
+    var form = a.closest("form");
+    go(form ? form.querySelector("input") : document.getElementById("heroUrl"));
+  }, true);
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" || !e.target.matches || !e.target.matches("#heroUrl, #stickyUrl")) return;
+    e.preventDefault(); go(e.target);
+  }, true);
+  document.addEventListener("submit", function (e) { e.preventDefault(); go(e.target.querySelector("input")); }, true);
+})();
 </script>
 </body>
 </html>
