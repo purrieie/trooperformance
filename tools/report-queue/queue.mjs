@@ -21,7 +21,8 @@ import { fileURLToPath } from "node:url";
 const here = path.dirname(fileURLToPath(import.meta.url));
 createRequire(import.meta.url)(path.join(here, "../../assets/js/report-doc.js"));
 const TP = globalThis.TPReportDoc;
-const ASSETS = "https://purrieie.github.io/trooperformance/";
+// email images load from the repo directly (raw), so a GitHub Pages outage never breaks a report email
+const ASSETS = "https://raw.githubusercontent.com/purrieie/trooperformance/main/";
 
 const [cmd, ...rest] = process.argv.slice(2);
 if (!cmd) { console.error("usage: queue.mjs review | preview [dir] | send [--skip 2,5] | reject 2,5"); process.exit(2); }
