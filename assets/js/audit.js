@@ -158,15 +158,13 @@
     d.innerHTML = '<span class="t">' + esc(text) + "</span>" + (tag ? '<span class="tag" style="color:' + (tagColor || DIM) + '">' + esc(tag) + "</span>" : "");
     logEl.appendChild(d); logEl.scrollTop = logEl.scrollHeight;
   }
-  // phone build animation
+  // live view: the real page with the agents working on it (assets/js/live.js)
+  var LV = win.TPLive || { start: function () {}, agent: function () {}, result: function () {}, shot: function () {}, finish: function () { return Promise.resolve(); } };
   var t0 = Date.now();
-  var clock = setInterval(function () { $("#clock").textContent = ((Date.now() - t0) / 1000).toFixed(1) + " s"; }, 100);
-  [[500, "1"], [1400, "3"], [2300, "2"], [3600, "img"], [4600, "5"]].forEach(function (s) {
-    setTimeout(function () {
-      if (s[1] === "img") { var im = $('[data-ph="3"]'); if (im) im.classList.add("filled"); return; }
-      var el = $('[data-ph="' + s[1] + '"]'); if (el) el.classList.add("on");
-    }, s[0]);
-  });
+  var clock = setInterval(function () { var c = $("#clock"); if (c) c.textContent = ((Date.now() - t0) / 1000).toFixed(1) + " s"; }, 100);
+  LV.start(URL0);
+  setTimeout(function () { LV.agent("speed", "run"); LV.agent("search", "run"); }, 1200);
+  setTimeout(function () { LV.agent("ai", "run"); LV.agent("desk", "run"); }, 2600);
   var total = 3 + VS.length, done = 0;
   function tick() {
     done++; var p = Math.min(100, Math.round(done / total * 100));
@@ -197,8 +195,10 @@
     meter("search", "Search", d.search.score, bandName(d.search.score), band(d.search.score));
     meter("ai", "AI answers", d.ai.score, bandName(d.ai.score), band(d.ai.score));
     stage("ai", "done");
+    liveScan(d);
   }).catch(function () {
     S.scanErr = true; stage("google", "err"); stage("ai", "err");
+    LV.agent("search", "fail", "Couldn't read the HTML"); LV.agent("ai", "fail", "Couldn't read the HTML");
     log("couldn't read this page's HTML", "error", R);
     meter("search", "Search", null, "couldn't check", R); meter("ai", "AI answers", null, "couldn't check", R);
   }).then(tick);
@@ -213,19 +213,21 @@
     if (m.field) { stage("field", "done"); log("real shoppers: LCP " + sec(m.field.lcp) + " · INP " + msf(m.field.inp), m.field.scope === "site" ? "site-wide" : "this page", mcol("lcp", m.field.lcp)); }
     else { stage("field", "done"); log("real-shopper data: not enough Chrome traffic", "n/a", DIM); }
     meter("speed", "Performance", m.perf, bandName(m.perf) + " · mobile", band(m.perf));
-    var img = $("#shot"); var src = m.shot || (m.thumbs.length ? m.thumbs[m.thumbs.length - 1].src : "");
-    if (src) { img.src = src; img.classList.add("on"); $("#beam").style.display = "none"; }
+    LV.shot(m.shot || (m.thumbs.length ? m.thumbs[m.thumbs.length - 1].src : ""));
+    livePsi(m);
   }).catch(function (e) {
     S.psiErr.mobile = e && e.message || "failed"; stage("mobile", "err"); stage("field", "err");
     log("Google PageSpeed " + (S.psiErr.mobile === "busy" ? "is busy right now" : "didn't answer"), "retry later", A);
     meter("speed", "Performance", null, "PageSpeed busy", A);
+    LV.agent("speed", "fail", "Google PageSpeed is busy");
   }).then(tick);
   stage("field", "active");
 
   S.pendingDesktop = true;
   var pDesk = runPsi(URL0, "desktop").then(function (m) {
     S.psi.desktop = m; stage("desktop", "done"); log("desktop score", String(m.perf), band(m.perf));
-  }).catch(function (e) { S.psiErr.desktop = e && e.message || "failed"; stage("desktop", "err"); }).then(function () {
+    LV.agent("desk", "done", "Desktop score " + m.perf);
+  }).catch(function (e) { S.psiErr.desktop = e && e.message || "failed"; stage("desktop", "err"); LV.agent("desk", "fail", "Google PageSpeed is busy"); }).then(function () {
     S.pendingDesktop = false; tick();
     if (S.shown) { var rep = $("#report"); rep.innerHTML = renderReport(); animateRings(rep); }
   });
@@ -246,8 +248,37 @@
     if (VS.length) stage("comps", "done");
     clearInterval(clock); $("#spin").style.display = "none";
     log("report ready", "done", G, "head");
-    setTimeout(showReport, 900);
+    var shown = false, go = function () { if (!shown) { shown = true; showReport(); } };
+    setTimeout(function () { LV.finish().then(go); }, 2600);
+    setTimeout(go, 7000);
   });
+
+  // what the agents pin on the live page
+  function kindOf(c) { return c === G ? "ok" : c === A ? "warn" : "bad"; }
+  function livePsi(m) {
+    var x = m.m;
+    if (x.lcp != null) LV.result("speed", "img", kindOf(mcol("lcp", x.lcp)), "Main content shows at " + sec(x.lcp));
+    if (x.tbt != null) LV.result("speed", "cta", kindOf(mcol("tbt", x.tbt)), "Taps blocked for " + msf(x.tbt));
+    if (x.cls != null) LV.result("speed", "content", kindOf(mcol("cls", x.cls)), "Layout shift " + x.cls.toFixed(2));
+    if (m.third.length) LV.result("speed", "nav", m.third.length > 8 ? "warn" : "ok", m.third.length + " third-party apps load");
+    LV.agent("speed", "done", "Performance " + (m.perf == null ? "–" : m.perf) + " on a phone");
+  }
+  function liveScan(d) {
+    var h = d.html;
+    if (h) {
+      var tl = (h.title || "").length;
+      LV.result("search", "title", h.h1Count === 1 ? "ok" : h.h1Count ? "warn" : "bad", h.h1Count === 1 ? "One clear H1" : h.h1Count ? h.h1Count + " H1 headings" : "No H1 heading");
+      LV.result("search", "nav", tl && tl <= 65 ? "ok" : "warn", tl ? (tl <= 65 ? "Title fits in Google" : "Title gets cut off") : "No page title");
+      if (h.imgs) LV.result("search", "img", h.imgsNoAlt ? (h.imgsNoAlt / h.imgs > 0.3 ? "bad" : "warn") : "ok", h.imgsNoAlt ? h.imgsNoAlt + " images without alt text" : "Every image has alt text");
+      var p = h.jsonld.product;
+      if (d.isProduct) LV.result("ai", "price", p && p.price ? "ok" : h.price ? "warn" : "bad", p && p.price ? "Price readable by AI" : h.price ? "Price not in schema" : "AI can't see the price");
+      LV.result("ai", "content", h.words >= 150 ? "ok" : "bad", h.words + " words readable without JS");
+    }
+    var blocked = d.robots.bots.filter(function (b) { return !b.allowed && b.ua !== "Googlebot" && b.ua !== "Bingbot"; });
+    LV.result("ai", "footer", blocked.length ? "bad" : "ok", blocked.length ? blocked.length + " AI bots blocked" : "AI bots allowed");
+    LV.agent("search", "done", "Search " + d.search.score + "/100");
+    LV.agent("ai", "done", "AI answers " + d.ai.score + "/100");
+  }
 
   // ---------- report ----------
   function showReport() {

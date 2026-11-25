@@ -16,8 +16,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=20261125q">
-<script src="assets/js/config.js?v=20261125q"></script>
+<link rel="stylesheet" href="assets/css/site.css?v=20261125r">
+<script src="assets/js/config.js?v=20261125r"></script>
 </head>
 <body>
 <header class="nav" id="nav">
@@ -41,29 +41,41 @@
         <span class="scan-status" id="scanStatus"><svg class="spin" id="spin" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"/></svg><span id="scanPct">Starting</span></span>
       </div>
       <div class="progress" role="progressbar" aria-label="Scan progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog"><i id="progBar"></i></div>
-      <div class="scan-grid">
-        <div class="phone" aria-hidden="true">
-          <div class="phone-screen" id="phone">
-            <div class="beam" id="beam"></div>
-            <span class="phone-clock" id="clock">0.0 s</span>
-            <div class="ph" data-ph="1" style="height:12px;background:#CFCCD9"></div>
-            <div class="ph ph-img" data-ph="3"></div>
-            <div class="ph" data-ph="2" style="display:flex;flex-direction:column;gap:7px"><i style="display:block;height:11px;width:88%;border-radius:4px;background:#2B2A35"></i><i style="display:block;height:11px;width:36%;border-radius:4px;background:#8B6BF7"></i><i style="display:block;height:7px;border-radius:4px;background:#DCD8EA"></i><i style="display:block;height:7px;width:76%;border-radius:4px;background:#DCD8EA"></i></div>
-            <div class="ph" data-ph="5" style="margin-top:auto;height:40px;border-radius:10px;background:#0A0A0C"></div>
-            <img class="shot" id="shot" alt="">
+      <div class="lv-grid">
+        <div class="lv-canvas" id="lv">
+          <div class="lv-bar" aria-hidden="true"><span class="lv-dots"><i></i><i></i><i></i></span><span class="lv-url" id="lvUrl"></span><span class="lv-pill"><b></b><span class="lv-pill-t">Live</span><span class="lv-clock" id="clock">0.0 s</span></span></div>
+          <div class="lv-view" id="lvView" aria-hidden="true">
+            <div class="lv-skel" id="lvSkel">
+              <div class="sk-nav" data-r="nav"><i></i><i></i><i></i></div>
+              <div class="sk-img" data-r="img"></div>
+              <div class="sk-title" data-r="title"><i></i><i></i></div>
+              <div class="sk-price" data-r="price"><i></i></div>
+              <div class="sk-cta" data-r="cta"></div>
+              <div class="sk-text" data-r="content"><i></i><i></i><i></i><i></i></div>
+              <div class="sk-foot" data-r="footer"><i></i><i></i></div>
+            </div>
+            <img class="lv-shot" id="shot" alt="">
+            <div class="lv-fx" id="lvFx"></div>
           </div>
+          <div class="lv-now" id="lvNow" aria-live="polite"></div>
         </div>
-        <div class="log">
-          <div class="log-head"><i style="background:#EF6B57"></i><i style="background:#E5A93D"></i><i style="background:#4CC38A"></i><span>scan.log</span></div>
-          <div class="log-body" id="log"></div>
-        </div>
+        <aside class="lv-side">
+          <div class="lv-agents-head"><span>Your agents</span><span id="lvActive">Starting</span></div>
+          <div class="lv-agents" id="lvAgents"></div>
+        </aside>
+      </div>
+      <div class="lv-under">
         <div class="meters">
           <div class="meter" id="m-speed"></div>
           <div class="meter" id="m-search"></div>
           <div class="meter" id="m-ai"></div>
         </div>
+        <div class="log">
+          <div class="log-head"><i style="background:#EF6B57"></i><i style="background:#E5A93D"></i><i style="background:#4CC38A"></i><span>scan.log</span></div>
+          <div class="log-body" id="log"></div>
+        </div>
       </div>
-      <div class="stages" id="stages"></div>
+      <div class="stages" id="stages" hidden></div>
     </div>
   </section>
 
@@ -77,6 +89,7 @@
   </div>
 </footer>
 <div class="toast" id="toast" role="status"></div>
-<script src="assets/js/audit.js?v=20261125q"></script>
+<script src="assets/js/live.js?v=20261125r"></script>
+<script src="assets/js/audit.js?v=20261125r"></script>
 </body>
 </html>
