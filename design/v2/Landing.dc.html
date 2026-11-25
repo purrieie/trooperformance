@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrooPerformance: free speed audit</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A0A0C}
+a{color:#CBBEFD}a:hover{color:#FFFFFF}
+.tp-dots{background-image:radial-gradient(rgba(255,255,255,.16) 1px,transparent 1.4px);background-size:15px 15px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 20%,transparent 75%)}
+.tp-glow{background:radial-gradient(closest-side,rgba(139,107,247,.4),rgba(139,107,247,0));animation:tpdrift 9s ease-in-out infinite alternate}
+.tp-glow2{background:radial-gradient(closest-side,rgba(76,195,138,.16),rgba(76,195,138,0));animation:tpdrift 11s ease-in-out infinite alternate-reverse}
+@keyframes tpdrift{from{transform:translate(-8%,4%) scale(1)}to{transform:translate(8%,-6%) scale(1.15)}}
+.tp-eye::before{content:"";width:10px;height:10px;flex:none;background-image:radial-gradient(circle,currentColor 1px,transparent 1.3px);background-size:3.4px 3.4px}
+.tp-track{animation:tpmarq 32s linear infinite}
+@keyframes tpmarq{to{transform:translateX(-50%)}}
+.tp-gauge{animation:tpgauge 2.4s cubic-bezier(.22,.8,.24,1) infinite alternate}
+@keyframes tpgauge{0%{stroke-dasharray:0 302}100%{stroke-dasharray:115 302}}
+.tp-f{opacity:0;animation:tpfade 6s infinite}
+@keyframes tpfade{0%,8%{opacity:0;transform:translateY(6px)}16%,86%{opacity:1;transform:none}100%{opacity:0}}
+.tp-stars{animation:tpstar 4s ease-in-out infinite}
+@keyframes tpstar{0%,30%{opacity:0;transform:translateX(-6px)}45%,90%{opacity:1;transform:none}100%{opacity:0}}
+.tp-caret{animation:tpblink 1s steps(1) infinite}
+@keyframes tpblink{50%{opacity:0}}
+.tp-pulse{animation:tppulse 2.2s ease-out infinite}
+@keyframes tppulse{0%{box-shadow:0 0 0 0 rgba(139,107,247,.6)}100%{box-shadow:0 0 0 12px rgba(139,107,247,0)}}
+.tp-rise{animation:tprise .8s cubic-bezier(.22,.8,.24,1) both}
+@keyframes tprise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.tp-draw{stroke-dasharray:420;stroke-dashoffset:420;animation:tpdraw 2.2s cubic-bezier(.22,.8,.24,1) .4s forwards}
+@keyframes tpdraw{to{stroke-dashoffset:0}}
+.tp-grow{transform-origin:left;animation:tpgrow 1.6s cubic-bezier(.22,.8,.24,1) both}
+@keyframes tpgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.tp-bounce{animation:tpbounce 1.6s ease-in-out infinite}
+@keyframes tpbounce{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(8px);opacity:.5}}
+.tp-wheel{animation:tpwheel 1.6s ease-in-out infinite}
+@keyframes tpwheel{0%{transform:translateY(0);opacity:1}70%{transform:translateY(10px);opacity:0}100%{transform:translateY(0);opacity:0}}
+.tp-shine{background:linear-gradient(100deg,#F4F3F8 0%,#CBBEFD 40%,#F4F3F8 60%,#F4F3F8 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tpshine 5s linear infinite}
+@keyframes tpshine{from{background-position:120% 0}to{background-position:-100% 0}}
+
+.tp-logo{height:24px;width:auto;opacity:.8}.tp-logo.t{height:34px}
+@media (hover:hover){.tp-marq:hover .tp-track{animation-play-state:paused}}
+@media (max-width:767px){.tp-logo{height:19px}.tp-logo.t{height:27px}.tp-track{gap:40px!important}.tp-proofrow{margin-top:32px!important}}
+/* Mobile: the three result tiles become a swipe carousel with peeking neighbours and arrow buttons */
+.tp-carctl{display:none}
+@media (max-width:767px){
+ .tp-tiles{display:flex!important;align-self:stretch;box-sizing:content-box;gap:12px!important;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;margin-left:-28px;margin-right:-28px;padding:4px 28px 8px;width:auto!important;scroll-padding:0 28px}
+ .tp-tiles::-webkit-scrollbar{display:none}
+ .tp-tiles>article{flex:0 0 84%;scroll-snap-align:center;min-height:200px!important}
+ .tp-carctl{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:14px}
+ .tp-arrow{all:unset;box-sizing:border-box;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.16);background:#141419;color:#F4F3F8;cursor:pointer;transition:opacity .2s,box-shadow .2s,transform .15s;touch-action:manipulation}
+ .tp-arrow:active{transform:scale(.95)}
+ .tp-arrow:focus-visible{outline:2px solid #A68EFA;outline-offset:2px}
+ .tp-arrow.go{box-shadow:0 0 0 3px #0A0A0C,0 0 0 5px #A68EFA}
+ .tp-arrow.off{opacity:.35;pointer-events:none}
+ .tp-dotsnav{display:flex;gap:6px}
+ .tp-dotsnav span{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.22);transition:width .3s,background-color .3s}
+ .tp-dotsnav span.on{width:18px;background:#A68EFA}
+}
+/* Sticky analyse bar: hidden while the big hero input is on screen, slides into the header after it scrolls away */
+.tp-sticky{opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transition:opacity .35s cubic-bezier(.16,1,.3,1),transform .35s cubic-bezier(.16,1,.3,1),visibility 0s linear .35s;box-shadow:0 0 0 4px rgba(139,107,247,.18)}
+.tp-sticky.on{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.tp-btn{transition:background-color .2s,transform .2s}
+.tp-btn:active{transform:scale(.98)}
+@media (hover:hover){.tp-btn:hover{background:#7A58F0!important}.tp-demo:hover{background:#FFFFFF!important}}
+.tp-big:focus-within{box-shadow:0 0 0 3px #A68EFA,0 30px 80px -30px rgba(139,107,247,.7)!important}
+.tp-big input::placeholder,.tp-sticky input::placeholder{color:#8A8798}
+/* Headline: each word lights up violet, then settles (TrooCRO-style burst) */
+.tp-b{display:inline-block;animation:tpburst 1.15s ease-in-out both}
+.tp-h1 .tp-b:nth-child(2){animation-delay:.06s}.tp-h1 .tp-b:nth-child(3){animation-delay:.12s}.tp-h1 .tp-b:nth-child(4){animation-delay:.18s}.tp-h1 .tp-b:nth-child(5){animation-delay:.24s}.tp-h1 .tp-b:nth-child(6){animation-delay:.3s}.tp-h1 .tp-b:nth-child(7){animation-delay:.36s}.tp-h1 .tp-b:nth-child(8){animation-delay:.42s}
+.tp-h1 span span .tp-b:nth-child(1){animation-delay:.5s}.tp-h1 span span .tp-b:nth-child(2){animation-delay:.56s}
+@keyframes tpburst{0%{color:rgba(160,157,173,.22);text-shadow:none}35%{color:#E9E2FF;text-shadow:0 0 18px rgba(203,190,253,.8)}70%{color:#A68EFA;text-shadow:0 0 10px rgba(139,107,247,.5)}100%{text-shadow:none}}
+@media (max-width:767px){
+ .tp-hero{padding-top:32px!important;min-height:0!important}
+ .tp-hero .tp-eye{font-size:11px!important;white-space:nowrap}
+ .tp-big{padding:6px 6px 6px 14px!important;border-radius:14px!important}
+ .tp-big .tp-pre{display:none}
+ .tp-big input{height:48px!important;font-size:16px!important}
+ .tp-big .tp-btn{height:48px!important;padding:0 16px!important;font-size:15px!important}
+ .tp-tiles{margin-top:36px!important}
+ .tp-sticky .tp-pre{display:none}
+ .tp-sticky{position:absolute;left:16px;right:16px;top:12px}
+ .tp-demo.hide{display:none!important}
+}
+@media (prefers-reduced-motion: reduce){.tp-b,.tp-rise,.tp-draw,.tp-grow,.tp-track,.tp-bounce,.tp-wheel,.tp-pulse,.tp-f,.tp-stars,.tp-caret,.tp-gauge{animation:none!important;opacity:1!important}.tp-sticky{transition:none}}
+</style>
+</helmet>
+<div style="background: #0A0A0C; color: #F4F3F8; font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip">
+
+<header class="tp-hdr" style="position: sticky; top: 0; z-index: 30; background: rgba(10,10,12,0.78); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,0.08)">
+<div style="max-width: 1200px; margin: 0 auto; padding: 10px 28px; min-height: 68px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 16px">
+<a href="#" style="display: flex; align-items: center; gap: 9px; color: #F4F3F8; text-decoration: none; font-size: 18px; font-weight: 500; letter-spacing: -0.02em; flex: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 13l4.5-4.5"/><path d="M3.5 17a9 9 0 1 1 17 0"/></svg><span>Troo<span style="color: #A68EFA">Performance</span></span></a>
+<div style="flex: 1; min-width: 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px">
+<form class="tp-sticky {{stickyCls}}" aria-label="Analyse your site" aria-hidden="{{stickyHidden}}" style="flex: 0 1 440px; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 4px 4px 4px 14px; border-radius: 12px; background: #F4F3F8">
+<label for="stickyUrl" style="position: absolute; left: -9999px">Your website</label>
+<span class="tp-pre" aria-hidden="true" style="font-size: 14px; color: #6B6878">https://</span>
+<input id="stickyUrl" type="url" inputmode="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="yourstore.com" tabindex="{{stickyTab}}" style="flex: 1; min-width: 0; height: 38px; border: 0; outline: 0; background: transparent; font-size: 16px; color: #121218; font-family: inherit">
+<a href="Scan.dc.html" tabindex="{{stickyTab}}" class="tp-btn" style="height: 38px; padding: 0 14px; border-radius: 9px; background: #8B6BF7; color: #FFFFFF; font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap">Analyse<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</form>
+<a href="https://calendly.com/nj-troopod/troopod-demo" class="tp-demo {{demoCls}}" style="height: 42px; padding: 0 16px; border-radius: 10px; background: #F4F3F8; color: #0A0A0C; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; white-space: nowrap; flex: none">Book a demo</a>
+</div>
+</div>
+</header>
+
+<section class="tp-hero" style="position: relative; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; padding: clamp(28px, 5vh, 52px) 0 28px; isolation: isolate">
+<canvas class="tp-halftone" data-ht="hero" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2"></canvas>
+<div aria-hidden="true" style="position: absolute; inset: 0; z-index: -3; background: radial-gradient(60% 45% at 50% 22%, rgba(139,107,247,0.16), rgba(10,10,12,0) 70%)"></div>
+
+<div style="max-width: 1200px; width: 100%; box-sizing: border-box; padding: 0 28px; display: flex; flex-direction: column; align-items: center; text-align: center">
+<span class="tp-eye tp-rise" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Case study · a billion-dollar house of brands</span>
+<h1 class="tp-h1" aria-label="We made their store fast in one week. Sales followed." style="margin: 20px 0 0; max-width: 900px; font-size: clamp(34px, min(4.8vw, 7.2vh), 66px); line-height: 1.04; font-weight: 400; letter-spacing: -0.04em; text-wrap: balance"><span aria-hidden="true"><span class="tp-b">We</span> <span class="tp-b">made</span> <span class="tp-b">their</span> <span class="tp-b">store</span> <span class="tp-b">fast</span> <span class="tp-b">in</span> <span class="tp-b">one</span> <span class="tp-b">week.</span> <span style="color: #A68EFA"><span class="tp-b">Sales</span> <span class="tp-b">followed.</span></span></span></h1>
+<p class="tp-rise" style="margin: 20px 0 0; max-width: 600px; font-size: 18px; line-height: 1.6; color: #CFCCD9; animation-delay: .16s">Same products, same ads. Only the speed changed.</p>
+<form class="tp-big tp-rise" data-hero-form aria-label="Analyse your site" style="margin-top: clamp(20px, 3.2vh, 30px); width: 100%; max-width: 680px; display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 22px; border-radius: 16px; background: #F4F3F8; box-sizing: border-box; box-shadow: 0 0 0 8px rgba(139,107,247,0.16), 0 30px 80px -30px rgba(139,107,247,0.7); animation-delay: .22s">
+<span class="tp-pre" aria-hidden="true" style="font-size: 18px; color: #6B6878; flex: none">https://</span>
+<label for="heroUrl" style="position: absolute; left: -9999px">Your website</label>
+<input id="heroUrl" name="url" type="url" inputmode="url" enterkeyhint="go" autocomplete="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="yourstore.com" style="flex: 1; min-width: 0; height: 56px; border: 0; outline: 0; background: transparent; font-size: 18px; color: #121218; font-family: inherit">
+<a href="Scan.dc.html" class="tp-btn" style="height: 56px; padding: 0 24px; border-radius: 11px; background: #8B6BF7; color: #FFFFFF; font-size: 17px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)">Analyse<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</form>
+<span class="tp-rise" style="margin-top: 14px; font-size: 14.5px; color: #A09DAD; animation-delay: .28s">Free audit. Takes about 2 minutes.</span>
+
+<div class="tp-tiles" data-tiles style="margin-top: clamp(24px, 4vh, 40px); width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; text-align: left">
+
+<article class="tp-rise" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: linear-gradient(160deg, rgba(139,107,247,0.16), rgba(14,14,18,0.9) 55%); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-height: clamp(150px, 20vh, 178px); box-sizing: border-box; animation-delay: .24s">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #CBBEFD">Speed score, 113 pages</span>
+<div aria-hidden="true" style="display: flex; align-items: flex-end; gap: 5px; height: 40px"><div style="width: 14px; height: {{b1}}px; border-radius: 3px; background: rgba(166,142,250,0.35)"></div><div style="width: 14px; height: {{b2}}px; border-radius: 3px; background: rgba(166,142,250,0.6)"></div><div style="width: 14px; height: {{b3}}px; border-radius: 3px; background: #A68EFA"></div></div>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: clamp(50px, 4.8vw, 68px); line-height: 1; letter-spacing: -0.04em; color: #F4F3F8">+{{n1}}%</span>
+<span style="margin-top: auto; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #CFCCD9; line-height: 1.5; text-wrap: pretty">Google: stores passing Core Web Vitals see <span style="color: #CBBEFD">24% fewer shoppers abandon</span>.</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #8A8798">Google Chromium, 2020</span></span>
+</article>
+
+<article class="tp-rise" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: linear-gradient(160deg, rgba(76,195,138,0.14), rgba(14,14,18,0.9) 55%); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-height: clamp(150px, 20vh, 178px); box-sizing: border-box; animation-delay: .32s">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #9FE3C1">Page load time</span>
+<div aria-hidden="true" style="width: 92px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.08); overflow: hidden"><div style="height: 100%; width: {{loadBar}}%; border-radius: 4px; background: #4CC38A"></div></div>
+</div>
+<span style="display: flex; align-items: baseline; gap: 10px"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: clamp(50px, 4.8vw, 68px); line-height: 1; letter-spacing: -0.04em; color: #F4F3F8">{{n2}}%</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #9FE3C1">faster</span></span>
+<span style="margin-top: auto; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #CFCCD9; line-height: 1.5; text-wrap: pretty">Google: 1 s to 3 s of loading <span style="color: #9FE3C1">raises bounce probability by 32%</span>.</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #8A8798">Google / SOASTA, 2017</span></span>
+</article>
+
+<article class="tp-rise" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(166,142,250,0.45); background: linear-gradient(160deg, rgba(139,107,247,0.32), rgba(14,14,18,0.9) 60%); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-height: clamp(150px, 20vh, 178px); box-sizing: border-box; animation-delay: .4s; box-shadow: 0 30px 80px -40px rgba(139,107,247,0.7)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #CBBEFD">Conversion rate</span>
+<svg width="92" height="40" viewBox="0 0 120 50" fill="none" aria-hidden="true"><path class="tp-draw" d="M2 44 L22 40 L38 42 L56 30 L72 32 L90 16 L118 6" stroke="#CBBEFD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: clamp(50px, 4.8vw, 68px); line-height: 1; letter-spacing: -0.04em; color: #CBBEFD">+{{n3}}%</span>
+<span style="margin-top: auto; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #CFCCD9; line-height: 1.5; text-wrap: pretty">Google: every 0.1 s faster <span style="color: #CBBEFD">lifts retail conversions by 8.4%</span>.</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #8A8798">Deloitte &#215; Google, 2020</span></span>
+</article>
+</div>
+
+
+
+
+</div>
+<div class="tp-carctl" role="group" aria-label="Results carousel">
+<button type="button" class="tp-arrow {{prevCls}}" aria-label="Previous result" onClick="{{prevTile}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+<span class="tp-dotsnav" aria-hidden="true"><span class="{{d0}}"></span><span class="{{d1}}"></span><span class="{{d2}}"></span></span>
+<button type="button" class="tp-arrow {{nextCls}}" aria-label="Next result" onClick="{{nextTile}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+</div>
+
+<div class="tp-proofrow tp-rise" style="margin-top: clamp(24px, 4vh, 44px); width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; animation-delay: .5s">
+<p style="margin: 0; font-size: 14px; color: #A09DAD">Building revenue for <strong style="color: #F4F3F8; font-weight: 500">50+ D2C brands</strong></p>
+<div class="tp-marq" style="width: 100%; overflow: hidden; -webkit-mask-image: linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); mask-image: linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)">
+<div class="tp-track" style="display: flex; align-items: center; gap: 64px; width: max-content">
+<img src="https://purrieie.github.io/troocro/assets/logos/titan.png" alt="Titan" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/mia-by-tanishq.png" alt="Mia by Tanishq" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/durex.png" alt="Durex" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/bombay-shaving-company.png" alt="Bombay Shaving Company" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/essor.png" alt="ESSOR Group" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/damensch.png" alt="Damensch" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/homelane.png" alt="HomeLane" class="tp-logo" loading="lazy" decoding="async">
+<img src="https://purrieie.github.io/troocro/assets/logos/titan.png" alt="" aria-hidden="true" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/mia-by-tanishq.png" alt="" aria-hidden="true" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/durex.png" alt="" aria-hidden="true" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/bombay-shaving-company.png" alt="" aria-hidden="true" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="" aria-hidden="true" class="tp-logo t" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/essor.png" alt="" aria-hidden="true" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/damensch.png" alt="" aria-hidden="true" class="tp-logo" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/homelane.png" alt="" aria-hidden="true" class="tp-logo" loading="lazy" decoding="async">
+</div>
+</div>
+<a href="#proof" aria-label="Scroll to see how we did it" class="tp-cue" style="margin-top: 6px; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: rgba(14,14,18,0.6); color: #CFCCD9; font-size: 13px; text-decoration: none">See how we did it<svg class="tp-bounce" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+</div>
+</section>
+
+<section id="proof" style="max-width: 1200px; margin: 0 auto; padding: 90px 28px 20px; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Every page type got faster</span>
+<h2 style="margin: 0; font-size: clamp(32px, 3.9vw, 50px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">Not just the homepage. <span style="color: #A68EFA">The pages that actually sell.</span></h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 14px">
+<sc-for list="{{pages}}" as="p" hint-placeholder-count="4">
+<article style="border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12; padding: 22px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 17px">{{p.name}}</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #6F6C7C">{{p.tag}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 12.5px; color: #A09DAD">Speed score</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 26px; color: #CBBEFD">+{{p.score}}%</span></div>
+<div style="height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06)"><div class="tp-grow" style="height: 100%; width: {{p.scoreW}}%; border-radius: 3px; background: linear-gradient(90deg, #6A4BE6, #CBBEFD); animation-delay: {{p.delay}}s"></div></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 12.5px; color: #A09DAD">Load time</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 26px; color: #9FE3C1">{{p.load}}% faster</span></div>
+<div style="height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06)"><div class="tp-grow" style="height: 100%; width: {{p.load}}%; border-radius: 3px; background: #4CC38A; animation-delay: {{p.delay}}s"></div></div>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+
+<section id="what" style="max-width: 1200px; margin: 0 auto; padding: 90px 28px 40px; display: flex; flex-direction: column; gap: 48px">
+<div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px">
+<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">What we check</span>
+<h2 style="margin: 0; font-size: clamp(32px, 3.9vw, 50px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">One scan. <span style="color: #A68EFA">Three ways shoppers find you, or don't.</span></h2>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px">
+
+<article style="border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column">
+<div style="height: 260px; position: relative; background: radial-gradient(120% 90% at 50% 0%, #241B45 0%, #0E0E12 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px">
+<svg width="150" height="90" viewBox="0 0 220 120" role="img" aria-label="Speed gauge">
+<path d="M14 110 A96 96 0 0 1 206 110" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12" stroke-linecap="round"></path>
+<path class="tp-gauge" d="M14 110 A96 96 0 0 1 206 110" fill="none" stroke="#EF6B57" stroke-width="12" stroke-linecap="round" stroke-dasharray="115 302"></path>
+<text x="110" y="104" text-anchor="middle" font-size="40" fill="#F4F3F8" font-family="DM Mono, monospace">38</text>
+</svg>
+<div style="display: flex; gap: 6px" aria-hidden="true">
+<div class="tp-f" style="width: 34px; height: 58px; border-radius: 5px; background: #F4F3F8; animation-delay: 0s"></div>
+<div class="tp-f" style="width: 34px; height: 58px; border-radius: 5px; background: #F4F3F8; padding: 4px; box-sizing: border-box; animation-delay: .4s"><div style="height: 4px; background: #CFCCD9; border-radius: 2px"></div></div>
+<div class="tp-f" style="width: 34px; height: 58px; border-radius: 5px; background: #F4F3F8; padding: 4px; box-sizing: border-box; display: flex; flex-direction: column; gap: 3px; animation-delay: .8s"><div style="height: 4px; background: #CFCCD9; border-radius: 2px"></div><div style="height: 22px; border: 1px dashed #B8B5C6; border-radius: 3px"></div></div>
+<div class="tp-f" style="width: 34px; height: 58px; border-radius: 5px; background: #F4F3F8; padding: 4px; box-sizing: border-box; display: flex; flex-direction: column; gap: 3px; animation-delay: 1.2s"><div style="height: 4px; background: #CFCCD9; border-radius: 2px"></div><div style="height: 22px; background: #A68EFA; border-radius: 3px"></div><div style="height: 3px; width: 70%; background: #CFCCD9; border-radius: 2px"></div></div>
+<div class="tp-f" style="width: 34px; height: 58px; border-radius: 5px; background: #F4F3F8; padding: 4px; box-sizing: border-box; display: flex; flex-direction: column; gap: 3px; animation-delay: 1.6s"><div style="height: 4px; background: #CFCCD9; border-radius: 2px"></div><div style="height: 22px; background: #A68EFA; border-radius: 3px"></div><div style="height: 3px; width: 70%; background: #CFCCD9; border-radius: 2px"></div><div style="height: 7px; margin-top: auto; background: #0A0A0C; border-radius: 2px"></div></div>
+</div>
+</div>
+<div style="padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">01 · Speed</span>
+<h3 style="margin: 0; font-size: 24px; font-weight: 400; letter-spacing: -0.02em">What your shoppers actually wait through</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A09DAD">Real-shopper data next to Google's lab test, a second-by-second filmstrip, and the apps slowing you down, named.</p>
+</div>
+</article>
+
+<article style="border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column">
+<div style="height: 260px; background: radial-gradient(120% 90% at 50% 0%, #1F2B4F 0%, #0E0E12 70%); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box">
+<div style="width: 100%; max-width: 290px; border-radius: 12px; background: #F4F3F8; padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 24px 50px -20px rgba(0,0,0,0.8)">
+<div style="display: flex; align-items: center; gap: 8px"><div style="width: 18px; height: 18px; border-radius: 50%; background: #DCD8EA"></div><span style="font-size: 11px; color: #5E5B6B">yourstore.com › products</span></div>
+<span style="font-size: 15px; color: #2B4EC9; line-height: 1.3">Vitamin C Serum 30 ml | yourstore</span>
+<span class="tp-stars" style="font-size: 12px; color: #C98A0C">★★★★☆ <span style="color: #5E5B6B">4.4 · 1,240 reviews · ₹899 · In stock</span></span>
+<span style="font-size: 11.5px; color: #4A4757; line-height: 1.45">Brightening serum with 10% vitamin C for dull skin. Free delivery over ₹499.</span>
+</div>
+</div>
+<div style="padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">02 · Search</span>
+<h3 style="margin: 0; font-size: 24px; font-weight: 400; letter-spacing: -0.02em">Whether Google shows you properly</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A09DAD">Indexing, titles, duplicate pages and the product schema that puts price, stock and stars in your results.</p>
+</div>
+</article>
+
+<article style="border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; background: #0E0E12; overflow: hidden; display: flex; flex-direction: column">
+<div style="height: 260px; background: radial-gradient(120% 90% at 50% 0%, #2C2157 0%, #0E0E12 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; box-sizing: border-box">
+<div role="group" aria-label="View as" style="display: flex; padding: 3px; border-radius: 999px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1)">
+<button type="button" aria-pressed="{{isHuman}}" onClick="{{toHuman}}" style="height: 28px; padding: 0 12px; border: 0; border-radius: 999px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; background: {{hBg}}; color: {{hFg}}; cursor: pointer">HUMAN</button>
+<button type="button" aria-pressed="{{isAgent}}" onClick="{{toAgent}}" style="height: 28px; padding: 0 12px; border: 0; border-radius: 999px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; background: {{aBg}}; color: {{aFg}}; cursor: pointer">AGENT</button>
+</div>
+<sc-if value="{{isHuman}}" hint-placeholder-val="{{ true }}">
+<div style="width: 100%; max-width: 290px; height: 150px; border-radius: 12px; background: #F4F3F8; padding: 12px; box-sizing: border-box; display: flex; gap: 10px">
+<div style="width: 44%; border-radius: 8px; background: linear-gradient(135deg, #CBBEFD, #A68EFA)"></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; padding-top: 4px">
+<div style="height: 8px; width: 90%; background: #2B2A35; border-radius: 3px"></div>
+<div style="height: 8px; width: 40%; background: #8B6BF7; border-radius: 3px"></div>
+<div style="height: 6px; width: 60%; background: #E5A93D; border-radius: 3px"></div>
+<div style="height: 5px; width: 100%; background: #DCD8EA; border-radius: 3px"></div>
+<div style="height: 5px; width: 80%; background: #DCD8EA; border-radius: 3px"></div>
+<div style="height: 20px; margin-top: auto; background: #0A0A0C; border-radius: 5px"></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isAgent}}" hint-placeholder-val="{{ false }}">
+<pre style="margin: 0; width: 100%; max-width: 290px; height: 150px; box-sizing: border-box; border-radius: 12px; background: #0A0A0C; border: 1px solid rgba(255,255,255,0.12); padding: 12px 14px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; line-height: 1.65; color: #CFCCD9; white-space: pre-wrap"><span style="color: #A68EFA"># Vitamin C Serum</span>
+<span style="color: #EF6B57">price: (not in HTML)</span>
+<span style="color: #EF6B57">reviews: (loaded by JS)</span>
+description: Brightening se…
+<span style="color: #E5A93D">faq: none</span><span class="tp-caret">▍</span></pre>
+</sc-if>
+</div>
+<div style="padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">03 · AI answers</span>
+<h3 style="margin: 0; font-size: 24px; font-weight: 400; letter-spacing: -0.02em">Whether ChatGPT recommends you</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A09DAD">Which AI bots you block, what they can read on your page, and how often they name you against your competitors.</p>
+</div>
+</article>
+</div>
+</section>
+
+<section style="max-width: 1200px; margin: 0 auto; padding: 60px 28px 40px">
+<ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 0; border-top: 1px solid rgba(255,255,255,0.08)">
+<li style="padding: 28px 28px 28px 0; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A68EFA">01</span><strong style="font-size: 18px; font-weight: 500">Enter your page</strong><span style="font-size: 15px; color: #A09DAD; line-height: 1.55">Homepage, collection or the product page your ads land on. Add competitors if you like.</span></li>
+<li style="padding: 28px; display: flex; flex-direction: column; gap: 8px; border-left: 1px solid rgba(255,255,255,0.08)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A68EFA">02</span><strong style="font-size: 18px; font-weight: 500">We load it three ways</strong><span style="font-size: 15px; color: #A09DAD; line-height: 1.55">On a mid-range phone, as Google's crawler, and as the AI bots that power ChatGPT and Perplexity.</span></li>
+<li style="padding: 28px; display: flex; flex-direction: column; gap: 8px; border-left: 1px solid rgba(255,255,255,0.08)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A68EFA">03</span><strong style="font-size: 18px; font-weight: 500">Get your report</strong><span style="font-size: 15px; color: #A09DAD; line-height: 1.55">Scores, the fixes that matter most and a link you can send to your developer.</span></li>
+</ol>
+</section>
+
+<section style="max-width: 1200px; margin: 0 auto; padding: 40px 28px 110px">
+<div style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: radial-gradient(90% 120% at 50% 100%, #2C2157 0%, #0E0E12 65%); padding: 72px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; isolation: isolate">
+<canvas class="tp-halftone" data-ht="cta" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1"></canvas>
+<h2 style="margin: 0; font-size: 44px; line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">See what's slowing your store down.</h2>
+<p style="margin: 0; font-size: 17px; color: #CFCCD9">Want the fixes built for you? TrooPerformance builds and tests them on your store.</p>
+<div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px">
+<a href="Scan.dc.html" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; box-shadow: 0 8px 24px -10px rgba(139,107,247,0.35), inset 0 1px 0 rgba(255,255,255,0.18)">Audit my site</a>
+<a href="#" style="height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); color: #F4F3F8; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center">Book a demo</a>
+</div>
+</div>
+</section>
+
+<footer style="border-top: 1px solid rgba(255,255,255,0.08)">
+<div style="max-width: 1200px; margin: 0 auto; padding: 28px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #A09DAD">
+<span>TrooPerformance · Speed, SEO and AEO for D2C brands. A Troopod company.</span>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2930}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { view: 'human', p: 0, stuck: false, tile: 0 }; this.stops = []; }
+  goTile(i) {
+    const el = document.querySelector('[data-tiles]'); if (!el) return;
+    const cards = el.children; const n = Math.max(0, Math.min(cards.length - 1, i));
+    const c = cards[n]; if (!c) return;
+    el.scrollTo({ left: c.offsetLeft - (el.clientWidth - c.offsetWidth) / 2, behavior: 'smooth' });
+  }
+  // TrooCRO-style halftone: a field of square "pixels" with a slow wavy horizon, brightest along the crest.
+  halftone(canvas, opt, reduce) {
+    if (!canvas || !canvas.getContext) return;
+    const ctx = canvas.getContext('2d');
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    let w = 1, h = 1, raf = 0, last = 0, visible = true;
+    const t0 = performance.now(), gap = opt.gap;
+    const size = () => {
+      const r = canvas.getBoundingClientRect(); w = Math.max(1, r.width); h = Math.max(1, r.height);
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    const frame = (now) => {
+      raf = requestAnimationFrame(frame);
+      if (!visible || now - last < 33) return; last = now;
+      if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) size();
+      const t = (now - t0) / 1000 * opt.speed;
+      ctx.clearRect(0, 0, w, h);
+      const cols = Math.ceil(w / gap) + 1, rows = Math.ceil(h / gap) + 1;
+      for (let j = 0; j < rows; j++) {
+        const y = j * gap, ny = y / h;
+        for (let i = 0; i < cols; i++) {
+          const x = i * gap, nx = x / w;
+          let v = Math.sin(nx * 6.2 + t * 0.55) * 0.5 + Math.sin(ny * 7.4 - t * 0.42 + nx * 2.3) * 0.5 + Math.sin((nx + ny) * 9 + t * 0.8) * 0.35;
+          v = (v + 1.35) / 2.7;
+          const a = opt.mask(nx, ny, t, clamp) * (opt.floor + (1 - opt.floor) * v) * opt.gain;
+          if (a < 0.08) continue;
+          const sz = Math.max(0.6, a * opt.max);
+          ctx.fillStyle = a > 0.72 ? opt.hi : opt.lo;
+          ctx.globalAlpha = clamp(a * opt.alpha, 0, 1);
+          ctx.fillRect(x - sz / 2, y - sz / 2, sz, sz);
+        }
+      }
+      ctx.globalAlpha = 1;
+      if (reduce) cancelAnimationFrame(raf);
+    };
+    size();
+    window.addEventListener('resize', size);
+    let io = null;
+    if (typeof IntersectionObserver === 'function') { io = new IntersectionObserver((es) => { visible = es[0].isIntersecting; }); io.observe(canvas); }
+    raf = requestAnimationFrame(frame);
+    this.stops.push(() => { cancelAnimationFrame(raf); window.removeEventListener('resize', size); if (io) io.disconnect(); });
+  }
+  componentDidMount() {
+    const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) this.setState({ p: 1 });
+    else {
+      const t0 = Date.now(), dur = 1800;
+      this.timer = setInterval(() => {
+        const x = Math.min(1, (Date.now() - t0) / dur);
+        this.setState({ p: 1 - Math.pow(1 - x, 3) });
+        if (x >= 1) clearInterval(this.timer);
+      }, 30);
+    }
+    this.halftone(document.querySelector('[data-ht="hero"]'), {
+      gap: 11, max: 3.2, speed: 0.7, hi: '#EFEAFF', lo: '#9C82F8', alpha: 1, floor: 0.45, gain: 1.25,
+      mask: (x, y, t, clamp) => {
+        const hz = 0.5 + 0.03 * Math.sin(x * 4.6 + t * 0.45) + 0.015 * Math.sin(x * 11 - t * 0.7);
+        const below = clamp((y - hz) / 0.06, 0, 1);
+        const crest = Math.exp(-Math.pow((y - hz - 0.06) / 0.075, 2));
+        const depth = clamp(1.05 - (y - hz) * 1.9, 0.12, 1);
+        const sky = Math.exp(-Math.pow((y - hz + 0.05) / 0.06, 2)) * 0.22;
+        const side = 0.55 + 0.45 * Math.min(1, Math.abs(x - 0.5) * 2.4);
+        return clamp((below * (0.42 + 0.58 * crest) * depth + sky) * side, 0, 1);
+      }
+    }, reduce);
+    this.halftone(document.querySelector('[data-ht="cta"]'), {
+      gap: 12, max: 2.4, speed: 0.4, hi: '#FFFFFF', lo: '#CBBEFD', alpha: 0.55, floor: 0, gain: 1,
+      mask: (x, y, t, clamp) => clamp(Math.exp(-Math.pow((x - 0.8) / 0.25, 2)) * Math.exp(-Math.pow((y - 0.45) / 0.45, 2)) * 1.1, 0, 1)
+    }, reduce);
+    // Carousel position (phones): track which tile is centred.
+    const track = document.querySelector('[data-tiles]');
+    if (track) {
+      let pend = 0;
+      const onScroll = () => { if (pend) return; pend = requestAnimationFrame(() => { pend = 0; const mid = track.scrollLeft + track.clientWidth / 2; let best = 0, bd = 1e9; [...track.children].forEach((c, i) => { const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = i; } }); if (best !== this.state.tile) this.setState({ tile: best }); }); };
+      track.addEventListener('scroll', onScroll, { passive: true });
+      this.stops.push(() => track.removeEventListener('scroll', onScroll));
+    }
+    // Sticky analyse bar: show it in the header once the big hero input has scrolled up under the header.
+    const form = document.querySelector('[data-hero-form]');
+    if (form && typeof IntersectionObserver === 'function') {
+      this.stickIO = new IntersectionObserver((es) => {
+        const e = es[0];
+        const stuck = !e.isIntersecting && e.boundingClientRect.top < 80;
+        if (stuck !== this.state.stuck) this.setState({ stuck });
+      }, { rootMargin: '-68px 0px 0px 0px', threshold: 0 });
+      this.stickIO.observe(form);
+    }
+  }
+  componentWillUnmount() { clearInterval(this.timer); this.stops.forEach((f) => f()); if (this.stickIO) this.stickIO.disconnect(); }
+  renderVals() {
+    const h = this.state.view === 'human', p = this.state.p;
+    // Case study (a billion-dollar house of brands): score 31.4 -> 60.6 (+93%), Speed Index 19.0s -> 8.5s (-55%), conversion rate +19%
+    const pages = [
+      { name: 'Product pages', tag: 'where ads land', score: 99, load: 54 },
+      { name: 'Collections', tag: '', score: 84, load: 54 },
+      { name: 'Blog', tag: '', score: 81, load: 58 },
+      { name: 'Homepage', tag: '', score: 73, load: 45 }
+    ].map((x, i) => Object.assign(x, { scoreW: x.score, delay: (0.2 + i * 0.12).toFixed(2) }));
+    const stuck = this.state.stuck, tile = this.state.tile;
+    return {
+      prevCls: tile === 0 ? 'off' : '', nextCls: tile >= 2 ? 'off' : 'go',
+      d0: tile === 0 ? 'on' : '', d1: tile === 1 ? 'on' : '', d2: tile === 2 ? 'on' : '',
+      prevTile: () => this.goTile(tile - 1), nextTile: () => this.goTile(tile + 1),
+      stickyCls: stuck ? 'on' : '', stickyHidden: stuck ? 'false' : 'true', stickyTab: stuck ? '0' : '-1', demoCls: stuck ? 'hide' : '',
+      n1: Math.round(93 * p), n2: Math.round(55 * p), n3: Math.round(19 * p),
+      b1: Math.round(12 + 6 * p), b2: Math.round(14 + 12 * p), b3: Math.round(16 + 24 * p), loadBar: Math.round(100 - 55 * p),
+      pages,
+      isHuman: h, isAgent: !h,
+      hBg: h ? '#F4F3F8' : 'transparent', hFg: h ? '#0A0A0C' : '#A09DAD',
+      aBg: !h ? '#F4F3F8' : 'transparent', aFg: !h ? '#0A0A0C' : '#A09DAD',
+      toHuman: () => this.setState({ view: 'human' }),
+      toAgent: () => this.setState({ view: 'agent' })
+    };
+  }
+}
+</script>
+</body>
+</html>

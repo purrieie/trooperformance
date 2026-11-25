@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live scan</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A0A0C}
+.sc-dots{background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1.4px);background-size:15px 15px;-webkit-mask-image:radial-gradient(ellipse 60% 70% at 50% 50%,#000 10%,transparent 80%);mask-image:radial-gradient(ellipse 60% 70% at 50% 50%,#000 10%,transparent 80%)}
+.sc-beam{animation:scbeam 2.2s ease-in-out infinite}
+@keyframes scbeam{0%{top:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:100%;opacity:0}}
+.sc-in{animation:scin .45s cubic-bezier(.22,.8,.24,1) both}
+@keyframes scin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sc-spin{animation:scspin 1s linear infinite;transform-origin:50% 50%}
+@keyframes scspin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div style="width: 1200px; height: 760px; box-sizing: border-box; position: relative; overflow: hidden; isolation: isolate; background: radial-gradient(70% 60% at 50% 30%, #1E1838 0%, #0A0A0C 70%); color: #F4F3F8; font-family: 'DM Sans', system-ui, sans-serif; padding: 40px 48px; display: flex; flex-direction: column; gap: 22px">
+<div class="sc-dots" aria-hidden="true" style="position: absolute; inset: 0; z-index: -1"></div>
+
+<div style="display: flex; align-items: center; gap: 16px">
+<div style="flex: 1; display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 8px 0 18px; border-radius: 14px; background: rgba(244,243,248,0.96); box-shadow: 0 0 0 7px rgba(139,107,247,0.14), 0 24px 60px -18px rgba(0,0,0,0.8)">
+<span style="font-size: 15px; color: #8A8798">https://</span>
+<span style="flex: 1; font-size: 15px; color: #121218">yourbrand.com/products/vitamin-c-serum</span>
+<span style="height: 36px; padding: 0 12px; border-radius: 9px; background: #0A0A0C; color: #F4F3F8; display: flex; align-items: center; gap: 8px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px">
+<sc-if value="{{running}}" hint-placeholder-val="{{ true }}"><svg class="sc-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"/></svg></sc-if>
+{{status}}</span>
+</div>
+</div>
+
+<div role="progressbar" aria-label="Scan progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{pct}}" style="height: 3px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden">
+<div style="height: 100%; width: {{pct}}%; background: linear-gradient(90deg, #6A4BE6, #CBBEFD); transition: width .6s cubic-bezier(.22,.8,.24,1)"></div>
+</div>
+
+<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 250px minmax(0, 1fr) 260px; gap: 22px">
+
+<div style="border-radius: 34px; border: 1px solid rgba(255,255,255,0.14); background: #0E0E12; padding: 12px; display: flex; box-shadow: 0 30px 60px -30px rgba(0,0,0,0.9)">
+<div style="flex: 1; position: relative; overflow: hidden; border-radius: 24px; background: #F4F3F8; padding: 26px 14px 16px; display: flex; flex-direction: column; gap: 10px">
+<div class="sc-beam" aria-hidden="true" style="position: absolute; left: 0; right: 0; height: 2px; background: #8B6BF7; box-shadow: 0 0 18px 4px rgba(139,107,247,0.55)"></div>
+<sc-if value="{{p1}}" hint-placeholder-val="{{ true }}"><div class="sc-in" style="height: 12px; border-radius: 4px; background: #CFCCD9"></div></sc-if>
+<sc-if value="{{p3}}" hint-placeholder-val="{{ true }}"><div class="sc-in" style="height: 190px; border-radius: 10px; border: 1.5px dashed #B8B5C6; background: {{imgBg}}; transition: background .5s"></div></sc-if>
+<sc-if value="{{p2}}" hint-placeholder-val="{{ true }}"><div class="sc-in" style="display: flex; flex-direction: column; gap: 7px"><div style="height: 11px; width: 88%; border-radius: 4px; background: #2B2A35"></div><div style="height: 11px; width: 36%; border-radius: 4px; background: #8B6BF7"></div><div style="height: 7px; width: 100%; border-radius: 4px; background: #DCD8EA"></div><div style="height: 7px; width: 76%; border-radius: 4px; background: #DCD8EA"></div></div></sc-if>
+<sc-if value="{{p5}}" hint-placeholder-val="{{ true }}"><div class="sc-in" style="margin-top: auto; height: 40px; border-radius: 10px; background: #0A0A0C"></div></sc-if>
+<span style="position: absolute; right: 12px; top: 6px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #5E5B6B">{{clock}}</span>
+</div>
+</div>
+
+<div style="border-radius: 18px; border: 1px solid rgba(255,255,255,0.1); background: rgba(10,10,12,0.75); display: flex; flex-direction: column; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.08)">
+<span style="width: 9px; height: 9px; border-radius: 50%; background: #EF6B57"></span><span style="width: 9px; height: 9px; border-radius: 50%; background: #E5A93D"></span><span style="width: 9px; height: 9px; border-radius: 50%; background: #4CC38A"></span>
+<span style="margin-left: 8px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">scan.log</span>
+</div>
+<div style="flex: 1; padding: 16px 18px; display: flex; flex-direction: column; gap: 7px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; line-height: 1.45">
+<sc-for list="{{lines}}" as="l" hint-placeholder-count="6">
+<div class="sc-in" style="display: flex; gap: 10px; color: {{l.color}}; padding-left: {{l.indent}}px"><span>{{l.text}}</span><span style="margin-left: auto; color: {{l.tagColor}}">{{l.tag}}</span></div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{meters}}" as="m" hint-placeholder-count="3">
+<div style="flex: 1; border-radius: 18px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12; padding: 16px 18px; display: flex; align-items: center; gap: 16px">
+<svg width="74" height="74" viewBox="0 0 120 120" role="img" aria-label="{{m.name}} {{m.val}}">
+<circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"></circle>
+<circle cx="60" cy="60" r="50" fill="none" stroke="{{m.color}}" stroke-width="10" stroke-linecap="round" stroke-dasharray="{{m.dash}}" transform="rotate(-90 60 60)" style="transition: stroke-dasharray .6s"></circle>
+<text x="60" y="71" text-anchor="middle" font-size="32" fill="#F4F3F8" font-family="DM Mono, monospace">{{m.val}}</text>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="font-size: 17px">{{m.name}}</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; white-space: nowrap; color: {{m.subColor}}">{{m.sub}}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+<sc-for list="{{stages}}" as="s" hint-placeholder-count="6">
+<span style="display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border-radius: 8px; font-size: 12.5px; border: 1px solid {{s.border}}; background: {{s.bg}}; color: {{s.fg}}; transition: all .3s"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{s.dot}}"></span>{{s.label}}</span>
+</sc-for>
+<sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+<a href="Report.dc.html" class="sc-in" style="margin-left: auto; height: 40px; padding: 0 16px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px -10px rgba(139,107,247,0.6)">See your report<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</sc-if>
+</div>
+<span style="position: absolute; right: 48px; bottom: 12px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #6F6C7C">Sample data</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":760}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { t: 0 }; }
+  componentDidMount() { this.timer = setInterval(() => this.setState({ t: (this.state.t + 1) % 22 }), 650); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  renderVals() {
+    const t = this.state.t;
+    const G = '#4CC38A', A = '#E5A93D', R = '#EF6B57', P = '#A68EFA', W = '#CFCCD9', D = '#6F6C7C';
+    const all = [
+      { text: '→ load on Moto G Power · slow 4G', color: P, indent: 0, tag: '', tagColor: D },
+      { text: 'first paint', color: W, indent: 18, tag: '2.9 s', tagColor: A },
+      { text: 'hero.jpg 1.8 MB, starts late', color: W, indent: 18, tag: 'fail', tagColor: R },
+      { text: '11 app scripts block taps', color: W, indent: 18, tag: '1,130 ms', tagColor: R },
+      { text: '→ Chrome real-shopper data · 28 days', color: P, indent: 0, tag: '', tagColor: D },
+      { text: 'LCP 4.1 s · INP 310 ms · CLS 0.18', color: W, indent: 18, tag: 'fail', tagColor: R },
+      { text: '→ Googlebot view', color: P, indent: 0, tag: '', tagColor: D },
+      { text: 'Product schema, no ratings', color: W, indent: 18, tag: 'partial', tagColor: A },
+      { text: '→ robots.txt', color: P, indent: 0, tag: '', tagColor: D },
+      { text: 'GPTBot, OAI-SearchBot: Disallow /', color: W, indent: 18, tag: 'blocked', tagColor: R },
+      { text: '→ AI view · no JavaScript', color: P, indent: 0, tag: '', tagColor: D },
+      { text: 'price and reviews not in HTML', color: W, indent: 18, tag: 'fail', tagColor: R },
+      { text: '→ competitor-one.com · competitor-two.com', color: P, indent: 0, tag: 'done', tagColor: G }
+    ];
+    const shown = Math.min(t, all.length);
+    const prog = Math.min(1, t / 14);
+    const done = t >= 15;
+    const C = 2 * Math.PI * 50;
+    const meter = (name, target, color, sub, subColor) => {
+      const v = Math.round(target * prog);
+      return { name, val: v, color, dash: (v / 100 * C).toFixed(1) + ' ' + C.toFixed(1), sub: done ? sub : 'measuring…', subColor: done ? subColor : D };
+    };
+    const labels = ['Loading on a phone', 'Real-shopper data', "Google's view", 'AI bots', "AI's view of your page", 'Competitors'];
+    const stages = labels.map((label, i) => {
+      const at = [1, 5, 7, 9, 11, 13][i];
+      const st = t > at + 1 || done ? 'done' : t >= at ? 'active' : 'wait';
+      return {
+        label,
+        border: st === 'active' ? '#8B6BF7' : 'rgba(255,255,255,0.1)',
+        bg: st === 'active' ? 'rgba(139,107,247,0.16)' : 'rgba(255,255,255,0.03)',
+        fg: st === 'wait' ? '#6F6C7C' : '#F4F3F8',
+        dot: st === 'done' ? G : st === 'active' ? P : '#3A3846'
+      };
+    });
+    const secs = Math.min(8.2, t * 0.62).toFixed(1);
+    return {
+      running: !done, status: done ? 'Done' : 'Scanning ' + Math.round(prog * 100) + '%',
+      pct: Math.round(prog * 100), done,
+      p1: t >= 2, p2: t >= 4, p3: t >= 5, p5: t >= 9,
+      imgBg: t >= 7 ? 'linear-gradient(135deg, #CBBEFD, #8B6BF7)' : 'transparent',
+      clock: secs + ' s',
+      lines: all.slice(0, shown),
+      meters: [
+        meter('Speed', 38, R, 'Poor · mobile', R),
+        meter('Search', 71, A, 'Needs work', A),
+        meter('AI answers', 42, R, 'Poor · bot blocked', R)
+      ],
+      stages
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -428,7 +428,6 @@
   function renderReport() {
     var hl = headline(), m = S.psi.mobile, dsk = S.psi.desktop, d = S.scan;
     var date = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
-    var wa = "https://wa.me/" + (CFG.whatsapp || "919810483552") + "?text=" + encodeURIComponent("Hi Troopod, I just ran the TrooPerformance audit for " + host(URL0) + " and want help fixing it: " + location.href);
     return '<section class="rep-hero"><div class="dots" aria-hidden="true"></div><div class="glow2" aria-hidden="true"></div><div class="wrap"><div class="txt">' +
       '<div class="tagrow"><span class="eyebrow">Report · ' + esc(host(URL0)) + " · " + esc(date) + "</span>" + (d && d.platform ? '<span class="badge">' + esc(d.platform) + "</span>" : "") + "</div>" +
       '<h1 class="h1">' + hl.h + '</h1><p class="lead" style="max-width:580px">' + esc(hl.l) + '</p><div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" type="button" data-copy>Copy link</button><button class="btn btn-ghost btn-sm" type="button" data-print>Download PDF</button></div></div>' +
@@ -439,7 +438,7 @@
       "</div></div></section>" +
       '<section class="rep-sec"><div class="wrap"><div class="rep-sec-head"><h2 class="h2">What we found</h2><div class="tabs no-print" role="tablist" aria-label="Report area" id="tabs">' + tabsHtml() + '</div></div><div id="panel">' + panelHtml() + "</div></div></section>" +
       fixList() + compsSection() +
-      '<section class="rep-sec no-print"><div class="wrap"><div class="cta-band"><div class="dots" aria-hidden="true"></div><h2 class="h2" style="font-size:clamp(28px,3.2vw,40px)">Want these fixed for you?</h2><p class="lead">TrooPerformance builds and tests the fixes on your store: speed, SEO and AI answers.</p><div class="row"><a class="btn btn-primary" href="' + esc(CFG.calendly || "#") + '" target="_blank" rel="noopener">Book a demo</a><a class="btn btn-ghost" href="' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp us</a></div></div></div></section>' +
+      '<section class="rep-sec no-print"><div class="wrap"><div class="cta-band"><div class="dots" aria-hidden="true"></div><h2 class="h2" style="font-size:clamp(28px,3.2vw,40px)">Want these fixed for you?</h2><p class="lead">TrooPerformance builds and tests the fixes on your store: speed, SEO and AI answers.</p><div class="row"><a class="btn btn-primary" href="' + esc(CFG.calendly || "#") + '" target="_blank" rel="noopener">Book a demo</a></div></div></div></section>' +
       '<section class="rep-sec"><div class="wrap"><p class="small" style="max-width:760px">Speed comes from Google PageSpeed Insights (Lighthouse lab test on an emulated phone, plus Chrome real-user data where Google has enough visits). Search and AI checks read your page\'s raw HTML, robots.txt, sitemap and llms.txt. Scores: pass = 1, warning = 0.5, fail = 0, averaged out of 100. Time savings are Google\'s own estimates.</p></div></section>';
   }
 

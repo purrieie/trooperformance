@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speed result card</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A0A0C}
+a{color:#CBBEFD}a:hover{color:#FFFFFF}
+.sc-dots{background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1.4px);background-size:15px 15px;-webkit-mask-image:radial-gradient(ellipse 60% 80% at 20% 20%,#000 10%,transparent 75%);mask-image:radial-gradient(ellipse 60% 80% at 20% 20%,#000 10%,transparent 75%)}
+.sc-eye::before{content:"";width:10px;height:10px;flex:none;background-image:radial-gradient(circle,currentColor 1px,transparent 1.3px);background-size:3.4px 3.4px}
+.sc-ring{animation:scring 1.4s cubic-bezier(.22,.8,.24,1) both}
+@keyframes scring{from{stroke-dasharray:0 540}}
+.sc-in{animation:scin .35s cubic-bezier(.22,.8,.24,1) both}
+@keyframes scin{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="background: #0A0A0C; color: #F4F3F8; font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; padding: 56px 0 88px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 28px; display: flex; flex-direction: column; gap: 20px">
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span class="sc-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Speed · moxiebeauty.in · tested on a phone</span>
+<h2 style="margin: 0; font-size: 40px; line-height: 1.08; font-weight: 400; letter-spacing: -0.03em">How fast your store feels</h2>
+</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<span style="display: inline-flex; align-items: center; height: 30px; padding: 0 11px; border-radius: 8px; font-size: 12.5px; border: 1px solid rgba(255,255,255,0.12); color: #CFCCD9">Desktop score <span style="font-family: 'DM Mono', ui-monospace, monospace; color: #E5A93D; margin-left: 6px">71</span></span>
+<span style="display: inline-flex; align-items: center; height: 30px; padding: 0 11px; border-radius: 8px; font-size: 12.5px; border: 1px solid rgba(239,107,87,0.4); color: #EF6B57">Core Web Vitals: failed</span>
+</div>
+</div>
+
+<section aria-label="Overall performance score" style="position: relative; isolation: isolate; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: radial-gradient(90% 120% at 0% 0%, #241B45 0%, #0E0E12 60%); padding: 36px; display: flex; flex-direction: column; gap: 28px">
+<div class="sc-dots" aria-hidden="true" style="position: absolute; inset: 0; z-index: -1"></div>
+<div style="display: flex; flex-wrap: wrap; gap: 28px 40px; align-items: center">
+<div style="display: flex; align-items: center; gap: clamp(6px, 2vw, 18px); flex-wrap: nowrap">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+<svg width="170" height="170" style="width: clamp(108px, 28vw, 170px); height: auto" viewBox="0 0 200 200" role="img" aria-label="Performance score today {{score}} out of 100">
+<circle cx="100" cy="100" r="86" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14"></circle>
+<circle class="sc-ring" cx="100" cy="100" r="86" fill="none" stroke="{{scoreColor}}" stroke-width="14" stroke-linecap="round" stroke-dasharray="{{dashNow}}" transform="rotate(-90 100 100)"></circle>
+<text x="100" y="112" text-anchor="middle" font-size="54" fill="#F4F3F8" font-family="DM Mono, monospace">{{score}}</text>
+<text x="100" y="138" text-anchor="middle" font-size="13" fill="#A09DAD" font-family="DM Mono, monospace">/ 100</text>
+</svg>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; color: #A09DAD; text-align: center; line-height: 1.5">Today<br><span style="color: {{scoreColor}}">{{band}}</span></span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding-bottom: 24px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; color: #CBBEFD; padding: 4px 10px; border-radius: 999px; background: rgba(139,107,247,0.18); border: 1px solid rgba(139,107,247,0.4)">+{{gain}}</span>
+<svg width="64" height="20" style="width: clamp(32px, 8vw, 64px); height: auto" viewBox="0 0 64 20" fill="none" stroke="#A68EFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10h58M52 3l8 7-8 7"/></svg>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+<svg width="170" height="170" style="width: clamp(108px, 28vw, 170px); height: auto" viewBox="0 0 200 200" role="img" aria-label="Estimated score with TrooPerformance {{target}} out of 100">
+<circle cx="100" cy="100" r="86" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14"></circle>
+<circle class="sc-ring" cx="100" cy="100" r="86" fill="none" stroke="#A68EFA" stroke-width="14" stroke-linecap="round" stroke-dasharray="{{dashTarget}}" transform="rotate(-90 100 100)" style="animation-delay: .5s"></circle>
+<text x="100" y="112" text-anchor="middle" font-size="54" fill="#CBBEFD" font-family="DM Mono, monospace">{{target}}</text>
+<text x="100" y="138" text-anchor="middle" font-size="13" fill="#A09DAD" font-family="DM Mono, monospace">/ 100</text>
+</svg>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; color: #A09DAD; text-align: center; line-height: 1.5">With<br><span style="color: #CBBEFD">TrooPerformance</span></span>
+</div>
+</div>
+<div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">Overall performance score · Google PageSpeed, mobile</span>
+<h3 style="margin: 0; font-size: 30px; line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; text-wrap: balance">We can take moxiebeauty.in from <span style="color: {{scoreColor}}">{{score}}</span> to <span style="color: #CBBEFD">{{target}}</span>.</h3>
+<div style="display: flex; gap: 10px; flex-wrap: wrap">
+<span style="display: inline-flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(139,107,247,0.12); border: 1px solid rgba(166,142,250,0.35)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #CBBEFD">+{{conv}}%</span><span style="font-size: 13px; color: #CFCCD9">conversions</span></span>
+<span style="display: inline-flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(76,195,138,0.1); border: 1px solid rgba(76,195,138,0.4)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #9FE3C1">+{{conv}}%</span><span style="font-size: 13px; color: #CFCCD9">revenue</span></span>
+</div>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #A09DAD">Estimated from our billion-dollar house of brands case, where +29 points lifted conversion rate 19%. Same traffic and order value.</p>
+<a href="#" style="align-self: flex-start; height: 44px; padding: 0 18px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px -10px rgba(139,107,247,0.6)">Get to {{target}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</div>
+</div>
+<div style="display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-radius: 14px; background: rgba(10,10,12,0.6); border: 1px solid rgba(255,255,255,0.08)">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF6B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/></svg>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 15px; line-height: 1.5">A score of {{score}} means your page is slow on a phone. Google found <b style="font-weight: 500; color: #FFB4A8">more than half of mobile visits are abandoned</b> when a page takes over 3 seconds to load.</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #6F6C7C">Google, Speed matters (Google Ads blog), 2018</span>
+</div>
+</div>
+</section>
+
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-top: 16px">
+<h3 style="margin: 0; font-size: 24px; font-weight: 400; letter-spacing: -0.02em">Core Web Vitals that are costing you sales</h3>
+<span style="font-size: 13px; color: #A09DAD">Tap + to see what each one means</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; align-items: start">
+<sc-for list="{{metrics}}" as="m" hint-placeholder-count="3">
+<article style="border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; color: #A68EFA">{{m.abbr}}</span>
+<h4 style="margin: 0; font-size: 17px; font-weight: 400">{{m.name}}</h4>
+</div>
+<button type="button" aria-expanded="{{m.open}}" aria-label="What is {{m.name}}?" onClick="{{m.toggle}}" style="width: 34px; height: 34px; flex: none; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); background: {{m.btnBg}}; color: #F4F3F8; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'DM Mono', ui-monospace, monospace; font-size: 18px; line-height: 1">{{m.sign}}</button>
+</div>
+
+<sc-if value="{{m.open}}" hint-placeholder-val="{{ false }}">
+<div class="sc-in" style="padding: 14px 16px; border-radius: 12px; background: rgba(139,107,247,0.08); border: 1px solid rgba(139,107,247,0.25); font-size: 14px; line-height: 1.6; color: #E4E0F2">{{m.def}}</div>
+</sc-if>
+
+<div style="display: flex; align-items: baseline; gap: 12px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 46px; line-height: 1; letter-spacing: -0.02em; color: {{m.color}}">{{m.value}}</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: {{m.color}}; border: 1px solid {{m.color}}; border-radius: 6px; padding: 2px 8px">{{m.band}}</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 7px">
+<div style="position: relative; display: flex; gap: 3px; height: 7px">
+<div style="width: {{m.g}}%; background: #1F5C47; border-radius: 4px 0 0 4px"></div>
+<div style="width: {{m.n}}%; background: #6B5413"></div>
+<div style="flex: 1; background: #6B2A2A; border-radius: 0 4px 4px 0"></div>
+<div style="position: absolute; left: {{m.pos}}%; top: -5px; width: 4px; height: 17px; margin-left: -2px; background: #F4F3F8; border-radius: 2px"></div>
+</div>
+<div style="display: flex; justify-content: space-between; font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #6F6C7C"><span>Good ≤ {{m.goodAt}}</span><span>Poor &gt; {{m.poorAt}}</span></div>
+</div>
+
+<sc-if value="{{m.hasField}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: #CFCCD9; padding-top: 2px"><span>Real shoppers, last 28 days</span><span style="font-family: 'DM Mono', ui-monospace, monospace; color: {{m.fieldColor}}">{{m.field}}</span></div>
+</sc-if>
+
+<div style="margin-top: auto; padding: 14px 16px; border-radius: 12px; background: rgba(10,10,12,0.7); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 14px; line-height: 1.55">{{m.impact}}</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #6F6C7C">{{m.source}}</span>
+</div>
+</article>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; margin-top: 4px">
+<div style="padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-size: 13px; color: #A09DAD">First paint</span><span style="font-family: 'DM Mono', ui-monospace, monospace; color: #4CC38A">1.3 s</span></div>
+<div style="padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-size: 13px; color: #A09DAD">Blocked time</span><span style="font-family: 'DM Mono', ui-monospace, monospace; color: #EF6B57">777 ms</span></div>
+<div style="padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-size: 13px; color: #A09DAD">Layout jumps</span><span style="font-family: 'DM Mono', ui-monospace, monospace; color: #4CC38A">0.00</span></div>
+</div>
+
+<a href="Compare.dc.html" style="margin-top: 12px; border-radius: 18px; border: 1px dashed rgba(166,142,250,0.45); background: rgba(139,107,247,0.06); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; text-decoration: none; color: #F4F3F8">
+<span style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 17px">Where do you rank against your competitors?</span>
+<span style="font-size: 13.5px; color: #A09DAD">Add up to 3 brands and we'll run the same test on each.</span>
+</span>
+<span style="height: 42px; padding: 0 16px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px">Compare now<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { open: { si: false, lcp: true, inp: false } }; }
+  renderVals() {
+    const G = '#4CC38A', A = '#E5A93D', R = '#EF6B57';
+    const o = this.state.open;
+    const toggle = (k) => () => this.setState({ open: Object.assign({}, o, { [k]: !o[k] }) });
+    const card = (k, d) => Object.assign(d, { open: !!o[k], sign: o[k] ? '−' : '+', btnBg: o[k] ? 'rgba(139,107,247,0.25)' : 'transparent', toggle: toggle(k) });
+    // TrooPerformance uplift: <20 → +15..20 · 20–49 → +15 · 50–59 → +10 · 60+ → +5, each ±1–2 (seeded by domain so a refresh shows the same number)
+    const score = 54, domain = 'moxiebeauty.in';
+    let h = 0; for (const ch of domain) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    const jitter = [-2, -1, 1, 2][h % 4];
+    const base = score < 20 ? 15 + (h % 6) : score < 50 ? 15 + jitter : score < 60 ? 10 + jitter : 5 + jitter;
+    const gain = Math.max(1, Math.min(base, 99 - score));
+    const target = score + gain;
+    const C = 2 * Math.PI * 86;
+    const col = score >= 90 ? G : score >= 50 ? A : R;
+    return {
+      score, target, gain, conv: Math.round(gain * (19 / 29.2) * 10) / 10, scoreColor: col, band: score >= 90 ? 'Good' : score >= 50 ? 'Needs work' : 'Poor',
+      dashNow: (score / 100 * C).toFixed(1) + ' ' + C.toFixed(1), dashTarget: (target / 100 * C).toFixed(1) + ' ' + C.toFixed(1),
+      metrics: [
+        card('si', {
+          abbr: 'SPEED INDEX', name: 'How fast the page fills in', value: '13.5 s', band: 'Poor', color: R,
+          g: 22.7, n: 16, pos: 90, goodAt: '3.4 s', poorAt: '5.8 s', hasField: false, field: '', fieldColor: R,
+          def: 'How quickly the visible part of your page fills in while it loads. A page that shows most of its content early scores better than one that pops in all at the end. Google calls it good under 3.4 s on a phone.',
+          impact: 'Your page fills in 10.1 s slower than Google\u2019s 3.4 s line. Every 0.1 s faster lifts retail conversions by 8.4%, so every extra second is sales you lose each day.',
+          source: 'Deloitte \u00d7 Google, Milliseconds Make Millions, 2020'
+        }),
+        card('lcp', {
+          abbr: 'LCP · LARGEST CONTENTFUL PAINT', name: 'When your main content shows', value: '4.9 s', band: 'Poor', color: R,
+          g: 31.3, n: 18.7, pos: 61, goodAt: '2.5 s', poorAt: '4 s', hasField: true, field: '1.4 s', fieldColor: G,
+          def: 'The moment the biggest thing on screen, usually your product photo or banner, finishes showing. It is when shoppers feel the page has loaded. Good is 2.5 s or less; over 4 s is poor.',
+          impact: 'Your LCP is 2.4 s over Google\u2019s 2.5 s line. Google: every 1 s of delay can cut conversions by up to 20%. That\u2019s up to 20% of sales lost, every day.',
+          source: 'Google, retail page-load data, 2018'
+        }),
+        card('inp', {
+          abbr: 'INP · INTERACTION TO NEXT PAINT', name: 'How fast taps respond, real shoppers', value: '239 ms', band: 'Needs work', color: A,
+          g: 28.6, n: 42.9, pos: 34, goodAt: '200 ms', poorAt: '500 ms', hasField: false, field: '', fieldColor: '#A09DAD',
+          def: 'How long the page takes to react after a shopper taps, clicks or types, like Add to cart or picking a shade. Measured on real visits. Good is 200 ms or less; over 500 ms is poor.',
+          impact: 'Your INP is 39 ms over Google\u2019s 200 ms line. When redBus fixed theirs, sales went up 7%. Slow taps cost you that every day.',
+          source: 'Google web.dev case study, redBus, 2023'
+        })
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

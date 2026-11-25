@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compare with competitors</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A0A0C}
+a{color:#CBBEFD}a:hover{color:#FFFFFF}
+.cp-dots{background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1.4px);background-size:15px 15px;-webkit-mask-image:radial-gradient(ellipse 60% 80% at 80% 10%,#000 10%,transparent 75%);mask-image:radial-gradient(ellipse 60% 80% at 80% 10%,#000 10%,transparent 75%)}
+.cp-eye::before{content:"";width:10px;height:10px;flex:none;background-image:radial-gradient(circle,currentColor 1px,transparent 1.3px);background-size:3.4px 3.4px}
+.cp-in{animation:cpin .5s cubic-bezier(.22,.8,.24,1) both}
+@keyframes cpin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.cp-grow{transform-origin:left;animation:cpgrow 1.1s cubic-bezier(.22,.8,.24,1) both}
+@keyframes cpgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+</style>
+</helmet>
+<div style="background: #0A0A0C; color: #F4F3F8; font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; padding: 56px 0 88px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 28px; display: flex; flex-direction: column; gap: 20px">
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+<span class="cp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Unlocks after your first scan</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #E5A93D; border: 1px solid rgba(229,169,61,0.35); border-radius: 6px; padding: 2px 8px">Demo data</span>
+</div>
+<h2 style="margin: 0; font-size: 40px; line-height: 1.08; font-weight: 400; letter-spacing: -0.03em">You vs <span style="color: #A68EFA">your competitors</span></h2>
+</div>
+<div role="group" aria-label="Preview state" style="display: flex; padding: 4px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12">
+<button type="button" aria-pressed="{{isEmpty}}" onClick="{{showEmpty}}" style="height: 34px; padding: 0 12px; border: 0; border-radius: 7px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; cursor: pointer; background: {{eBg}}; color: {{eFg}}">Before</button>
+<button type="button" aria-pressed="{{isDone}}" onClick="{{run}}" style="height: 34px; padding: 0 12px; border: 0; border-radius: 7px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; cursor: pointer; background: {{dBg}}; color: {{dFg}}">After</button>
+</div>
+</div>
+
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{ true }}">
+<section class="cp-in" aria-labelledby="addc" style="position: relative; isolation: isolate; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: radial-gradient(90% 120% at 100% 0%, #241B45 0%, #0E0E12 60%); padding: 36px; display: flex; flex-direction: column; gap: 22px">
+<div class="cp-dots" aria-hidden="true" style="position: absolute; inset: 0; z-index: -1"></div>
+<div style="display: flex; flex-direction: column; gap: 8px; max-width: 620px">
+<h3 id="addc" style="margin: 0; font-size: 26px; font-weight: 400; letter-spacing: -0.02em">See where moxiebeauty.in ranks</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #CFCCD9">Add up to 3 competitors. We run the exact same phone test on each, at the same moment, so the comparison is fair.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="c1" style="font-size: 12px; color: #A09DAD">Competitor 1</label><input id="c1" type="text" value="brand-a.com" style="height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); background: rgba(10,10,12,0.7); color: #F4F3F8; padding: 0 14px; font-size: 15px; font-family: inherit"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="c2" style="font-size: 12px; color: #A09DAD">Competitor 2</label><input id="c2" type="text" value="brand-b.com" style="height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); background: rgba(10,10,12,0.7); color: #F4F3F8; padding: 0 14px; font-size: 15px; font-family: inherit"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="c3" style="font-size: 12px; color: #A09DAD">Competitor 3</label><input id="c3" type="text" value="brand-c.com" style="height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); background: rgba(10,10,12,0.7); color: #F4F3F8; padding: 0 14px; font-size: 15px; font-family: inherit"></div>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+<button type="button" onClick="{{run}}" style="height: 48px; padding: 0 22px; border: 0; border-radius: 12px; background: #8B6BF7; color: #FFFFFF; font-size: 15px; font-weight: 500; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px -10px rgba(139,107,247,0.6)">Compare speed<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+<span style="font-size: 13px; color: #A09DAD">About a minute. Your own result is already in.</span>
+</div>
+<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #6F6C7C">What you'll get</span>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<span style="display: inline-flex; align-items: center; height: 30px; padding: 0 11px; border-radius: 8px; font-size: 12.5px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #CFCCD9">Your rank</span>
+<span style="display: inline-flex; align-items: center; height: 30px; padding: 0 11px; border-radius: 8px; font-size: 12.5px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #CFCCD9">Score, Speed Index, LCP, INP side by side</span>
+<span style="display: inline-flex; align-items: center; height: 30px; padding: 0 11px; border-radius: 8px; font-size: 12.5px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #CFCCD9">How far you are from the fastest brand</span>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+<div class="cp-in" style="display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Your rank" style="position: relative; isolation: isolate; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: radial-gradient(90% 120% at 100% 0%, #241B45 0%, #0E0E12 60%); padding: 32px 36px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center">
+<div class="cp-dots" aria-hidden="true" style="position: absolute; inset: 0; z-index: -1"></div>
+<div style="display: flex; align-items: baseline; gap: 10px; flex: none">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 96px; line-height: 0.9; letter-spacing: -0.04em; color: #CBBEFD">#3</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 18px; color: #A09DAD">of 4</span>
+</div>
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-size: 28px; line-height: 1.2; font-weight: 400; letter-spacing: -0.02em; text-wrap: balance">Two competitors load faster than you on a phone.</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #CFCCD9">brand-a.com shows its main content 2.1 s sooner. Close that gap and you move to #2.</p>
+</div>
+</section>
+
+<section aria-labelledby="board" style="border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12; overflow-x: auto">
+<h3 id="board" style="margin: 0; padding: 22px 24px 4px; font-size: 18px; font-weight: 400">Leaderboard · phone test</h3>
+<div role="table" aria-label="Leaderboard" style="min-width: 860px">
+<div role="row" style="display: grid; grid-template-columns: 30% 28% 1fr 1fr 1fr; align-items: center; padding: 14px 24px; font-size: 12px; color: #A09DAD">
+<span role="columnheader">Brand</span><span role="columnheader">Performance score</span><span role="columnheader" style="padding-left: 12px">Speed Index</span><span role="columnheader">LCP</span><span role="columnheader">INP</span>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+<div role="row" style="display: grid; grid-template-columns: 30% 28% 1fr 1fr 1fr; align-items: center; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.06); background: {{r.bg}}; font-size: 14px">
+<div role="rowheader" style="display: flex; align-items: center; gap: 14px">
+<span style="width: 28px; height: 28px; flex: none; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; background: {{r.rankBg}}; color: {{r.rankFg}}">{{r.rank}}</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span>{{r.name}}</span><span style="font-size: 11.5px; color: {{r.tagColor}}">{{r.tag}}</span></span>
+</div>
+<div role="cell" style="display: flex; align-items: center; gap: 10px"><span style="font-family: 'DM Mono', ui-monospace, monospace; width: 26px; color: {{r.sColor}}">{{r.score}}</span><div style="flex: 1; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.06)"><div class="cp-grow" style="height: 100%; width: {{r.score}}%; border-radius: 4px; background: {{r.sColor}}"></div></div></div>
+<span role="cell" style="padding-left: 12px; font-family: 'DM Mono', ui-monospace, monospace; color: {{r.siColor}}">{{r.si}}</span>
+<span role="cell" style="font-family: 'DM Mono', ui-monospace, monospace; color: {{r.lcpColor}}">{{r.lcp}}</span>
+<span role="cell" style="font-family: 'DM Mono', ui-monospace, monospace; color: {{r.inpColor}}">{{r.inp}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px">
+<sc-for list="{{gaps}}" as="g" hint-placeholder-count="3">
+<article style="border-radius: 18px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; color: #A68EFA">{{g.label}}</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 34px; line-height: 1; color: #EF6B57">{{g.gap}}</span>
+<span style="font-size: 14px; color: #CFCCD9; line-height: 1.5">{{g.text}}</span>
+</article>
+</sc-for>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 4px 2px">
+<span style="font-size: 13px; color: #6F6C7C">Each brand tested once on the same emulated phone, a few seconds apart. Scores move a little run to run.</span>
+<button type="button" onClick="{{showEmpty}}" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); background: transparent; color: #F4F3F8; font-size: 13.5px; font-family: inherit; cursor: pointer">Change competitors</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":920}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { view: 'done' }; }
+  renderVals() {
+    const G = '#4CC38A', A = '#E5A93D', R = '#EF6B57';
+    const band = (n) => n >= 90 ? G : n >= 50 ? A : R;
+    const t = (v, good, poor) => v <= good ? G : v <= poor ? A : R;
+    const data = [
+      { name: 'brand-a.com', score: 78, si: 4.1, lcp: 2.8, inp: 160 },
+      { name: 'brand-b.com', score: 61, si: 7.3, lcp: 3.9, inp: 210 },
+      { name: 'moxiebeauty.in', score: 54, si: 13.5, lcp: 4.9, inp: 239, you: true },
+      { name: 'brand-c.com', score: 42, si: 15.8, lcp: 6.2, inp: 320 }
+    ];
+    const rows = data.map((d, i) => ({
+      rank: i + 1, name: d.name, score: d.score,
+      tag: d.you ? 'You' : i === 0 ? 'Fastest' : 'Competitor', tagColor: d.you ? '#CBBEFD' : i === 0 ? G : '#6F6C7C',
+      bg: d.you ? 'rgba(139,107,247,0.08)' : 'transparent',
+      rankBg: d.you ? '#8B6BF7' : 'rgba(255,255,255,0.06)', rankFg: d.you ? '#FFFFFF' : '#CFCCD9',
+      sColor: band(d.score), si: d.si.toFixed(1) + ' s', siColor: t(d.si, 3.4, 5.8),
+      lcp: d.lcp.toFixed(1) + ' s', lcpColor: t(d.lcp, 2.5, 4), inp: d.inp + ' ms', inpColor: t(d.inp, 200, 500)
+    }));
+    const v = this.state.view;
+    const on = (x) => v === x;
+    return {
+      isEmpty: on('empty'), isDone: on('done'),
+      eBg: on('empty') ? '#F4F3F8' : 'transparent', eFg: on('empty') ? '#0A0A0C' : '#A09DAD',
+      dBg: on('done') ? '#F4F3F8' : 'transparent', dFg: on('done') ? '#0A0A0C' : '#A09DAD',
+      showEmpty: () => this.setState({ view: 'empty' }),
+      run: () => this.setState({ view: 'done' }),
+      rows,
+      gaps: [
+        { label: 'SPEED INDEX vs brand-a.com', gap: '+9.4 s', text: 'Your page takes 9.4 s longer to fill in.' },
+        { label: 'LCP vs brand-a.com', gap: '+2.1 s', text: 'Your main product shows 2.1 s later.' },
+        { label: 'INP vs brand-a.com', gap: '+79 ms', text: 'Taps on your page respond 79 ms slower.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
