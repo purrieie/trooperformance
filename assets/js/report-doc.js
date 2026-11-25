@@ -138,7 +138,7 @@
       '<div style="margin-top:12px;font-family:' + F + ';font-size:11.5px;line-height:17px;color:' + C.dim + '">Speed comes from Google PageSpeed Insights (Lighthouse on an emulated phone, plus Chrome real-user data where Google has enough visits). Search and AI checks read your page’s raw HTML, robots.txt, sitemap and llms.txt. Scores: pass = 1, warning = 0.5, fail = 0, out of 100.' +
       (print ? "" : " You’re getting this because you unlocked your report on TrooPerformance. Reply to this email to talk to the team.") + "</div></td></tr>";
 
-    var table = '<table class="doc" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:' + C.bg + ';border:1px solid #1F1C2B;border-radius:' + (print ? "0" : "20px") + ';overflow:hidden">' + rows + "</table>";
+    var table = '<table class="doc" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;table-layout:fixed;background:' + C.bg + ';border:1px solid #1F1C2B;border-radius:' + (print ? "0" : "20px") + ';overflow:hidden">' + rows + "</table>";
     var pre = esc("Performance " + (sc.perf == null ? "–" : sc.perf) + " · Search " + (sc.search == null ? "–" : sc.search) + " · AI answers " + (sc.ai == null ? "–" : sc.ai) + ". Your fix plan for " + d.site + " is inside.");
     var head = '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"><title>TrooPerformance report · ' + site + "</title>" +
       '<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">' +
