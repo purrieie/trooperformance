@@ -125,9 +125,9 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 <h3 style="margin: 0; font-size: 30px; line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; text-wrap: balance">We can take {{domain}} from <span style="color: {{scoreColor}}">{{score}}</span> to <span style="color: #CBBEFD">{{target}}</span>.</h3>
 <div style="display: flex; gap: 10px; flex-wrap: wrap">
 <span style="display: inline-flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(139,107,247,0.12); border: 1px solid rgba(166,142,250,0.35)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #CBBEFD">+{{conv}}%</span><span style="font-size: 13px; color: #CFCCD9">conversions</span></span>
-<span style="display: inline-flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(76,195,138,0.1); border: 1px solid rgba(76,195,138,0.4)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #9FE3C1">+{{conv}}%</span><span style="font-size: 13px; color: #CFCCD9">revenue</span></span>
+<span style="display: inline-flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(76,195,138,0.1); border: 1px solid rgba(76,195,138,0.4)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #9FE3C1">+{{revLift}}%</span><span style="font-size: 13px; color: #CFCCD9">revenue</span></span>
 </div>
-<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #A09DAD">Estimated from our billion-dollar house of brands case, where +29 points lifted conversion rate 19%. Same traffic and order value.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #A09DAD">Conversions: from our billion-dollar house of brands case (+29 points, +19% conversion rate). Revenue adds bigger orders: Deloitte × Google saw order value rise 9.2% alongside 8.4% more conversions.</p>
 <a href="https://calendly.com/nj-troopod/troopod-demo" style="align-self: flex-start; height: 44px; padding: 0 18px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px -10px rgba(139,107,247,0.6)">Get to {{target}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </div>
 </div>
@@ -145,7 +145,7 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 <span style="font-size: 13px; color: #A09DAD">Tap + to see what each one means</span>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; align-items: start">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; align-items: stretch">
 <sc-for list="{{metrics}}" as="m" hint-placeholder-count="3">
 <article style="border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12; padding: 24px; display: flex; flex-direction: column; gap: 18px">
 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
@@ -290,8 +290,8 @@ faq: <span style="color: #E5A93D">none</span></pre>
 <div style="border-radius: 18px; border: 1px solid rgba(76,195,138,0.4); background: rgba(76,195,138,0.08); padding: 22px; display: flex; flex-direction: column; gap: 10px">
 <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #9FE3C1">Revenue lift</span>
 <svg width="100%" height="40" viewBox="0 0 200 40" preserveAspectRatio="none" fill="none" aria-hidden="true"><path d="M0 36 L40 34 L80 28 L120 22 L160 10 L200 2" stroke="#4CC38A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path></svg>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 44px; line-height: 1; letter-spacing: -0.03em; color: #9FE3C1">+{{convLift}}%</span>
-<span style="font-size: 13.5px; color: #A09DAD">Same traffic, same order value</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 44px; line-height: 1; letter-spacing: -0.03em; color: #9FE3C1">+{{revLift}}%</span>
+<span style="font-size: 13.5px; color: #A09DAD">More orders, and bigger ones</span>
 </div>
 </div>
 <div style="display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; padding: 20px 22px; border-radius: 16px; background: rgba(10,10,12,0.6); border: 1px solid rgba(255,255,255,0.08)">
@@ -300,7 +300,7 @@ faq: <span style="color: #E5A93D">none</span></pre>
 <input id="rev" type="number" value="{{rev}}" onInput="{{setRev}}" style="height: 46px; box-sizing: border-box; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); background: #0A0A0C; color: #F4F3F8; padding: 0 14px; font-size: 16px; font-family: 'DM Mono', ui-monospace, monospace; width: 100%">
 </div>
 <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 4px">
-<span style="font-size: 13px; color: #A09DAD">Extra revenue a month, at +{{convLift}}%</span>
+<span style="font-size: 13px; color: #A09DAD">Extra revenue a month, at +{{revLift}}%</span>
 <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 40px; line-height: 1.1; color: #9FE3C1">+{{revGain}}</span>
 </div>
 <a href="#" style="height: 46px; padding: 0 18px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; white-space: nowrap">Unlock this lift</a>
@@ -324,7 +324,7 @@ faq: <span style="color: #E5A93D">none</span></pre>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3380}}'>
 class Component extends DCLogic {
-  constructor(props) { super(props); this.state = { tab: 'speed', rev: 1000000, open: { si: false, lcp: true, inp: false } }; }
+  constructor(props) { super(props); this.state = { tab: 'speed', rev: 1000000, open: { si: false, lcp: false, inp: false } }; }
   renderVals() {
     const t = this.state.tab;
     const G = '#4CC38A', A = '#E5A93D', R = '#EF6B57', M = '#A09DAD';
@@ -370,6 +370,7 @@ class Component extends DCLogic {
     const pts = Math.max(1, Math.min(base, 99 - score));
     // Case study: +29.2 pts (31.4 → 60.6) gave +19% conversion rate → 0.65% per point
     const conv = Math.round(pts * (19 / 29.2) * 10) / 10;
+    const revLift = Math.round(((1 + conv / 100) * (1 + conv / 100 * 9.2 / 8.4) - 1) * 1000) / 10;
 
     // Speed card (same design as v3): sample numbers for yourbrand.com that match this report (score 38).
     const o = this.state.open;
@@ -394,17 +395,17 @@ class Component extends DCLogic {
         source: 'Google, retail page-load data, 2018'
       }, bar(6.8, 2.5, 4))),
       card('inp', Object.assign({
-        abbr: 'INP \u00b7 INTERACTION TO NEXT PAINT', name: 'How fast taps respond, real shoppers', value: '310 ms', band: 'Needs work', color: A,
+        abbr: 'INP \u00b7 INTERACTION TO NEXT PAINT', name: 'How fast taps respond', value: '310 ms', band: 'Needs work', color: A,
         goodAt: '200 ms', poorAt: '500 ms', hasField: false, field: '', fieldColor: M,
         def: 'How long the page takes to react after a shopper taps, clicks or types, like Add to cart or picking a shade. Measured on real visits. Good is 200 ms or less; over 500 ms is poor.',
         impact: 'Your INP is 110 ms over Google\u2019s 200 ms line. When redBus fixed theirs, sales went up 7%. Slow taps cost you that every day.',
         source: 'Google web.dev case study, redBus, 2023'
       }, bar(310, 200, 500)))
     ];
-    const rev = Number(this.state.rev) || 0, gainV = rev * conv / 100;
+    const rev = Number(this.state.rev) || 0, gainV = rev * revLift / 100;
     const inr = (v) => v >= 1e7 ? '₹' + (v / 1e7).toFixed(2) + ' Cr' : v >= 1e5 ? '₹' + (v / 1e5).toFixed(1) + ' L' : '₹' + Math.round(v).toLocaleString('en-IN');
     return { tabs, checks: d.checks, panelTitle: d.title, isSpeed: t === 'speed', notSpeed: t !== 'speed', isSearch: t === 'search', isAi: t === 'ai',
-      domain, score, target: score + pts, gain: pts, conv, scoreColor, band: score >= 90 ? 'Good' : score >= 50 ? 'Needs work' : 'Poor',
+      domain, score, target: score + pts, gain: pts, conv, revLift, scoreColor, band: score >= 90 ? 'Good' : score >= 50 ? 'Needs work' : 'Poor',
       dashNow: (score / 100 * C).toFixed(1) + ' ' + C.toFixed(1), dashTarget: ((score + pts) / 100 * C).toFixed(1) + ' ' + C.toFixed(1),
       dsk: 64, dskColor: A, metrics, speedChecks: data.speed.checks,
       liftFrom: score, liftTo: score + pts, liftPts: pts, convLift: conv, rev: this.state.rev, revGain: inr(gainV),

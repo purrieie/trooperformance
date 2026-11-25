@@ -68,9 +68,9 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 <h3 style="margin: 0; font-size: 30px; line-height: 1.15; font-weight: 400; letter-spacing: -0.025em; text-wrap: balance">We can take moxiebeauty.in from <span style="color: {{scoreColor}}">{{score}}</span> to <span style="color: #CBBEFD">{{target}}</span>.</h3>
 <div style="display: flex; gap: 10px; flex-wrap: wrap">
 <span style="display: inline-flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(139,107,247,0.12); border: 1px solid rgba(166,142,250,0.35)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #CBBEFD">+{{conv}}%</span><span style="font-size: 13px; color: #CFCCD9">conversions</span></span>
-<span style="display: inline-flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(76,195,138,0.1); border: 1px solid rgba(76,195,138,0.4)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #9FE3C1">+{{conv}}%</span><span style="font-size: 13px; color: #CFCCD9">revenue</span></span>
+<span style="display: inline-flex; align-items: baseline; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(76,195,138,0.1); border: 1px solid rgba(76,195,138,0.4)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #9FE3C1">+{{rev}}%</span><span style="font-size: 13px; color: #CFCCD9">revenue</span></span>
 </div>
-<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #A09DAD">Estimated from our billion-dollar house of brands case, where +29 points lifted conversion rate 19%. Same traffic and order value.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #A09DAD">Conversions: from our billion-dollar house of brands case (+29 points, +19% conversion rate). Revenue adds bigger orders: Deloitte × Google saw order value rise 9.2% alongside 8.4% more conversions.</p>
 <a href="#" style="align-self: flex-start; height: 44px; padding: 0 18px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px -10px rgba(139,107,247,0.6)">Get to {{target}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </div>
 </div>
@@ -88,7 +88,7 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 <span style="font-size: 13px; color: #A09DAD">Tap + to see what each one means</span>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; align-items: start">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; align-items: stretch">
 <sc-for list="{{metrics}}" as="m" hint-placeholder-count="3">
 <article style="border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12; padding: 24px; display: flex; flex-direction: column; gap: 18px">
 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
@@ -148,7 +148,7 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
 class Component extends DCLogic {
-  constructor(props) { super(props); this.state = { open: { si: false, lcp: true, inp: false } }; }
+  constructor(props) { super(props); this.state = { open: { si: false, lcp: false, inp: false } }; }
   renderVals() {
     const G = '#4CC38A', A = '#E5A93D', R = '#EF6B57';
     const o = this.state.open;
@@ -164,7 +164,7 @@ class Component extends DCLogic {
     const C = 2 * Math.PI * 86;
     const col = score >= 90 ? G : score >= 50 ? A : R;
     return {
-      score, target, gain, conv: Math.round(gain * (19 / 29.2) * 10) / 10, scoreColor: col, band: score >= 90 ? 'Good' : score >= 50 ? 'Needs work' : 'Poor',
+      score, target, gain, conv: Math.round(gain * (19 / 29.2) * 10) / 10, rev: Math.round(((1 + gain * 19 / 29.2 / 100) * (1 + gain * 19 / 29.2 / 100 * 9.2 / 8.4) - 1) * 1000) / 10, scoreColor: col, band: score >= 90 ? 'Good' : score >= 50 ? 'Needs work' : 'Poor',
       dashNow: (score / 100 * C).toFixed(1) + ' ' + C.toFixed(1), dashTarget: (target / 100 * C).toFixed(1) + ' ' + C.toFixed(1),
       metrics: [
         card('si', {
@@ -182,7 +182,7 @@ class Component extends DCLogic {
           source: 'Google, retail page-load data, 2018'
         }),
         card('inp', {
-          abbr: 'INP · INTERACTION TO NEXT PAINT', name: 'How fast taps respond, real shoppers', value: '239 ms', band: 'Needs work', color: A,
+          abbr: 'INP · INTERACTION TO NEXT PAINT', name: 'How fast taps respond', value: '239 ms', band: 'Needs work', color: A,
           g: 28.6, n: 42.9, pos: 34, goodAt: '200 ms', poorAt: '500 ms', hasField: false, field: '', fieldColor: '#A09DAD',
           def: 'How long the page takes to react after a shopper taps, clicks or types, like Add to cart or picking a shade. Measured on real visits. Good is 200 ms or less; over 500 ms is poor.',
           impact: 'Your INP is 39 ms over Google\u2019s 200 ms line. When redBus fixed theirs, sales went up 7%. Slow taps cost you that every day.',
