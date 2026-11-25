@@ -1,6 +1,6 @@
-/* TrooPerformance branded report: ONE renderer for the PDF download (browser) and the report email (server).
-   Email-safe on purpose: tables, inline styles, hosted images, no CSS gradients or SVG that mail apps drop.
-   The same file is copied into supabase/functions/trooperformance-report/report-doc.js. Keep the two identical. */
+/* TrooPerformance branded report: ONE renderer for the PDF download (browser) and the report email
+   (sent from tools/report-queue/queue.mjs after approval). Email-safe on purpose: tables, inline styles,
+   hosted images, no CSS gradients or SVG that mail apps drop. */
 (function (root) {
   "use strict";
   var C = { bg: "#0A0A0C", card: "#131219", card2: "#1A1630", line: "#2A2638", text: "#F4F3F8", text2: "#CFCCD9", muted: "#A09DAD", dim: "#6F6C7C", purple: "#8B6BF7", lilac: "#CBBEFD", good: "#4CC38A", warn: "#E5A93D", bad: "#EF6B57" };

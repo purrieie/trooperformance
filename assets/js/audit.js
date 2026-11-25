@@ -541,7 +541,7 @@
     Promise.all(S.cmp.list.map(function (x) {
       if (!x.pending) return Promise.resolve();
       return Promise.race([runPsiOnce(x.url, "mobile"), new Promise(function (_, no) { setTimeout(function () { no(new Error("timeout")); }, 100000); })]).then(function (m) { x.psi = m; }).catch(function () { x.psi = null; }).then(function () { x.pending = false; if (S.cmp.state === "running") renderCompare(); });
-    })).then(function () { S.cmp.state = "done"; renderCompare(); var rec = mailRec(); if (rec && Date.now() - rec.at < 13 * 60000) scheduleReportEmail(rec.to, rec.name); });
+    })).then(function () { S.cmp.state = "done"; renderCompare(); var rec = mailRec(); if (rec) scheduleReportEmail(rec.to, rec.name); });
   }
   function autoDetect() {
     if (!CFG.reportApi || S.cmp.finding) return;
@@ -633,19 +633,18 @@
       .then(function () { return new Promise(function (r) { setTimeout(r, 400); }); })
       .then(function () { try { target.focus(); target.print(); } catch (e) {} cleanup(); });
   }
-  // Report email: scheduled on the server a few minutes after unlock, so it lands after the visitor leaves.
-  // A competitor test inside that window replaces it with a version that has the leaderboard.
+  // Report email: queued on the server at unlock (one pending entry per email + store). A competitor test updates it.
+  // Nothing is sent from here: the queue is reviewed and approved twice a day (12 PM, 6 PM IST), then sent.
   win.TPReport = { data: reportData, pdf: downloadPdf };
   var MAIL_KEY = "tp_mail";
   function mailRec() { try { return (JSON.parse(localStorage.getItem(MAIL_KEY) || "{}") || {})[host(URL0)] || null; } catch (e) { return null; } }
   function saveMail(r) { try { var all = JSON.parse(localStorage.getItem(MAIL_KEY) || "{}") || {}; all[host(URL0)] = r; localStorage.setItem(MAIL_KEY, JSON.stringify(all)); } catch (e) {} }
   function scheduleReportEmail(to, name) {
     if (!CFG.reportApi || !to || !win.fetch) return;
-    var prev = mailRec(), body = { to: to, name: name || "", data: reportData() };
-    if (prev && prev.id && prev.to === to) body.replaceId = prev.id;
+    var body = { to: to, name: name || "", data: reportData() };
     timeoutFetch(CFG.reportApi + "/email", { method: "POST", headers: { authorization: "Bearer " + CFG.anonKey, apikey: CFG.anonKey, "content-type": "application/json" }, body: JSON.stringify(body), keepalive: true }, 20000)
       .then(function (r) { return r.json(); })
-      .then(function (d) { if (d && d.id) saveMail({ id: d.id, to: to, name: name || "", at: prev && prev.id === d.id ? prev.at : Date.now() }); })
+      .then(function (d) { if (d && d.id) saveMail({ id: d.id, to: to, name: name || "", at: Date.now() }); })
       .catch(function () {});
   }
 

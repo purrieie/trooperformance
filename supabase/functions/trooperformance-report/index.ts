@@ -1,22 +1,14 @@
 // TrooPerformance report helpers (Supabase Edge Function, Deno). Called with the public anon key, like trooperformance-audit.
 // POST /competitors {url, title, desc, h1, platform}  -> up to 3 likely competitor domains (one small Groq call, each domain DNS-checked)
-// POST /email {to, name, data, replaceId?}            -> schedules the branded report email via Resend, REPORT_DELAY_MIN after unlock.
-//                                                        With replaceId (e.g. after a competitor test) the scheduled email is cancelled and re-sent with the new data.
-// GET  /                                              -> health: which secrets are set
-// The email HTML is built HERE from numbers and short strings (report-doc.js, same file as the site's), never taken from the browser.
-import "./report-doc.js";
-// deno-lint-ignore no-explicit-any
-const TP = (globalThis as any).TPReportDoc;
+// POST /email {to, name, data}                        -> queues the report (one pending row per email + store; a competitor test updates it).
+//                                                        Sending happens after approval, twice a day, from tools/report-queue/queue.mjs.
+// GET  /queue, POST /queue/mark {results}             -> private (x-admin-token): pending list, mark sent/rejected/failed
+// GET  /                                              -> health
+// Only numbers and short strings are stored (cleanData); the email HTML is built at send time by assets/js/report-doc.js.
 
 const CORS = { "access-control-allow-origin": "*", "access-control-allow-methods": "GET, POST, OPTIONS", "access-control-allow-headers": "content-type, authorization, apikey, x-client-info" };
 const json = (d: unknown, status = 200) => new Response(JSON.stringify(d), { status, headers: { ...CORS, "content-type": "application/json" } });
-const RESEND = Deno.env.get("RESEND_API_KEY") || "";
 const GROQ = Deno.env.get("GROQ_API_KEY") || "";
-const FROM = Deno.env.get("REPORT_FROM") || "TrooPerformance by Troopod <reports@troopodhq.com>";
-const REPLY_TO = Deno.env.get("REPORT_REPLY_TO") || "";
-const DELAY_MIN = Math.max(1, Math.min(240, Number(Deno.env.get("REPORT_DELAY_MIN") || 15)));
-const BCC = (Deno.env.get("REPORT_BCC") || "").split(",").map((s) => s.trim()).filter(Boolean);
-const ASSETS = "https://purrieie.github.io/trooperformance/";
 
 // ---------- tiny in-memory rate limits (reset when the function cold-starts; enough to stop casual abuse) ----------
 const hits = new Map<string, number[]>();
@@ -45,7 +37,7 @@ function cleanData(d: any) {
     scores: { perf: num(d.scores?.perf), desk: num(d.scores?.desk), search: num(d.scores?.search), ai: num(d.scores?.ai), searchN: num(d.scores?.searchN, 0, 99), aiN: num(d.scores?.aiN, 0, 99) },
     uplift: d.uplift ? { target: num(d.uplift.target), conv: Math.max(0, Math.min(99, Number(d.uplift.conv) || 0)).toFixed(1).replace(/\.0$/, ""), rev: Math.max(0, Math.min(99, Number(d.uplift.rev) || 0)).toFixed(1).replace(/\.0$/, "") } : null,
     cwv: typeof d.cwv === "boolean" ? d.cwv : null,
-    vitals: arr(d.vitals, 6).map((v: any) => ({ name: str(v.name, 40), abbr: str(v.abbr, 12), value: str(v.value, 16), good: str(v.good, 20), kind: KINDS.has(v.kind) ? v.kind : "" })),
+    vitals: arr(d.vitals, 6).map((v: any) => ({ name: str(v.name, 40), abbr: str(v.abbr, 32), value: str(v.value, 16), good: str(v.good, 20), kind: KINDS.has(v.kind) ? v.kind : "" })),
     fixes: arr(d.fixes, 8).map((x: any) => ({ tag: TAGS.has(x.tag) ? x.tag : "Performance", title: str(x.title, 140), why: str(x.why, 300), imp: str(x.imp, 60), effort: str(x.effort, 30), who: str(x.who, 40) })),
     search: arr(d.search, 30).map((c: any) => ({ status: STAT.has(c.status) ? c.status : "warn", title: str(c.title, 120), why: str(c.why, 260) })),
     ai: arr(d.ai, 30).map((c: any) => ({ status: STAT.has(c.status) ? c.status : "warn", title: str(c.title, 120), why: str(c.why, 260) })),
@@ -57,35 +49,60 @@ function cleanData(d: any) {
   };
 }
 
-async function resend(path: string, body?: unknown) {
-  const r = await fetch("https://api.resend.com" + path, { method: "POST", headers: { authorization: "Bearer " + RESEND, "content-type": "application/json" }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(15000) });
-  const d = await r.json().catch(() => ({}));
-  return { ok: r.ok, status: r.status, d };
-}
-
+// Reports are NOT sent from here. They wait in public.trooperformance_report_queue until Jaanya approves the
+// 12 PM / 6 PM batch; the approved ones are sent from her Mac with tools/report-queue/queue.mjs.
+const SB_URL = Deno.env.get("SUPABASE_URL") || "", SB_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+const QH = { apikey: SB_KEY, authorization: "Bearer " + SB_KEY, "content-type": "application/json" };
+const QURL = () => SB_URL + "/rest/v1/trooperformance_report_queue";
 async function handleEmail(req: Request) {
-  if (!RESEND) return json({ error: "not_configured" }, 503);
+  if (!SB_URL || !SB_KEY) return json({ error: "not_configured" }, 503);
   const b = await req.json().catch(() => ({}));
   const to = str(b.to, 200).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(to)) return json({ error: "bad_email" }, 400);
   if (personal(to.split("@")[1])) return json({ error: "personal_email" }, 400);
   const data = cleanData(b.data || {});
   if (!data) return json({ error: "bad_data" }, 400);
-  if (b.name) data.name = str(b.name, 60).split(" ")[0];
-  const replaceId = /^[0-9a-f-]{20,60}$/i.test(String(b.replaceId || "")) ? String(b.replaceId) : "";
-  if (limited("ip:" + ipOf(req), 8, 3600_000) || limited("to:" + to, replaceId ? 6 : 3, 86400_000)) return json({ error: "rate_limited" }, 429);
-  if (replaceId) {
-    const c = await resend("/emails/" + replaceId + "/cancel");
-    if (!c.ok) return json({ ok: true, id: replaceId, kept: true, reason: "already_sent_or_unknown" });
+  const name = str(b.name, 80);
+  if (name) data.name = name.split(" ")[0];
+  if (limited("ip:" + ipOf(req), 12, 3600_000) || limited("to:" + to, 8, 86400_000)) return json({ error: "rate_limited" }, 429);
+  const last = await fetch(QURL() + "?select=id,status,created_at&email=eq." + encodeURIComponent(to) + "&site=eq." + encodeURIComponent(data.site) + "&order=created_at.desc&limit=1", { headers: QH }).then((r) => r.json()).catch(() => []);
+  const row = Array.isArray(last) ? last[0] : null;
+  if (row && row.status === "pending") {
+    const r = await fetch(QURL() + "?id=eq." + row.id, { method: "PATCH", headers: { ...QH, prefer: "return=minimal" }, body: JSON.stringify({ data, name: name || null, updated_at: new Date().toISOString() }) });
+    return r.ok ? json({ ok: true, id: row.id, queued: true, updated: true }) : json({ error: "save_failed" }, 502);
   }
-  const sendAt = new Date(Date.now() + DELAY_MIN * 60_000).toISOString();
-  const html = TP.render(data, { mode: "email", assetBase: ASSETS });
-  const payload: Record<string, unknown> = { from: FROM, to: [to], subject: TP.subject(data), html, scheduled_at: sendAt, tags: [{ name: "source", value: "trooperformance" }] };
-  if (REPLY_TO) payload.reply_to = REPLY_TO;
-  if (BCC.length) payload.bcc = BCC;
-  const r = await resend("/emails", payload);
-  if (!r.ok) return json({ error: "send_failed", detail: r.status, msg: str(r.d?.message, 200) }, 502);
-  return json({ ok: true, id: r.d.id, sendAt });
+  if (row && Date.now() - Date.parse(row.created_at) < 7 * 86400_000) return json({ ok: true, id: row.id, queued: false, reason: "already_" + row.status });
+  const r = await fetch(QURL(), { method: "POST", headers: { ...QH, prefer: "return=representation" }, body: JSON.stringify({ email: to, name: name || null, site: data.site, data, ip: ipOf(req), user_agent: str(req.headers.get("user-agent"), 300) }) });
+  const d = await r.json().catch(() => null);
+  return r.ok && Array.isArray(d) && d[0] ? json({ ok: true, id: d[0].id, queued: true }) : json({ error: "save_failed" }, 502);
+}
+
+// ---------- private queue routes for tools/report-queue/queue.mjs (x-admin-token = the queue_token row) ----------
+let TOKEN = "";
+async function adminOk(req: Request) {
+  const t = req.headers.get("x-admin-token") || "";
+  if (t.length < 32 || !SB_URL || !SB_KEY) return false;
+  if (!TOKEN) { const d = await fetch(SB_URL + "/rest/v1/trooperformance_admin?select=v&k=eq.queue_token", { headers: QH }).then((r) => r.json()).catch(() => []); TOKEN = (Array.isArray(d) && d[0] && d[0].v) || ""; }
+  if (!TOKEN || t.length !== TOKEN.length) return false;
+  let diff = 0; for (let i = 0; i < t.length; i++) diff |= t.charCodeAt(i) ^ TOKEN.charCodeAt(i);
+  return diff === 0;
+}
+async function handleQueueList() {
+  const r = await fetch(QURL() + "?select=id,created_at,updated_at,email,name,site,data&status=eq.pending&order=created_at.asc&limit=200", { headers: QH });
+  return json({ rows: await r.json().catch(() => []) });
+}
+async function handleQueueMark(req: Request) {
+  const b = await req.json().catch(() => ({}));
+  const list = Array.isArray(b.results) ? b.results.slice(0, 200) : [];
+  let n = 0;
+  for (const x of list) {
+    if (!/^[0-9a-f-]{36}$/i.test(String(x.id)) || !["sent", "rejected", "failed"].includes(x.status)) continue;
+    const patch: Record<string, unknown> = { status: x.status, updated_at: new Date().toISOString(), note: str(x.error || x.note, 300) || null };
+    if (x.status === "sent") { patch.sent_at = new Date().toISOString(); patch.resend_id = str(x.resend_id, 80) || null; }
+    const r = await fetch(QURL() + "?id=eq." + x.id + "&status=eq.pending", { method: "PATCH", headers: { ...QH, prefer: "return=minimal" }, body: JSON.stringify(patch) });
+    if (r.ok) n++;
+  }
+  return json({ ok: true, marked: n });
 }
 
 async function resolves(domain: string) {
@@ -132,7 +149,12 @@ Deno.serve(async (req) => {
   try {
     if (req.method === "POST" && route.startsWith("/email")) return await handleEmail(req);
     if (req.method === "POST" && route.startsWith("/competitors")) return await handleCompetitors(req);
-    return json({ ok: true, service: "trooperformance-report", resend: !!RESEND, groq: !!GROQ, from: FROM, delayMin: DELAY_MIN });
+    if (route.startsWith("/queue")) {
+      if (!(await adminOk(req))) return json({ error: "forbidden" }, 403);
+      if (req.method === "GET") return await handleQueueList();
+      if (req.method === "POST" && route.startsWith("/queue/mark")) return await handleQueueMark(req);
+    }
+    return json({ ok: true, service: "trooperformance-report", queue: !!(SB_URL && SB_KEY), groq: !!GROQ });
   } catch (e) {
     return json({ error: "server_error", detail: String((e as Error)?.message || e).slice(0, 200) }, 500);
   }
