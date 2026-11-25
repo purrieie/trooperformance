@@ -699,3 +699,7 @@ pre.agent { margin: 0; background: var(--bg); border: 1px solid rgba(255,255,255
 @media (max-width: 640px) { input, select, textarea { font-size: 16px !important; } }
 .scan { min-height: calc(100svh - 64px); }
 @media (max-width: 640px) { .scan { min-height: 0; } }
+/* compare: auto-detect competitors */
+.cp-auto { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.cp-auto .btn { display: inline-flex; align-items: center; gap: 7px; }
+.cp-auto .btn[disabled] { opacity: .7; cursor: progress; }

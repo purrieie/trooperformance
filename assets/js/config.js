@@ -6,6 +6,8 @@ window.TP_CONFIG = {
   calendly: "https://calendly.com/nj-troopod/troopod-demo",
   /* Google PageSpeed Insights API key (free). Restrict it in Google Cloud: API = PageSpeed Insights only, HTTP referrer = purrieie.github.io/* */
   /* TrooCRO page-view function: returns a store page's HTML so the scan screen can draw it live (drawn with no scripts). */
+  /* TrooPerformance report function: auto-detect competitors + the branded report email (Resend). */
+  reportApi: "https://mrfixorpmhrnkxhqzesn.supabase.co/functions/v1/trooperformance-report",
   pageView: "https://mrfixorpmhrnkxhqzesn.supabase.co/functions/v1/troocro-page-view",
   psiKey: "AIzaSyC4k7vaxwnNf_CkV_URwKRLls2A3xV1Tfk",
   /* Troopod Apps Script web app (same one as troopod.io/blackfriday). Leads carry source "trooperformance" -> "TrooPerformance leads" tab + email alert. */

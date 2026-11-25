@@ -385,7 +385,7 @@
     var head = '<div class="sp-head"><div><span class="eyebrow">Performance · ' + esc(dom) + " · tested on a " + (S.device === "mobile" ? "phone" : "desktop") + '</span><h3 class="h3" style="font-size:clamp(24px,2.6vw,32px);margin-top:8px">How fast your store feels</h3></div><div class="sp-chips">' + toggle +
       (other ? '<span class="sp-chip">' + (S.device === "mobile" ? "Desktop" : "Mobile") + ' score <b style="color:' + band(other.perf) + '">' + other.perf + "</b></span>" : S.device === "mobile" && S.pendingDesktop ? '<span class="sp-chip">Desktop score <b style="color:' + DIM + '">testing\u2026</b></span>' : "") +
       (cwvPass == null ? "" : '<span class="sp-chip" style="color:' + (cwvPass ? G : R) + ";border-color:" + (cwvPass ? "rgba(76,195,138,.4)" : "rgba(239,107,87,.4)") + '">Core Web Vitals: ' + (cwvPass ? "passed" : "failed") + "</span>") + "</div></div>";
-    var abandon = score >= 90 ? "A score of " + score + " is fast. Google found <b>more than half of mobile visits are abandoned</b> past 3 seconds, and you're well clear of that." : "A score of " + score + " means your page is " + (score < 50 ? "slow" : "only middling") + " on a " + (S.device === "mobile" ? "phone" : "computer") + ". Google found <b>more than half of mobile visits are abandoned</b> when a page takes over 3 seconds to load.";
+    var abandon = score >= 90 ? "A score of " + score + " is strong. Google found that when a site meets its Core Web Vitals, shoppers are <b>24% less likely to abandon the page</b> while it loads. Keep it there." : "A score of " + score + " means your page " + (score < 50 ? "struggles" : "is only average") + " on a " + (S.device === "mobile" ? "phone" : "computer") + ". Google found that when a site meets its Core Web Vitals, shoppers are <b>24% less likely to abandon the page</b> while it loads.";
     var hero = '<section class="sp-hero" aria-label="Overall performance score"><div class="sp-dots" aria-hidden="true"></div><div class="sp-hero-row"><div class="sp-rings">' +
       bigRing(score, band(score), "Today", bandName(score), band(score), 0) +
       '<div class="sp-arrow"><span>+' + up.gain + '</span><svg viewBox="0 0 64 20" fill="none" stroke="#A68EFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10h58M52 3l8 7-8 7"/></svg></div>' +
@@ -394,7 +394,7 @@
       '<div class="sp-lift"><span class="c"><b>+' + up.conv + '%</b> conversions</span><span class="r"><b>+' + up.rev + '%</b> revenue</span></div>' +
       '<p class="small" style="margin:0;font-size:13px">Conversions: based on a billion-dollar house of brands case, where +29 points lifted conversion rate 19%. Revenue adds bigger orders: Deloitte \u00d7 Google saw order value rise 9.2% alongside 8.4% more conversions. Same traffic. Estimate, not a guarantee.</p>' +
       '<a class="btn btn-primary" data-calendly href="' + esc(CFG.calendly || "#") + '" target="_blank" rel="noopener" style="align-self:flex-start">Get to ' + up.target + ' <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>' +
-      '<div class="sp-quote"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF6B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/></svg><div><span>' + abandon + '</span><small>Google, Speed matters (Google Ads blog), 2018</small></div></div></section>';
+      '<div class="sp-quote"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF6B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/></svg><div><span>' + abandon + '</span><small>Google, The Science Behind Web Vitals (Chromium blog), 2020</small></div></div></section>';
     // vitals
     var si = m.m.si, lcp = m.m.lcp, inpF = f && f.inp, tbt = m.m.tbt, s1 = function (ms) { return (ms / 1000).toFixed(1) + " s"; };
     var siImp = si == null ? "Google couldn't measure this one." : si > 3400 ? "Your page fills in " + s1(si - 3400) + " slower than Google’s 3.4 s line. Every 0.1 s faster lifts retail conversions by 8.4%, so every extra second is sales you lose each day." : "You fill in under Google’s 3.4 s line. Worth keeping: every 0.1 s faster lifts retail conversions by 8.4%.";
@@ -482,6 +482,7 @@
     if (c.state === "empty") {
       return head + '<form class="cp-card cp-form" data-cmp-form novalidate><div class="sp-dots" aria-hidden="true"></div><div style="display:flex;flex-direction:column;gap:8px;max-width:620px"><h3 class="h3">See where ' + esc(dom) + ' ranks</h3><p class="small" style="margin:0;font-size:15px;color:var(--text-2)">Add up to 3 competitors and see where your store ranks on the exact same phone test.</p></div>' +
         '<div class="cp-inputs">' + [0, 1, 2].map(function (i) { return '<div><label for="cmp' + i + '">Competitor ' + (i + 1) + '</label><input id="cmp' + i + '" data-cmp-in="' + i + '" type="text" inputmode="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="competitor' + (i + 1) + '.com" value="' + esc(c.inputs[i]) + '"></div>'; }).join("") + "</div>" +
+        '<div class="cp-auto"><button class="btn btn-ghost btn-sm" type="button" data-cmp-auto' + (c.finding ? " disabled" : "") + '><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' + (c.finding ? "Finding your competitors\u2026" : "Auto-detect competitors") + "</button>" + (c.auto && !c.finding ? '<span class="small" style="font-size:13px">Picked for you. Change any of them if you like.</span>' : '<span class="small" style="font-size:13px">Too busy to type? We\u2019ll pick 3 for you.</span>') + "</div>" +
         '<p class="form-error" data-cmp-err role="alert"' + (c.err ? "" : " hidden") + ">" + esc(c.err || "") + "</p>" +
         '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><button class="btn btn-primary" type="submit">Compare speed <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="small" style="font-size:13px">About a minute. Your own result is already in.</span></div>' +
         '<div class="cp-get"><span class="vis-label">What you’ll get</span><div class="pills"><span class="chip">Your rank</span><span class="chip">Score, Speed Index, LCP and taps side by side</span><span class="chip">How far you are from the fastest brand</span></div></div></form>';
@@ -540,7 +541,17 @@
     Promise.all(S.cmp.list.map(function (x) {
       if (!x.pending) return Promise.resolve();
       return Promise.race([runPsiOnce(x.url, "mobile"), new Promise(function (_, no) { setTimeout(function () { no(new Error("timeout")); }, 100000); })]).then(function (m) { x.psi = m; }).catch(function () { x.psi = null; }).then(function () { x.pending = false; if (S.cmp.state === "running") renderCompare(); });
-    })).then(function () { S.cmp.state = "done"; renderCompare(); });
+    })).then(function () { S.cmp.state = "done"; renderCompare(); var rec = mailRec(); if (rec && Date.now() - rec.at < 13 * 60000) scheduleReportEmail(rec.to, rec.name); });
+  }
+  function autoDetect() {
+    if (!CFG.reportApi || S.cmp.finding) return;
+    var h = (S.scan && S.scan.html) || {};
+    S.cmp.finding = true; S.cmp.err = ""; renderCompare();
+    timeoutFetch(CFG.reportApi + "/competitors", { method: "POST", headers: { authorization: "Bearer " + CFG.anonKey, apikey: CFG.anonKey, "content-type": "application/json" }, body: JSON.stringify({ url: URL0, title: h.title || "", desc: h.desc || "", h1: h.h1 || "", platform: (S.scan && S.scan.platform) || "" }) }, 35000)
+      .then(function (r) { return r.json(); })
+      .then(function (d) { var list = (d && d.competitors) || []; if (!list.length) throw new Error("none"); S.cmp.inputs = list.concat(["", "", ""]).slice(0, 3); S.cmp.auto = true; })
+      .catch(function () { S.cmp.err = "Couldn\u2019t find competitors automatically. Add them yourself."; })
+      .then(function () { S.cmp.finding = false; renderCompare(); });
   }
 
   function compsSection() {
@@ -577,6 +588,65 @@
     if (!top.length) return "";
     return '<section class="rep-sec"><div class="wrap"><div class="rep-sec-head"><h2 class="h2">Fix these <span class="hl">first</span></h2><span class="small">Biggest impact for the least effort, across all three</span></div><div class="fixes">' +
       top.map(function (x, i) { return '<div class="fix"><span class="no">0' + (i + 1) + '</span><div><b>' + esc(x.title) + "</b><span>" + esc(x.why) + (x.imp ? " · " + esc(x.imp) : "") + '</span></div><span class="tg">' + x.tag + "</span></div>"; }).join("") + "</div></div></section>";
+  }
+
+  // ---------- branded report (PDF download + report email), drawn by assets/js/report-doc.js ----------
+  function kindOfC(c) { return c === G ? "ok" : c === A ? "warn" : c === R ? "bad" : ""; }
+  function reportData() {
+    var m = S.psi.mobile, dsk = S.psi.desktop, d = S.scan, f = m && m.field, dom = host(URL0), vit = [];
+    if (m) {
+      var lcpV = f && f.lcp != null ? f.lcp : m.m.lcp, clsV = f && f.cls != null ? f.cls : m.m.cls;
+      if (lcpV != null) vit.push({ name: "Main content shows", abbr: "LCP" + (f && f.lcp != null ? " \u00b7 real shoppers" : " \u00b7 lab"), value: sec(lcpV), good: "\u2264 2.5 s", kind: kindOfC(mcol("lcp", lcpV)) });
+      if (f && f.inp != null) vit.push({ name: "Taps respond", abbr: "INP \u00b7 real shoppers", value: msf(f.inp), good: "\u2264 200 ms", kind: kindOfC(mcol("inp", f.inp)) });
+      else if (m.m.tbt != null) vit.push({ name: "Page blocked from taps", abbr: "TBT \u00b7 lab", value: msf(m.m.tbt), good: "\u2264 200 ms", kind: kindOfC(mcol("tbt", m.m.tbt)) });
+      if (clsV != null) vit.push({ name: "Layout jumps", abbr: "CLS", value: clsV.toFixed(2), good: "\u2264 0.10", kind: kindOfC(mcol("cls", clsV)) });
+      if (m.m.si != null) vit.push({ name: "Page fills in", abbr: "Speed Index", value: sec(m.m.si), good: "\u2264 3.4 s", kind: kindOfC(mcol("si", m.m.si)) });
+      if (m.m.fcp != null) vit.push({ name: "First paint", abbr: "FCP", value: sec(m.m.fcp), good: "\u2264 1.8 s", kind: kindOfC(mcol("fcp", m.m.fcp)) });
+    }
+    var up = m && m.perf != null ? uplift(m.perf, dom) : null;
+    var chk = function (c) { return { status: c.status, title: c.title, why: c.why }; };
+    return {
+      site: dom, date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }), platform: (d && d.platform) || "",
+      scores: { perf: m ? m.perf : null, desk: dsk ? dsk.perf : null, search: d ? d.search.score : null, ai: d ? d.ai.score : null, searchN: d ? d.search.checks.length : null, aiN: d ? d.ai.checks.length : null },
+      uplift: up ? { target: up.target, conv: up.conv, rev: up.rev } : null,
+      cwv: f ? (f.lcp != null && f.lcp <= 2500 && (f.inp == null || f.inp <= 200) && (f.cls == null || f.cls <= 0.1)) : null,
+      vitals: vit,
+      fixes: planItems().map(function (x) { return { tag: x.tag, title: x.title, why: x.why, imp: x.imp, effort: x.effort, who: x.who }; }),
+      search: d ? d.search.checks.map(chk) : [], ai: d ? d.ai.checks.map(chk) : [],
+      bots: d ? d.robots.bots.filter(function (b) { return !b.allowed && b.ua !== "Googlebot" && b.ua !== "Bingbot"; }).map(function (b) { return b.ua; }) : [],
+      apps: m ? m.third.filter(function (x) { return x.cost >= 1; }).slice(0, 5).map(function (x) { return { name: x.name, ms: x.cost }; }) : [],
+      comps: S.cmp && S.cmp.state === "done" ? cmpRows().map(function (r) { return { site: host(r.url), perf: r.psi.perf, si: sec(r.psi.m.si), lcp: sec(r.psi.m.lcp), you: !!r.you }; }) : [],
+      reportUrl: "https://purrieie.github.io/trooperformance/audit.html?url=" + encodeURIComponent(shortUrl(URL0)), demoUrl: CFG.calendly
+    };
+  }
+  // PDF: the branded report in its own window, then the browser's Save as PDF
+  function downloadPdf() {
+    if (!win.TPReportDoc) { win.print(); return; }
+    var html = win.TPReportDoc.render(reportData(), { mode: "print", assetBase: new URL(".", location.href).href });
+    var w = null; try { w = win.open("", "_blank"); } catch (e) { w = null; }
+    var target, cleanup = function () {};
+    if (w) { target = w; }
+    else { var fr = doc.createElement("iframe"); fr.style.cssText = "position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0"; doc.body.appendChild(fr); target = fr.contentWindow; cleanup = function () { setTimeout(function () { fr.remove(); }, 60000); }; }
+    target.document.open(); target.document.write(html); target.document.close();
+    var imgs = Array.prototype.slice.call(target.document.images);
+    Promise.race([Promise.all(imgs.map(function (im) { return im.complete ? 1 : new Promise(function (r) { im.onload = im.onerror = r; }); })), new Promise(function (r) { setTimeout(r, 3500); })])
+      .then(function () { return new Promise(function (r) { setTimeout(r, 400); }); })
+      .then(function () { try { target.focus(); target.print(); } catch (e) {} cleanup(); });
+  }
+  // Report email: scheduled on the server a few minutes after unlock, so it lands after the visitor leaves.
+  // A competitor test inside that window replaces it with a version that has the leaderboard.
+  win.TPReport = { data: reportData, pdf: downloadPdf };
+  var MAIL_KEY = "tp_mail";
+  function mailRec() { try { return (JSON.parse(localStorage.getItem(MAIL_KEY) || "{}") || {})[host(URL0)] || null; } catch (e) { return null; } }
+  function saveMail(r) { try { var all = JSON.parse(localStorage.getItem(MAIL_KEY) || "{}") || {}; all[host(URL0)] = r; localStorage.setItem(MAIL_KEY, JSON.stringify(all)); } catch (e) {} }
+  function scheduleReportEmail(to, name) {
+    if (!CFG.reportApi || !to || !win.fetch) return;
+    var prev = mailRec(), body = { to: to, name: name || "", data: reportData() };
+    if (prev && prev.id && prev.to === to) body.replaceId = prev.id;
+    timeoutFetch(CFG.reportApi + "/email", { method: "POST", headers: { authorization: "Bearer " + CFG.anonKey, apikey: CFG.anonKey, "content-type": "application/json" }, body: JSON.stringify(body), keepalive: true }, 20000)
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d && d.id) saveMail({ id: d.id, to: to, name: name || "", at: prev && prev.id === d.id ? prev.at : Date.now() }); })
+      .catch(function () {});
   }
 
   // ---------- full report (fix plan + competitor rank), unlocked with a short form ----------
@@ -692,6 +762,7 @@
         try { fetch(CFG.sheetEndpoint, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(row), keepalive: true }).catch(function () {}); } catch (e) {}
       }
       S.unlocked = true;
+      if (!g("company_site")) scheduleReportEmail(body.email, body.name);
       try { var l = JSON.parse(localStorage.getItem(LOCK_KEY) || "[]") || []; l.push(host(URL0)); localStorage.setItem(LOCK_KEY, JSON.stringify(l.slice(-20))); } catch (e) {}
       if (comps.length) S.cmp.inputs = comps.map(shortUrl).concat(["", "", ""]).slice(0, 3);
       var sec = $("#full"); if (sec) { var tmp = doc.createElement("div"); tmp.innerHTML = fullSection(); sec.replaceWith.apply(sec, Array.prototype.slice.call(tmp.children)); }
@@ -747,7 +818,8 @@
       var dv = e.target.closest("[data-dev]"); if (dv) { S.device = dv.getAttribute("data-dev"); rerenderPanel(); animateRings($("#panel")); return; }
       var df = e.target.closest("[data-def]"); if (df) { var k = df.getAttribute("data-def"); S.open[k] = !S.open[k]; rerenderPanel(); var b2 = $('[data-def="' + k + '"]'); if (b2) b2.focus(); return; }
       if (e.target.closest("[data-copy]")) { (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(function () { toast("Link copied"); }, function () { toast(location.href); }); return; }
-      if (e.target.closest("[data-print]")) { win.print(); return; }
+      if (e.target.closest("[data-print]")) { downloadPdf(); return; }
+      if (e.target.closest("[data-cmp-auto]")) { autoDetect(); return; }
       if (e.target.closest("[data-cmp-edit]")) { S.cmp.state = "empty"; renderCompare(); var c0 = $("#cmp0"); if (c0) c0.focus(); return; }
       if (e.target.closest("[data-cmp-go]")) { var cs = $("#compare") || $("#full"); if (cs) cs.scrollIntoView({ behavior: "smooth", block: "start" }); setTimeout(function () { var c1 = $("#cmp0") || $("#ldEmail"); if (c1) c1.focus({ preventScroll: true }); }, 500); return; }
       var rt = e.target.closest("[data-retry]"); if (rt) {
