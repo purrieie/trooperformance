@@ -48,6 +48,46 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 .tp-logo{height:var(--h,22px);width:auto;opacity:.82;flex:none}
 @media (hover:hover){.tp-marq:hover .tp-track{animation-play-state:paused}}
 @media (max-width:767px){.tp-logo{height:calc(var(--h,22px) * .82)}.tp-track{gap:44px!important}.tp-proofrow{margin-top:32px!important;gap:20px!important}}
+/* Customer story cards (hero) */
+.tp-cs{position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.1);background:#121217;display:flex;flex-direction:column;box-sizing:border-box}
+.tp-cs-top{position:relative;padding:20px 22px 18px;display:flex;flex-direction:column;gap:14px;isolation:isolate}
+.tp-cs-top::after{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.22) 1px,transparent 1.4px);background-size:9px 9px;-webkit-mask-image:linear-gradient(225deg,#000,transparent 55%);mask-image:linear-gradient(225deg,#000,transparent 55%);opacity:.55}
+.tp-cs-a .tp-cs-top{background:linear-gradient(180deg,rgba(0,77,255,.28),rgba(20,28,60,.35))}
+.tp-cs-b .tp-cs-top{background:linear-gradient(180deg,rgba(76,195,138,.24),rgba(18,40,32,.35))}
+.tp-cs-c .tp-cs-top{background:linear-gradient(180deg,rgba(139,107,247,.38),rgba(36,26,70,.4))}
+.tp-cs-c{border-color:rgba(166,142,250,.45);box-shadow:0 30px 80px -40px rgba(139,107,247,.7)}
+.tp-cs-row{display:flex;justify-content:space-between;align-items:center;gap:12px;height:38px}
+.tp-cs-eye{display:inline-flex;align-items:center;gap:9px;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;color:#CFCCD9;white-space:nowrap}
+.tp-cs-eye::before{content:"";width:18px;height:1px;background:currentColor;opacity:.7}
+.tp-cs-logo{width:auto;flex:none;opacity:.95}
+.tp-cs-name{font-size:12.5px;line-height:1.2;color:#F4F3F8;text-align:right;font-weight:500}
+.tp-cs-h{margin:0;font-size:clamp(22px,1.85vw,27px);line-height:1.08;font-weight:500;letter-spacing:-.03em;color:#F4F3F8;text-wrap:balance}
+.tp-cs-bot{padding:16px 22px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.tp-cs-ba{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tp-cs-ba span{font-size:12.5px;color:#A09DAD}
+.tp-cs-ba b{font-family:'DM Mono',ui-monospace,monospace;font-weight:400;font-size:19px;color:#8A8798;white-space:nowrap}
+.tp-cs-ba i{font-style:normal;color:#6F6C7C;margin:0 2px}
+.tp-cs-ba em{font-style:normal;color:#F4F3F8}
+.tp-cs-a .tp-cs-ba em{color:#9DB8FF}.tp-cs-b .tp-cs-ba em{color:#9FE3C1}.tp-cs-c .tp-cs-ba em{color:#CBBEFD}
+@media (max-width:1279px){.tp-cs-h{min-height:2.16em}}
+.tp-cs-bot p{margin:0;font-size:14px;line-height:1.5;color:#CFCCD9;text-wrap:pretty}
+/* Page-by-page proof panels */
+.tp-pp{position:relative;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:#0E0E12;padding:22px;display:flex;flex-direction:column;gap:16px}
+.tp-pp-h{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:30px}
+.tp-pp-h small{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;color:#6F6C7C;text-align:right}
+.tp-pp-big{display:flex;flex-direction:column;gap:4px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.07)}
+.tp-pp-big b{font-family:'DM Mono',ui-monospace,monospace;font-weight:400;font-size:26px;letter-spacing:-.02em;color:#F4F3F8}
+.tp-pp-big span{font-size:12.5px;color:#A09DAD}
+.tp-pp-r{display:flex;flex-direction:column;gap:7px}
+.tp-pp-r>div:first-child{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tp-pp-r>div:first-child span{font-size:13.5px;color:#CFCCD9}
+.tp-pp-r>div:first-child b{font-family:'DM Mono',ui-monospace,monospace;font-weight:400;font-size:14px;color:#F4F3F8;white-space:nowrap}
+.tp-pp-r>div:first-child b i{font-style:normal;color:#6F6C7C}
+.tp-pp-t{position:relative;height:6px;border-radius:3px;background:rgba(255,255,255,.06)}
+.tp-pp-t .tp-bar{position:absolute;left:0;top:0;height:100%;border-radius:3px}
+.tp-pp-t .was{background:rgba(255,255,255,.16)}
+.tp-pp-t .tick{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:1px;background:#F4F3F8;opacity:.55}
+@media (max-width:767px){.tp-cs>*{}.tp-tiles>article.tp-cs{min-height:0!important}.tp-cs-h{font-size:24px}.tp-case-m{display:none}}
 /* Mobile: the three result tiles become a swipe carousel with peeking neighbours and arrow buttons */
 .tp-carctl{display:none}
 @media (max-width:767px){
@@ -88,11 +128,12 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 @media (max-width:767px){
  #proof,#what{padding-top:64px!important;gap:28px!important}
  #proof,#what,.tp-steps,.tp-cta{scroll-margin-top:72px}
- .tp-pages{grid-template-columns:1fr 1fr!important;gap:10px!important}
- .tp-pages>article{padding:16px!important;gap:14px!important}
- .tp-pages>article>div:first-child{flex-direction:column;align-items:flex-start!important;gap:2px}
- .tp-pages>article span[style*="font-size: 26px"]{font-size:20px!important}
- .tp-pages>article div[style*="align-items: baseline"]{flex-direction:column;align-items:flex-start!important;gap:2px}
+ .tp-pages{grid-template-columns:1fr!important;gap:12px!important}
+ .tp-pp{padding:18px!important}
+ .tp-cs-logo{height:20px!important}
+ .tp-cs-b .tp-cs-logo{height:30px!important}
+ .tp-cs-top{padding:18px 18px 16px!important}
+ .tp-cs-bot{padding:14px 18px 18px!important}
  .tp-what{gap:12px!important}
  .tp-what>article>div:first-child{height:210px!important}
  .tp-what>article>div:last-child{padding:20px!important}
@@ -125,7 +166,10 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
  .tp-big .tp-pre{display:none}
  .tp-big input{height:44px!important;font-size:16px!important}
  .tp-big .tp-btn{height:44px!important;padding:0 16px!important;font-size:15px!important}
- .tp-tiles{margin-top:36px!important}
+ .tp-tiles{margin-top:12px!important}
+ .tp-case{padding:0 2px}
+ .tp-case-t{font-size:14px!important}
+ .tp-tf{display:block;margin-top:3px}
  .tp-sticky .tp-pre{display:none}
  .tp-sticky{position:absolute;left:16px;right:16px;top:12px;background:#1D1733!important}
  .tp-demo.hide{display:none!important}
@@ -156,9 +200,9 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 <div aria-hidden="true" style="position: absolute; inset: 0; z-index: -3; background: radial-gradient(60% 45% at 50% 22%, rgba(139,107,247,0.16), rgba(10,10,12,0) 70%)"></div>
 
 <div style="max-width: 1200px; width: 100%; box-sizing: border-box; padding: 0 28px; display: flex; flex-direction: column; align-items: center; text-align: center">
-<span class="tp-eye tp-rise" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Case study · a billion-dollar house of brands</span>
+<span class="tp-eye tp-rise" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Free performance, SEO and AI audit</span>
 <h1 class="tp-h1" aria-label="Faster store. More sales." style="margin: 20px 0 0; max-width: 900px; font-size: clamp(42px, min(6vw, 9vh), 84px); line-height: 1.02; font-weight: 400; letter-spacing: -0.04em; text-wrap: balance"><span aria-hidden="true"><span class="tp-b">Faster</span> <span class="tp-b">store.</span> <span style="color: #A68EFA"><span class="tp-b">More</span> <span class="tp-b">sales.</span></span></span></h1>
-<p class="tp-rise" style="margin: 20px 0 0; max-width: 600px; font-size: 18px; line-height: 1.6; color: #CFCCD9; animation-delay: .16s">Same products, same ads. We made the site fast in one week.</p>
+<p class="tp-rise" style="margin: 20px 0 0; max-width: 600px; font-size: 18px; line-height: 1.6; color: #CFCCD9; animation-delay: .16s">Same products, same ads. A faster site turns more visitors into orders.</p>
 <form class="tp-big tp-rise" data-hero-form aria-label="Analyse your site" style="margin-top: clamp(20px, 3.2vh, 30px); width: 100%; max-width: 520px; display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 20px; border-radius: 14px; background: linear-gradient(180deg, rgba(139,107,247,0.22), rgba(139,107,247,0.10)); border: 1px solid rgba(166,142,250,0.5); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-sizing: border-box; box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 70px -30px rgba(139,107,247,0.9); animation-delay: .22s">
 <span class="tp-pre" aria-hidden="true" style="font-size: 16px; color: #A79CCB; flex: none">https://</span>
 <label for="heroUrl" style="position: absolute; left: -9999px">Your website</label>
@@ -167,39 +211,48 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 </form>
 <span class="tp-rise" style="margin-top: 14px; font-size: 14.5px; color: #A09DAD; animation-delay: .28s">Free audit. Takes about 2 minutes.</span>
 
-<div class="tp-tiles" data-tiles style="margin-top: clamp(24px, 4vh, 40px); width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; text-align: left">
-
-<article class="tp-rise" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: linear-gradient(160deg, rgba(139,107,247,0.16), rgba(14,14,18,0.9) 55%); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-height: clamp(150px, 20vh, 178px); box-sizing: border-box; animation-delay: .24s">
-<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #CBBEFD">Performance score, 113 pages</span>
-<div aria-hidden="true" style="display: flex; align-items: flex-end; gap: 5px; height: 40px"><div style="width: 14px; height: {{b1}}px; border-radius: 3px; background: rgba(166,142,250,0.35)"></div><div style="width: 14px; height: {{b2}}px; border-radius: 3px; background: rgba(166,142,250,0.6)"></div><div style="width: 14px; height: {{b3}}px; border-radius: 3px; background: #A68EFA"></div></div>
+<div class="tp-case tp-rise" style="margin-top: clamp(24px, 4vh, 40px); align-self: stretch; display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; text-align: left; animation-delay: .3s">
+<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+<span style="display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: rgba(139,107,247,0.18); border: 1px solid rgba(166,142,250,0.45); font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; color: #CBBEFD">Customer stories</span>
+<span class="tp-case-t" style="font-size: 15px; color: #F4F3F8">What a faster site did for these brands</span>
 </div>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: clamp(50px, 4.8vw, 68px); line-height: 1; letter-spacing: -0.04em; color: #F4F3F8">+{{n1}}%</span>
-<span style="margin-top: auto; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #CFCCD9; line-height: 1.5; text-wrap: pretty">Google: stores passing Core Web Vitals see <span style="color: #CBBEFD">24% fewer shoppers abandon</span>.</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #8A8798">Google Chromium, 2020</span></span>
+<span class="tp-case-m" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">Google PageSpeed, before vs after</span>
+</div>
+<div class="tp-tiles" data-tiles style="margin-top: 14px; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; text-align: left">
+
+<article class="tp-rise tp-cs tp-cs-a" style="animation-delay: .24s">
+<div class="tp-cs-top">
+<div class="tp-cs-row"><span class="tp-cs-eye">Performance score</span><img class="tp-cs-logo" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTMzIDMzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNi4xMzM4IDAuNjgyNjE3QzI2LjQyODEgMC42ODI4MTUgMjYuNjY2OSAwLjkyMTQ1MSAyNi42NjcgMS4yMTU4MkwyNi42NjYgMjAuNDExMUMyNi42MzcyIDIzLjczMTkgMjQuNzgxMSAyNi43Njk4IDIxLjgzNCAyOC4zMDk2TDEzLjU4MDEgMzIuNjIyMUMxMy40MjU1IDMyLjcwMjYgMTMuMjQxNCAzMi43MDI3IDEzLjA4NjkgMzIuNjIyMUw0LjgzMjAzIDI4LjMwOTZDMS44ODUwOSAyNi43Njk4IDAuMDI4ODIxNCAyMy43MzE4IDAgMjAuNDExMVYxLjIxNTgyQzcuMTQ5NDFlLTA1IDAuOTIxMzczIDAuMjM4NzU1IDAuNjgyNjg5IDAuNTMzMjAzIDAuNjgyNjE3SDI2LjEzMzhaTTQuNTYxNTIgNy45NzE2OEM0LjUwMjQ2IDcuOTcxNzEgNC40NjAyOCA4LjAyODE4IDQuNDc2NTYgOC4wODQ5Nkw3LjY1MTM3IDE5LjE1NzJDOC4zNzgzNiAyMS42OTE2IDEwLjY5NjMgMjMuNDM4NSAxMy4zMzMgMjMuNDM4NUMxNS45Njk1IDIzLjQzODMgMTguMjg2NyAyMS42OTE1IDE5LjAxMzcgMTkuMTU3MkwyMi4xODg1IDguMDg0OTZDMjIuMjA0OCA4LjAyODE2IDIyLjE2MjYgNy45NzE2OCAyMi4xMDM1IDcuOTcxNjhIMTguNTEwN0MxNy45NTU3IDcuOTcxODEgMTcuNDY3NSA4LjMzOTQ3IDE3LjMxNDUgOC44NzMwNUwxMy40MzU1IDIyLjQwMjNDMTMuNDA2IDIyLjUwNTQgMTMuMjYgMjIuNTA1NCAxMy4yMzA1IDIyLjQwMjNMOS4zNTA1OSA4Ljg3MzA1QzkuMTk3NTggOC4zMzk0NSA4LjcwOTM4IDcuOTcxNzggOC4xNTQzIDcuOTcxNjhINC41NjE1MloiIGZpbGw9IiNGRkZGRkYiPjwvcGF0aD48cGF0aCBkPSJNNzEuNjYxMSAxMS4wOTc3Qzc1LjA1NTQgMTEuMDk3NyA3Ny4zMDEgMTIuNzcwNSA3Ny41MjU0IDE1LjQxMzFINzQuMzMyQzc0LjEyMDcgMTQuMjMwMiA3My4wNzEzIDEzLjUwNzkgNzEuNTU1NyAxMy41MDc4QzcwLjA0NjMgMTMuNTA3OCA2OS4wOTI5IDE0LjE5NTkgNjkuMDkyOCAxNS4yMjg1QzY5LjA5MjggMTYuMDIyOSA2OS41Njk4IDE2LjQ0NzMgNzAuODE0NSAxNi42NTkyTDc0LjA0NDkgMTcuMTYyMUM3Ni4zNzU0IDE3LjUzMjkgNzcuNTkzOCAxOC45MDk5IDc3LjU5MzggMjEuMDAyQzc3LjU5MzcgMjMuNzI5NSA3NS4yODk4IDI1LjUzMDEgNzEuNzE0OCAyNS41MzAzQzY4LjIxNTIgMjUuNTMwMyA2NS43NDE1IDIzLjY4IDY1LjUzMTIgMjAuOTc1Nkg2OC43Mjk1QzY4Ljk3MSAyMi4yNDQ1IDcwLjE1MDEgMjMuMDY3MyA3MS44NDY3IDIzLjA2NzRDNzMuNDM1NiAyMy4wNjc0IDc0LjQ0MjMgMjIuMzUyNCA3NC40NDI0IDIxLjI0MDJDNzQuNDQyNCAyMC4zNjY0IDczLjk5MTYgMTkuOTQyMyA3Mi43NzM0IDE5LjczMDVMNjkuNjIyMSAxOS4yMjc1QzY3LjE4NTkgMTguODMwMyA2NS45NDE1IDE3LjUwNTkgNjUuOTQxNCAxNS40NDA0QzY1Ljk0MTUgMTIuODQ1NCA2OC4yMTg3IDExLjA5NzggNzEuNjYxMSAxMS4wOTc3Wk01Ny42NDM2IDExLjA5NjdDNjEuNzIxOSAxMS4wOTY4IDY0LjQ3NTYgMTMuNzQ1NSA2NC40NzU2IDE3LjcxNzhWMTcuNzcwNUM2NC40NzU2IDE4LjM1MzEgNjQuNDQ5NiAxOC44NTY0IDY0LjM3MDEgMTkuMzMzSDU0LjAxNTZDNTQuMTQ4MSAyMS42MTA0IDU1LjYwNDUgMjIuOTg3MyA1Ny44NTU1IDIyLjk4NzNDNTkuNTIzOCAyMi45ODcyIDYwLjY2MjIgMjIuMjE5MiA2MS4wODU5IDIwLjk3NDZINjQuMjY0NkM2My41NzYxIDIzLjgwODEgNjEuMTkyMyAyNS41MjkxIDU3LjgwMjcgMjUuNTI5M0M1My41NjU0IDI1LjUyOTMgNTAuODM2OSAyMi42Njk2IDUwLjgzNjkgMTguMjQ3MUM1MC44MzY5IDE0LjAwOTkgNTMuNjE4MSAxMS4wOTY3IDU3LjY0MzYgMTEuMDk2N1pNMTE1LjU1NSAxMS4wOTU3QzExOS42MzMgMTEuMDk1NyAxMjIuMzg3IDEzLjc0NDcgMTIyLjM4OCAxNy43MTY4VjE3Ljc2OTVDMTIyLjM4OCAxOC4zNTE5IDEyMi4zNjEgMTguODU1NSAxMjIuMjgxIDE5LjMzMkgxMTEuOTI3QzExMi4wNTkgMjEuNjA5NSAxMTMuNTE2IDIyLjk4NjMgMTE1Ljc2NyAyMi45ODYzQzExNy40MzUgMjIuOTg2MyAxMTguNTczIDIyLjIxODMgMTE4Ljk5NyAyMC45NzM2SDEyMi4xNzZDMTIxLjQ4NyAyMy44MDcyIDExOS4xMDQgMjUuNTI5MiAxMTUuNzE0IDI1LjUyOTNDMTExLjQ3NyAyNS41MjkzIDEwOC43NDggMjIuNjY4NiAxMDguNzQ4IDE4LjI0NjFDMTA4Ljc0OCAxNC4wMDkzIDExMS41MyAxMS4wOTU3IDExNS41NTUgMTEuMDk1N1pNODMuNjk1MyAxMS40OTIySDg2LjI2MzdWMTQuMjE2OEg4My42OTUzVjIwLjc5NzlDODMuNjk1MyAyMS44NTcgODQuMTQ1OCAyMi4zMDc1IDg1LjA0NTkgMjIuMzA3Nkg4Ni4yNjQ2VjI1LjIxQzg2LjI2NDYgMjUuMjEgODUuMzYyOCAyNS4yOTk4IDg0LjE3MjkgMjUuMjk5OEM4MS44OTU0IDI1LjI5OTggODAuNTcwNSAyNC4xMzUxIDgwLjU3MDMgMjEuOTkwMlYxNC4yMTY4SDc4LjM3M1YxMS42Nzg3SDc5LjQzMTZDODAuNDM3OSAxMS42Nzg3IDgwLjc1NTggMTEuMzM2IDgwLjc1NTkgMTAuMzU2NFY4LjIzMTQ1SDgzLjY5NTNWMTEuNDkyMlpNNDIuODM4OSAxNi44NDI4TDQ0LjI5NDkgMjAuOTczNkw0NS42OTkyIDE2Ljg2OTFMNDkuMzc5OSA2LjQ2MDk0SDUzLjAwNzhMNDUuOTkwMiAyNS4xMzE4SDQyLjU3NDJMMzUuNTU1NyA2LjQ2MDk0SDM5LjE4MzZMNDIuODM4OSAxNi44NDI4Wk0xMjcuMTkzIDI1LjEzMThIMTI0LjA2OFY2LjQ2MDk0SDEyNy4xOTNWMjUuMTMxOFpNMTMyLjM5MSAyNS4xMzE4SDEyOS4yNjZWNi40NjA5NEgxMzIuMzkxVjI1LjEzMThaTTkyLjQ2NDggMTguMTEyM0w5My40MTggMjEuNTAyTDk0LjQ1MTIgMTguMDg1OUw5Ni40Mzc1IDExLjQ5MjJIOTkuNjY4TDEwMS42NTQgMTguMDg1OUwxMDIuNjg4IDIxLjUwMkwxMDMuNjQxIDE4LjExMjNMMTA1LjU3NCAxMS40OTIySDEwOC44MDVMMTA0LjM4MyAyNS4xMzA5SDEwMS4xNTFMOTkuMTM4NyAxOC40ODM0Qzk4Ljc2OCAxNy4yOTE4IDk4LjM5NyAxNi4xNTI1IDk4LjA1MjcgMTQuOTYwOUw5Ni45NjY4IDE4LjQ4MzRMOTQuOTU0MSAyNS4xMzA5SDkxLjcyMzZMODcuMzAwOCAxMS40OTIySDkwLjUzMjJMOTIuNDY0OCAxOC4xMTIzWk01Ny42Njk5IDEzLjU4NTlDNTUuNjMwOCAxMy41ODU5IDU0LjIwMTEgMTQuODU3MiA1NC4wMTU2IDE2Ljk3NTZINjEuMjcxNUM2MS4yMTg0IDE0LjkxMDIgNTkuNzg4NCAxMy41ODYgNTcuNjY5OSAxMy41ODU5Wk0xMTUuNTgxIDEzLjU4NTlDMTEzLjU0MiAxMy41ODYgMTEyLjExMiAxNC44NTczIDExMS45MjcgMTYuOTc1NkgxMTkuMTgzQzExOS4xMjkgMTQuOTEwMiAxMTcuNyAxMy41ODU5IDExNS41ODEgMTMuNTg1OVpNNzcuNTQxIDE1LjY1MjNINzQuMzYzM1YxNS42NTE0SDc3LjU0MVYxNS42NTIzWiIgZmlsbD0iI0ZGRkZGRiI+PC9wYXRoPjwvc3ZnPg==" alt="Vestwell" style="height: 24px"></div>
+<h3 class="tp-cs-h">+{{n1}}% performance score</h3>
+</div>
+<div class="tp-cs-bot">
+<div class="tp-cs-ba"><span>Homepage, mobile, out of 100</span><b>40 <i>&#8594;</i> <em>78</em></b></div>
+<p>Speed Index 13.7s to 5.7s. Product and blog pages up 36% and 48%.</p>
+</div>
 </article>
 
-<article class="tp-rise" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: linear-gradient(160deg, rgba(76,195,138,0.14), rgba(14,14,18,0.9) 55%); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-height: clamp(150px, 20vh, 178px); box-sizing: border-box; animation-delay: .32s">
-<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #9FE3C1">Page load time</span>
-<div aria-hidden="true" style="width: 92px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.08); overflow: hidden"><div style="height: 100%; width: {{loadBar}}%; border-radius: 4px; background: #4CC38A"></div></div>
+<article class="tp-rise tp-cs tp-cs-b" style="animation-delay: .32s">
+<div class="tp-cs-top">
+<div class="tp-cs-row"><span class="tp-cs-eye">Speed</span><img class="tp-cs-logo" src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" style="height: 38px"></div>
+<h3 class="tp-cs-h">{{n2}}% faster, sitewide</h3>
 </div>
-<span style="display: flex; align-items: baseline; gap: 10px"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: clamp(50px, 4.8vw, 68px); line-height: 1; letter-spacing: -0.04em; color: #F4F3F8">{{n2}}%</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 22px; color: #9FE3C1">faster</span></span>
-<span style="margin-top: auto; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #CFCCD9; line-height: 1.5; text-wrap: pretty">Google: 1 s to 3 s of loading <span style="color: #9FE3C1">raises bounce probability by 32%</span>.</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #8A8798">Google / SOASTA, 2017</span></span>
+<div class="tp-cs-bot">
+<div class="tp-cs-ba"><span>Speed Index, 61 pages</span><b>15.3s <i>&#8594;</i> <em>10.8s</em></b></div>
+<p>Performance score up 66%. Every page now loads inside the 12s target.</p>
+</div>
 </article>
 
-<article class="tp-rise" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(166,142,250,0.45); background: linear-gradient(160deg, rgba(139,107,247,0.32), rgba(14,14,18,0.9) 60%); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-height: clamp(150px, 20vh, 178px); box-sizing: border-box; animation-delay: .4s; box-shadow: 0 30px 80px -40px rgba(139,107,247,0.7)">
-<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #CBBEFD">Conversion rate</span>
-<svg width="92" height="40" viewBox="0 0 120 50" fill="none" aria-hidden="true"><path class="tp-draw" d="M2 44 L22 40 L38 42 L56 30 L72 32 L90 16 L118 6" stroke="#CBBEFD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<article class="tp-rise tp-cs tp-cs-c" style="animation-delay: .4s">
+<div class="tp-cs-top">
+<div class="tp-cs-row"><span class="tp-cs-eye">Conversion rate</span><span class="tp-cs-name">A billion-dollar<br>house of brands</span></div>
+<h3 class="tp-cs-h">+{{n3}}% conversion rate</h3>
 </div>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: clamp(50px, 4.8vw, 68px); line-height: 1; letter-spacing: -0.04em; color: #CBBEFD">+{{n3}}%</span>
-<span style="margin-top: auto; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #CFCCD9; line-height: 1.5; text-wrap: pretty">Google: every 0.1 s faster <span style="color: #CBBEFD">lifts retail conversions by 8.4%</span>.</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10.5px; color: #8A8798">Deloitte &#215; Google, 2020</span></span>
+<div class="tp-cs-bot">
+<div class="tp-cs-ba"><span>Store-wide, 6 weeks after</span><b>1.51% <i>&#8594;</i> <em>1.79%</em></b></div>
+<p>Same products, same ads. Only the site got faster, across 113 pages.</p>
+</div>
 </article>
 </div>
-
-
-
-
 </div>
 <div class="tp-carctl" role="group" aria-label="Results carousel">
 <button type="button" class="tp-arrow {{prevCls}}" aria-label="Previous result" onClick="{{prevTile}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
@@ -208,42 +261,53 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 </div>
 
 <div class="tp-proofrow tp-rise" style="margin-top: clamp(24px, 4vh, 44px); width: 100%; display: flex; flex-direction: column; align-items: center; gap: 30px; animation-delay: .5s">
-<p style="margin: 0; font-size: 14px; color: #A09DAD">Building revenue for <strong style="color: #F4F3F8; font-weight: 500">50+ D2C brands</strong></p>
+<p style="margin: 0; font-size: 14px; color: #A09DAD">Building revenue for <strong style="color: #F4F3F8; font-weight: 500">100+ D2C brands</strong></p>
 <div class="tp-marq" style="width: 100%; overflow: hidden; -webkit-mask-image: linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); mask-image: linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)">
 <div class="tp-track" style="display: flex; align-items: center; gap: 80px; width: max-content; padding: 6px 0">
 <img src="https://purrieie.github.io/troocro/assets/logos/titan.png" alt="Titan" class="tp-logo" style="--h: 28px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/mia-by-tanishq.png" alt="Mia by Tanishq" class="tp-logo" style="--h: 30px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/durex.png" alt="Durex" class="tp-logo" style="--h: 22px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/bombay-shaving-company.png" alt="Bombay Shaving Company" class="tp-logo" style="--h: 30px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" class="tp-logo" style="--h: 34px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/essor.png" alt="ESSOR Group" class="tp-logo" style="--h: 18px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/damensch.png" alt="Damensch" class="tp-logo" style="--h: 19px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/homelane.png" alt="HomeLane" class="tp-logo" style="--h: 20px" loading="lazy" decoding="async">
 <img src="https://purrieie.github.io/troocro/assets/logos/titan.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 28px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/mia-by-tanishq.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 30px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/durex.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 22px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/bombay-shaving-company.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 30px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 34px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/essor.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 18px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/damensch.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 19px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/homelane.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 20px" loading="lazy" decoding="async">
 </div>
 </div>
-<a href="#proof" aria-label="Scroll to see how we did it" class="tp-cue" style="margin-top: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: rgba(14,14,18,0.6); color: #CFCCD9; font-size: 13px; text-decoration: none">See how we did it<svg class="tp-bounce" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+<a href="#proof" aria-label="Scroll to see the page-by-page numbers" class="tp-cue" style="margin-top: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: rgba(14,14,18,0.6); color: #CFCCD9; font-size: 13px; text-decoration: none">See the page-by-page numbers<svg class="tp-bounce" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
 </div>
 </section>
 
 <section id="proof" data-k="proof" style="max-width: 1200px; margin: 0 auto; padding: 90px 28px 20px; display: flex; flex-direction: column; gap: 36px">
 <div class="rv {{rv.proof}}" style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
-<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Every page type got faster</span>
-<h2 style="margin: 0; font-size: clamp(32px, 3.9vw, 50px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">Not just the homepage. <span style="color: #A68EFA">The pages that actually sell.</span></h2>
+<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Page by page</span>
+<h2 style="margin: 0; font-size: clamp(32px, 3.9vw, 50px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">Not just your homepage. <span style="color: #A68EFA">The pages that actually sell.</span></h2>
 </div>
-<div class="stag tp-pages {{rv.pages}}" data-k="pages" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 14px">
-<sc-for list="{{pages}}" as="p" hint-placeholder-count="4">
-<article class="spot" style="position: relative; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: #0E0E12; padding: 22px; display: flex; flex-direction: column; gap: 18px">
-<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 17px">{{p.name}}</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #6F6C7C">{{p.tag}}</span></div>
-<div style="display: flex; flex-direction: column; gap: 8px">
-<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 12.5px; color: #A09DAD">Speed score</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 26px; color: #CBBEFD">+{{p.scoreNow}}%</span></div>
-<div style="height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06)"><div class="tp-bar" style="height: 100%; width: {{p.scoreBar}}%; border-radius: 3px; background: linear-gradient(90deg, #6A4BE6, #CBBEFD); animation-delay: {{p.delay}}s"></div></div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 8px">
-<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 12.5px; color: #A09DAD">Load time</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 26px; color: #9FE3C1">{{p.loadNow}}% faster</span></div>
-<div style="height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06)"><div class="tp-bar" style="height: 100%; width: {{p.loadBar}}%; border-radius: 3px; background: #4CC38A; animation-delay: {{p.delay}}s"></div></div>
-</div>
+<div class="stag tp-pages {{rv.pages}}" data-k="pages" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 14px">
+<article class="spot tp-pp">
+<div class="tp-pp-h"><img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTMzIDMzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNi4xMzM4IDAuNjgyNjE3QzI2LjQyODEgMC42ODI4MTUgMjYuNjY2OSAwLjkyMTQ1MSAyNi42NjcgMS4yMTU4MkwyNi42NjYgMjAuNDExMUMyNi42MzcyIDIzLjczMTkgMjQuNzgxMSAyNi43Njk4IDIxLjgzNCAyOC4zMDk2TDEzLjU4MDEgMzIuNjIyMUMxMy40MjU1IDMyLjcwMjYgMTMuMjQxNCAzMi43MDI3IDEzLjA4NjkgMzIuNjIyMUw0LjgzMjAzIDI4LjMwOTZDMS44ODUwOSAyNi43Njk4IDAuMDI4ODIxNCAyMy43MzE4IDAgMjAuNDExMVYxLjIxNTgyQzcuMTQ5NDFlLTA1IDAuOTIxMzczIDAuMjM4NzU1IDAuNjgyNjg5IDAuNTMzMjAzIDAuNjgyNjE3SDI2LjEzMzhaTTQuNTYxNTIgNy45NzE2OEM0LjUwMjQ2IDcuOTcxNzEgNC40NjAyOCA4LjAyODE4IDQuNDc2NTYgOC4wODQ5Nkw3LjY1MTM3IDE5LjE1NzJDOC4zNzgzNiAyMS42OTE2IDEwLjY5NjMgMjMuNDM4NSAxMy4zMzMgMjMuNDM4NUMxNS45Njk1IDIzLjQzODMgMTguMjg2NyAyMS42OTE1IDE5LjAxMzcgMTkuMTU3MkwyMi4xODg1IDguMDg0OTZDMjIuMjA0OCA4LjAyODE2IDIyLjE2MjYgNy45NzE2OCAyMi4xMDM1IDcuOTcxNjhIMTguNTEwN0MxNy45NTU3IDcuOTcxODEgMTcuNDY3NSA4LjMzOTQ3IDE3LjMxNDUgOC44NzMwNUwxMy40MzU1IDIyLjQwMjNDMTMuNDA2IDIyLjUwNTQgMTMuMjYgMjIuNTA1NCAxMy4yMzA1IDIyLjQwMjNMOS4zNTA1OSA4Ljg3MzA1QzkuMTk3NTggOC4zMzk0NSA4LjcwOTM4IDcuOTcxNzggOC4xNTQzIDcuOTcxNjhINC41NjE1MloiIGZpbGw9IiNGRkZGRkYiPjwvcGF0aD48cGF0aCBkPSJNNzEuNjYxMSAxMS4wOTc3Qzc1LjA1NTQgMTEuMDk3NyA3Ny4zMDEgMTIuNzcwNSA3Ny41MjU0IDE1LjQxMzFINzQuMzMyQzc0LjEyMDcgMTQuMjMwMiA3My4wNzEzIDEzLjUwNzkgNzEuNTU1NyAxMy41MDc4QzcwLjA0NjMgMTMuNTA3OCA2OS4wOTI5IDE0LjE5NTkgNjkuMDkyOCAxNS4yMjg1QzY5LjA5MjggMTYuMDIyOSA2OS41Njk4IDE2LjQ0NzMgNzAuODE0NSAxNi42NTkyTDc0LjA0NDkgMTcuMTYyMUM3Ni4zNzU0IDE3LjUzMjkgNzcuNTkzOCAxOC45MDk5IDc3LjU5MzggMjEuMDAyQzc3LjU5MzcgMjMuNzI5NSA3NS4yODk4IDI1LjUzMDEgNzEuNzE0OCAyNS41MzAzQzY4LjIxNTIgMjUuNTMwMyA2NS43NDE1IDIzLjY4IDY1LjUzMTIgMjAuOTc1Nkg2OC43Mjk1QzY4Ljk3MSAyMi4yNDQ1IDcwLjE1MDEgMjMuMDY3MyA3MS44NDY3IDIzLjA2NzRDNzMuNDM1NiAyMy4wNjc0IDc0LjQ0MjMgMjIuMzUyNCA3NC40NDI0IDIxLjI0MDJDNzQuNDQyNCAyMC4zNjY0IDczLjk5MTYgMTkuOTQyMyA3Mi43NzM0IDE5LjczMDVMNjkuNjIyMSAxOS4yMjc1QzY3LjE4NTkgMTguODMwMyA2NS45NDE1IDE3LjUwNTkgNjUuOTQxNCAxNS40NDA0QzY1Ljk0MTUgMTIuODQ1NCA2OC4yMTg3IDExLjA5NzggNzEuNjYxMSAxMS4wOTc3Wk01Ny42NDM2IDExLjA5NjdDNjEuNzIxOSAxMS4wOTY4IDY0LjQ3NTYgMTMuNzQ1NSA2NC40NzU2IDE3LjcxNzhWMTcuNzcwNUM2NC40NzU2IDE4LjM1MzEgNjQuNDQ5NiAxOC44NTY0IDY0LjM3MDEgMTkuMzMzSDU0LjAxNTZDNTQuMTQ4MSAyMS42MTA0IDU1LjYwNDUgMjIuOTg3MyA1Ny44NTU1IDIyLjk4NzNDNTkuNTIzOCAyMi45ODcyIDYwLjY2MjIgMjIuMjE5MiA2MS4wODU5IDIwLjk3NDZINjQuMjY0NkM2My41NzYxIDIzLjgwODEgNjEuMTkyMyAyNS41MjkxIDU3LjgwMjcgMjUuNTI5M0M1My41NjU0IDI1LjUyOTMgNTAuODM2OSAyMi42Njk2IDUwLjgzNjkgMTguMjQ3MUM1MC44MzY5IDE0LjAwOTkgNTMuNjE4MSAxMS4wOTY3IDU3LjY0MzYgMTEuMDk2N1pNMTE1LjU1NSAxMS4wOTU3QzExOS42MzMgMTEuMDk1NyAxMjIuMzg3IDEzLjc0NDcgMTIyLjM4OCAxNy43MTY4VjE3Ljc2OTVDMTIyLjM4OCAxOC4zNTE5IDEyMi4zNjEgMTguODU1NSAxMjIuMjgxIDE5LjMzMkgxMTEuOTI3QzExMi4wNTkgMjEuNjA5NSAxMTMuNTE2IDIyLjk4NjMgMTE1Ljc2NyAyMi45ODYzQzExNy40MzUgMjIuOTg2MyAxMTguNTczIDIyLjIxODMgMTE4Ljk5NyAyMC45NzM2SDEyMi4xNzZDMTIxLjQ4NyAyMy44MDcyIDExOS4xMDQgMjUuNTI5MiAxMTUuNzE0IDI1LjUyOTNDMTExLjQ3NyAyNS41MjkzIDEwOC43NDggMjIuNjY4NiAxMDguNzQ4IDE4LjI0NjFDMTA4Ljc0OCAxNC4wMDkzIDExMS41MyAxMS4wOTU3IDExNS41NTUgMTEuMDk1N1pNODMuNjk1MyAxMS40OTIySDg2LjI2MzdWMTQuMjE2OEg4My42OTUzVjIwLjc5NzlDODMuNjk1MyAyMS44NTcgODQuMTQ1OCAyMi4zMDc1IDg1LjA0NTkgMjIuMzA3Nkg4Ni4yNjQ2VjI1LjIxQzg2LjI2NDYgMjUuMjEgODUuMzYyOCAyNS4yOTk4IDg0LjE3MjkgMjUuMjk5OEM4MS44OTU0IDI1LjI5OTggODAuNTcwNSAyNC4xMzUxIDgwLjU3MDMgMjEuOTkwMlYxNC4yMTY4SDc4LjM3M1YxMS42Nzg3SDc5LjQzMTZDODAuNDM3OSAxMS42Nzg3IDgwLjc1NTggMTEuMzM2IDgwLjc1NTkgMTAuMzU2NFY4LjIzMTQ1SDgzLjY5NTNWMTEuNDkyMlpNNDIuODM4OSAxNi44NDI4TDQ0LjI5NDkgMjAuOTczNkw0NS42OTkyIDE2Ljg2OTFMNDkuMzc5OSA2LjQ2MDk0SDUzLjAwNzhMNDUuOTkwMiAyNS4xMzE4SDQyLjU3NDJMMzUuNTU1NyA2LjQ2MDk0SDM5LjE4MzZMNDIuODM4OSAxNi44NDI4Wk0xMjcuMTkzIDI1LjEzMThIMTI0LjA2OFY2LjQ2MDk0SDEyNy4xOTNWMjUuMTMxOFpNMTMyLjM5MSAyNS4xMzE4SDEyOS4yNjZWNi40NjA5NEgxMzIuMzkxVjI1LjEzMThaTTkyLjQ2NDggMTguMTEyM0w5My40MTggMjEuNTAyTDk0LjQ1MTIgMTguMDg1OUw5Ni40Mzc1IDExLjQ5MjJIOTkuNjY4TDEwMS42NTQgMTguMDg1OUwxMDIuNjg4IDIxLjUwMkwxMDMuNjQxIDE4LjExMjNMMTA1LjU3NCAxMS40OTIySDEwOC44MDVMMTA0LjM4MyAyNS4xMzA5SDEwMS4xNTFMOTkuMTM4NyAxOC40ODM0Qzk4Ljc2OCAxNy4yOTE4IDk4LjM5NyAxNi4xNTI1IDk4LjA1MjcgMTQuOTYwOUw5Ni45NjY4IDE4LjQ4MzRMOTQuOTU0MSAyNS4xMzA5SDkxLjcyMzZMODcuMzAwOCAxMS40OTIySDkwLjUzMjJMOTIuNDY0OCAxOC4xMTIzWk01Ny42Njk5IDEzLjU4NTlDNTUuNjMwOCAxMy41ODU5IDU0LjIwMTEgMTQuODU3MiA1NC4wMTU2IDE2Ljk3NTZINjEuMjcxNUM2MS4yMTg0IDE0LjkxMDIgNTkuNzg4NCAxMy41ODYgNTcuNjY5OSAxMy41ODU5Wk0xMTUuNTgxIDEzLjU4NTlDMTEzLjU0MiAxMy41ODYgMTEyLjExMiAxNC44NTczIDExMS45MjcgMTYuOTc1NkgxMTkuMTgzQzExOS4xMjkgMTQuOTEwMiAxMTcuNyAxMy41ODU5IDExNS41ODEgMTMuNTg1OVpNNzcuNTQxIDE1LjY1MjNINzQuMzYzM1YxNS42NTE0SDc3LjU0MVYxNS42NTIzWiIgZmlsbD0iI0ZGRkZGRiI+PC9wYXRoPjwvc3ZnPg==" alt="Vestwell" style="height: 22px; width: auto"><small>Mobile score, out of 100</small></div>
+<div class="tp-pp-big"><b>+95%</b><span>Homepage performance score, 40 to 78</span></div>
+<div class="tp-pp-r"><div><span>Homepage</span><b>40 <i>&#8594;</i> 78</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 78%; background: #9DB8FF"></div></div></div>
+<div class="tp-pp-r"><div><span>ABLE product page</span><b>53 <i>&#8594;</i> 72</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 72%; background: #9DB8FF"></div></div></div>
+<div class="tp-pp-r"><div><span>Blog article</span><b>52 <i>&#8594;</i> 77</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77%; background: #9DB8FF"></div></div></div>
 </article>
-</sc-for>
+<article class="spot tp-pp">
+<div class="tp-pp-h"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" style="height: 28px; width: auto"><small>Speed Index today<br>line marks the 12s target</small></div>
+<div class="tp-pp-big"><b>15.3s &#8594; 10.8s</b><span>Average across all 61 pages, 30% faster</span></div>
+<div class="tp-pp-r"><div><span>Homepage</span><b>11.8s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77.1%; background: #4CC38A"></div><span class="tick" style="left: 78.4%"></span></div></div>
+<div class="tp-pp-r"><div><span>Product pages</span><b>11.4s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 74.5%; background: #4CC38A"></div><span class="tick" style="left: 78.4%"></span></div></div>
+<div class="tp-pp-r"><div><span>Fastest category</span><b>9.4s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 61.4%; background: #4CC38A"></div><span class="tick" style="left: 78.4%"></span></div></div>
+<div class="tp-pp-r"><div><span>Slowest category</span><b>11.9s</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 77.8%; background: #4CC38A"></div><span class="tick" style="left: 78.4%"></span></div></div>
+</article>
+<article class="spot tp-pp">
+<div class="tp-pp-h"><span style="font-size: 15px; font-weight: 500; line-height: 1.2">A billion-dollar house of brands</span><small>Score gain and load time</small></div>
+<div class="tp-pp-big"><b>1.51% &#8594; 1.79%</b><span>Conversion rate, 6 weeks after launch, 113 pages</span></div>
+<div class="tp-pp-r"><div><span>Product pages</span><b>+99% <i>&#183;</i> 54% faster</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 99%; background: linear-gradient(90deg, #6A4BE6, #CBBEFD)"></div></div></div>
+<div class="tp-pp-r"><div><span>Collections</span><b>+84% <i>&#183;</i> 54% faster</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 84%; background: linear-gradient(90deg, #6A4BE6, #CBBEFD)"></div></div></div>
+<div class="tp-pp-r"><div><span>Blog</span><b>+81% <i>&#183;</i> 58% faster</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 81%; background: linear-gradient(90deg, #6A4BE6, #CBBEFD)"></div></div></div>
+<div class="tp-pp-r"><div><span>Homepage</span><b>+73% <i>&#183;</i> 45% faster</b></div><div class="tp-pp-t"><div class="tp-bar" style="width: 73%; background: linear-gradient(90deg, #6A4BE6, #CBBEFD)"></div></div></div>
+</article>
 </div>
+<p class="rv {{rv.pages}}" style="margin: 0; text-align: center; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; line-height: 1.6; color: #6F6C7C">Google PageSpeed Insights, mobile. Vestwell: live site vs optimised build, 3 runs per page.</p>
 </section>
 
 <section id="what" data-k="what" style="max-width: 1200px; margin: 0 auto; padding: 90px 28px 40px; display: flex; flex-direction: column; gap: 48px">
 <div class="rv {{rv.what}}" style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px">
-<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">What we check</span>
+<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">What your audit checks</span>
 <h2 style="margin: 0; font-size: clamp(32px, 3.9vw, 50px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">One scan. <span style="color: #A68EFA">Three ways shoppers find you, or don't.</span></h2>
 </div>
 
@@ -265,7 +329,7 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 </div>
 </div>
 <div style="padding: 26px; display: flex; flex-direction: column; gap: 10px">
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">01 · Speed</span>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">01 · Performance</span>
 <h3 style="margin: 0; font-size: 24px; font-weight: 400; letter-spacing: -0.02em">What your shoppers actually wait through</h3>
 <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A09DAD">Real-shopper data next to Google's lab test, a second-by-second filmstrip, and the apps slowing you down, named.</p>
 </div>
@@ -325,8 +389,8 @@ description: Brightening se…
 
 <section style="max-width: 1200px; margin: 0 auto; padding: 60px 28px 40px">
 <ol class="stag tp-steps {{rv.steps}}" data-k="steps" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 0; border-top: 1px solid rgba(255,255,255,0.08)">
-<li class="tp-step" style="position: relative; padding: 28px 28px 28px 0; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A68EFA">01</span><strong style="font-size: 18px; font-weight: 500">Enter your page</strong><span style="font-size: 15px; color: #A09DAD; line-height: 1.55">Homepage, collection or the product page your ads land on. Add competitors if you like.</span></li>
-<li class="tp-step" style="position: relative; padding: 28px; display: flex; flex-direction: column; gap: 8px; border-left: 1px solid rgba(255,255,255,0.08)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A68EFA">02</span><strong style="font-size: 18px; font-weight: 500">We load it three ways</strong><span style="font-size: 15px; color: #A09DAD; line-height: 1.55">On a mid-range phone, as Google's crawler, and as the AI bots that power ChatGPT and Perplexity.</span></li>
+<li class="tp-step" style="position: relative; padding: 28px 28px 28px 0; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A68EFA">01</span><strong style="font-size: 18px; font-weight: 500">Enter your page</strong><span style="font-size: 15px; color: #A09DAD; line-height: 1.55">Your homepage, a collection, or the product page your ads land on.</span></li>
+<li class="tp-step" style="position: relative; padding: 28px; display: flex; flex-direction: column; gap: 8px; border-left: 1px solid rgba(255,255,255,0.08)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A68EFA">02</span><strong style="font-size: 18px; font-weight: 500">It loads three ways</strong><span style="font-size: 15px; color: #A09DAD; line-height: 1.55">On a mid-range phone, as Google's crawler, and as the AI bots that power ChatGPT and Perplexity.</span></li>
 <li class="tp-step" style="position: relative; padding: 28px; display: flex; flex-direction: column; gap: 8px; border-left: 1px solid rgba(255,255,255,0.08)"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A68EFA">03</span><strong style="font-size: 18px; font-weight: 500">Get your report</strong><span style="font-size: 15px; color: #A09DAD; line-height: 1.55">Scores, the fixes that matter most and a link you can send to your developer.</span></li>
 </ol>
 </section>
@@ -335,7 +399,7 @@ description: Brightening se…
 <div class="rv spot tp-cta {{rv.cta}}" data-k="cta" style="position: relative; overflow: hidden; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: radial-gradient(90% 120% at 50% 100%, #2C2157 0%, #0E0E12 65%); padding: 72px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; isolation: isolate">
 <canvas class="tp-halftone" data-ht="cta" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1"></canvas>
 <h2 style="margin: 0; font-size: clamp(30px, 4vw, 44px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">See what's slowing your store down.</h2>
-<p style="margin: 0; font-size: 17px; color: #CFCCD9">Want the fixes built for you? TrooPerformance builds and tests them on your store.</p>
+<p style="margin: 0; font-size: 17px; color: #CFCCD9">Want the fixes built for you? Get them built and tested on your store.</p>
 <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px">
 <a href="Scan.dc.html" style="height: 44px; padding: 0 18px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; box-shadow: 0 8px 24px -10px rgba(139,107,247,0.35), inset 0 1px 0 rgba(255,255,255,0.18)">Audit my site</a>
 <a href="https://calendly.com/nj-troopod/troopod-demo" style="height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); color: #F4F3F8; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center">Book a demo</a>
@@ -503,7 +567,7 @@ class Component extends DCLogic {
       d0: tile === 0 ? 'on' : '', d1: tile === 1 ? 'on' : '', d2: tile === 2 ? 'on' : '',
       prevTile: () => this.goTile(tile - 1), nextTile: () => this.goTile(tile + 1),
       stickyCls: stuck ? 'on' : '', stickyHidden: stuck ? 'false' : 'true', stickyTab: stuck ? '0' : '-1', demoCls: stuck ? 'hide' : '',
-      n1: Math.round(93 * p), n2: Math.round(55 * p), n3: Math.round(19 * p),
+      n1: Math.round(95 * p), n2: Math.round(30 * p), n3: Math.round(19 * p),
       b1: Math.round(12 + 6 * p), b2: Math.round(14 + 12 * p), b3: Math.round(16 + 24 * p), loadBar: Math.round(100 - 55 * p),
       pages,
       isHuman: h, isAgent: !h,
