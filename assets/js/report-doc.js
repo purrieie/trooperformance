@@ -16,11 +16,12 @@
   }
   function card(inner, pad) { return '<tr><td style="padding:0 24px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + C.card + ';border:1px solid ' + C.line + ';border-radius:16px"><tr><td style="padding:' + (pad || "20px 22px") + '">' + inner + "</td></tr></table></td></tr>"; }
   function rule(base) { return '<tr><td style="padding:22px 32px 0"><img src="' + base + 'assets/email/holo-rule.png" width="536" height="3" alt="" style="display:block;width:100%;max-width:536px;height:3px;border:0"></td></tr>'; }
-  function scoreTile(n, label, sub) {
+  function scoreTile(n, label, sub, base) {
     var c = band(n);
     return '<td width="33%" align="center" valign="top" style="padding:6px">' +
       '<table role="presentation" cellpadding="0" cellspacing="0" style="background:' + C.card2 + ';border:1px solid ' + C.line + ';border-radius:16px;width:100%"><tr><td align="center" style="padding:18px 6px 16px">' +
-      '<table role="presentation" cellpadding="0" cellspacing="0"><tr><td align="center" valign="middle" width="78" height="78" style="width:78px;height:78px;border-radius:50%;border:6px solid ' + c + ';font-family:' + M + ';font-size:28px;color:' + C.text + '">' + (n == null ? "–" : n) + "</td></tr></table>" +
+      // the ring is an image (assets/email/rings/<score>.png): mail apps stretch CSS circles into ovals
+      '<img src="' + base + 'assets/email/rings/' + (n == null ? "na" : Math.max(0, Math.min(100, Math.round(n)))) + '.png" width="84" height="84" alt="' + (n == null ? "no score" : n + " out of 100") + '" style="display:block;margin:0 auto;width:84px;height:84px;max-width:84px;border:0;outline:none">' +
       '<div style="margin-top:12px;font-family:' + F + ';font-size:15px;color:' + C.text + '">' + esc(label) + '</div><div style="margin-top:3px;font-family:' + M + ';font-size:11px;color:' + c + '">' + esc(bandName(n)) + "</div>" +
       (sub ? '<div style="margin-top:2px;font-family:' + M + ';font-size:10.5px;color:' + C.dim + '">' + esc(sub) + "</div>" : "") +
       "</td></tr></table></td>";
@@ -51,11 +52,11 @@
     var pb = print ? "break-before:page;page-break-before:always;" : "";
 
     // cover
-    rows += '<tr><td style="padding:0"><img src="' + base + 'assets/email/holo-header.png" width="600" height="220" alt="TrooPerformance site audit by Troopod" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>';
+    rows += '<tr><td style="padding:0"><img src="' + base + 'assets/email/holo-header.png" width="600" alt="TrooPerformance site audit by Troopod" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>';
     rows += '<tr><td style="padding:30px 32px 6px"><div style="font-family:' + M + ';font-size:12px;color:' + C.muted + '">Report · ' + esc(d.date || "") + (d.platform ? " · " + esc(d.platform) : "") + '</div><div style="margin-top:10px;font-family:' + F + ';font-size:30px;line-height:36px;letter-spacing:-.03em;color:' + C.text + '">Your performance report for <span style="color:#A68EFA">' + site + "</span></div>" +
       (!print ? intro(d, site, sc, up) : '<div style="margin-top:14px;font-family:' + F + ';font-size:15.5px;line-height:24px;color:' + C.text2 + '">Everything holding ' + site + " back, with the fixes ranked by what they cost you.</div>") + "</td></tr>";
     rows += '<tr><td style="padding:18px 18px 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
-      scoreTile(sc.perf, "Performance", sc.desk != null ? "desktop " + sc.desk : "phone") + scoreTile(sc.search, "Search", sc.searchN ? sc.searchN + " checks" : "") + scoreTile(sc.ai, "AI answers", sc.aiN ? sc.aiN + " checks" : "") +
+      scoreTile(sc.perf, "Performance", sc.desk != null ? "desktop " + sc.desk : "phone", base) + scoreTile(sc.search, "Search", sc.searchN ? sc.searchN + " checks" : "", base) + scoreTile(sc.ai, "AI answers", sc.aiN ? sc.aiN + " checks" : "", base) +
       "</tr></table></td></tr>";
     if (up && sc.perf != null) {
       rows += card('<div style="font-family:' + M + ';font-size:11.5px;color:' + C.lilac + '">Overall performance score · Google PageSpeed, phone</div><div style="margin-top:8px;font-family:' + F + ';font-size:22px;line-height:29px;letter-spacing:-.02em;color:' + C.text + '">See ' + site + ' go from <span style="color:' + band(sc.perf) + '">' + sc.perf + '</span> to <span style="color:' + C.lilac + '">' + up.target + "</span>.</div>" +
@@ -137,7 +138,7 @@
       '<div style="margin-top:12px;font-family:' + F + ';font-size:11.5px;line-height:17px;color:' + C.dim + '">Speed comes from Google PageSpeed Insights (Lighthouse on an emulated phone, plus Chrome real-user data where Google has enough visits). Search and AI checks read your page’s raw HTML, robots.txt, sitemap and llms.txt. Scores: pass = 1, warning = 0.5, fail = 0, out of 100.' +
       (print ? "" : " You’re getting this because you unlocked your report on TrooPerformance. Reply to this email to talk to the team.") + "</div></td></tr>";
 
-    var table = '<table class="doc" role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:' + C.bg + ';border:1px solid #1F1C2B;border-radius:' + (print ? "0" : "20px") + ';overflow:hidden">' + rows + "</table>";
+    var table = '<table class="doc" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:' + C.bg + ';border:1px solid #1F1C2B;border-radius:' + (print ? "0" : "20px") + ';overflow:hidden">' + rows + "</table>";
     var pre = esc("Performance " + (sc.perf == null ? "–" : sc.perf) + " · Search " + (sc.search == null ? "–" : sc.search) + " · AI answers " + (sc.ai == null ? "–" : sc.ai) + ". Your fix plan for " + d.site + " is inside.");
     var head = '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"><title>TrooPerformance report · ' + site + "</title>" +
       '<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">' +
