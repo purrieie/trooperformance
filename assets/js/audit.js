@@ -8,6 +8,20 @@
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var G = "#4CC38A", A = "#E5A93D", R = "#EF6B57", P = "#A68EFA", DIM = "#6F6C7C";
 
+  // ---------- analytics ----------
+  // GTM-WDPL7ZKM routes these dataLayer events: generate_lead -> GA4 + Reddit Lead, book_demo -> GA4,
+  // speed_audit_start / speed_audit_result -> GA4. Google Consent Mode decides what GA keeps.
+  function track(ev, data) { try { var o = { event: ev }; for (var k in data) o[k] = data[k]; (win.dataLayer = win.dataLayer || []).push(o); } catch (e) {} }
+  // For the sheet row: the Apps Script only sends its server-side Lead (same event_id) when meta_consent is true,
+  // and passes Meta's browser ids along so it can match the visitor. Empty unless the visitor tapped Accept.
+  function metaIds() {
+    var ck = function (n) { var m = doc.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)")); return m ? decodeURIComponent(m[1]) : ""; };
+    var ok = ck("troopod_cookie_consent") === "accepted";
+    return { meta_consent: ok, fbp: ok ? ck("_fbp") : "", fbc: ok ? ck("_fbc") : "" };
+  }
+  // Meta Pixel only exists after cookie consent (see the <head>), so this is a no-op until then.
+  function fb(name, data, id, custom) { try { if (typeof win.fbq === "function") win.fbq(custom ? "trackCustom" : "track", name, data || {}, id ? { eventID: id } : {}); } catch (e) {} }
+
   // ---------- input ----------
   function clean(v) {
     v = String(v || "").trim().replace(/\s+/g, "");
@@ -204,6 +218,8 @@
     meter("search", "Search", null, "couldn't check", R); meter("ai", "AI answers", null, "couldn't check", R);
   }).then(tick);
 
+  track("speed_audit_start", { store: host(URL0) });
+  fb("AuditStart", { content_name: "TrooPerformance audit" }, "", true);
   var pMob = runPsi(URL0, "mobile").then(function (m) {
     S.psi.mobile = m; stage("mobile", "done");
     log("→ phone test done", "", "", "head");
@@ -332,6 +348,7 @@
 
   // ---------- report ----------
   function showReport() {
+    if (!S.shown && !S.saved) track("speed_audit_result", { store: host(URL0), speed_score: S.psi.mobile ? S.psi.mobile.perf : null });
     S.shown = true;
     if (S.comps.length && S.cmp.state === "empty" && S.psi.mobile) { S.cmp.state = "done"; S.cmp.list = S.comps.map(function (c) { return { url: c.url, psi: c.psi, pending: false }; }); }
     if (!S.psi.mobile && S.scan) S.tab = "search";
@@ -809,10 +826,16 @@
     var at = attribution();
     var body = Object.assign({ name: g("name").trim(), email: g("email").trim().toLowerCase(), phone: phone, country_code: cc === "other" ? "" : cc + (cc === "+1" ? " " + ccLabel : ""), site: site, orders: g("orders"), heard_from: g("heard_from"), competitors: comps.map(shortUrl), speed: S.psi.mobile ? S.psi.mobile.perf : null, search: S.scan ? S.scan.search.score : null, ai: S.scan ? S.scan.ai.score : null, report: location.href }, at);
     var reset = function () { btn.disabled = false; btn.firstChild.textContent = "Unlock full report "; };
+    // One id for the browser Lead (Meta Pixel) and the sheet row, so Meta can dedupe it against the server-side Lead.
+    var leadId = "tp-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
     var done = function () {
+      if (!g("company_site")) {
+        track("generate_lead", { lead_source: "trooperformance" }); // GTM -> GA4 generate_lead + Reddit Lead
+        fb("Lead", { content_name: "TrooPerformance report" }, leadId);
+      }
       // Google Sheet (TrooFestive Data > "TrooPerformance leads") + email alert, via the Troopod Apps Script. Doesn't block the unlock.
       if (CFG.sheetEndpoint && !g("company_site")) {
-        var row = Object.assign({ source: "trooperformance", name: body.name, email: body.email, phone: body.phone, country_code: body.country_code, website: site, orders: body.orders, heard_from: body.heard_from, competitors: body.competitors.join(", "), speed_score: body.speed, search_score: body.search, ai_score: body.ai, report_url: body.report, page: location.href.split("#")[0], submitted_at: new Date().toISOString(), event_id: "tp-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10), user_agent: navigator.userAgent }, at);
+        var row = Object.assign({ source: "trooperformance", name: body.name, email: body.email, phone: body.phone, country_code: body.country_code, website: site, orders: body.orders, heard_from: body.heard_from, competitors: body.competitors.join(", "), speed_score: body.speed, search_score: body.search, ai_score: body.ai, report_url: body.report, page: location.href.split("#")[0], submitted_at: new Date().toISOString(), event_id: leadId, user_agent: navigator.userAgent }, at, metaIds());
         try { fetch(CFG.sheetEndpoint, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(row), keepalive: true }).catch(function () {}); } catch (e) {}
       }
       S.unlocked = true;
@@ -892,5 +915,12 @@
     });
   }
   if (CFG.calendly) doc.querySelectorAll("[data-calendly]").forEach(function (a) { a.href = CFG.calendly; });
+  // Every "Book a demo" (nav, fix plan, "Want these fixed?") opens Calendly in a new tab.
+  doc.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="calendly.com"]'); if (!a) return;
+    var where = a.closest("#nav, nav, header") ? "nav" : a.closest(".cta-band") ? "want_these_fixed" : a.closest("#full") ? "fix_plan" : a.closest("#panel") ? "performance_tab" : "report";
+    track("book_demo", { cta: where, page: "trooperformance_report" });
+    fb("Contact", { content_name: "Book a demo", content_category: where });
+  }, true);
   var nav = $("#nav"); if (nav) { var os = function () { nav.classList.toggle("scrolled", win.scrollY > 8); }; win.addEventListener("scroll", os, { passive: true }); os(); }
 })();

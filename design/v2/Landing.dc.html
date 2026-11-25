@@ -738,6 +738,12 @@ class Component extends DCLogic {
     e.preventDefault(); go(e.target);
   }, true);
   document.addEventListener("submit", function (e) { e.preventDefault(); go(e.target.querySelector("input")); }, true);
+  // "Book a demo" (header and sticky bar): GTM sends book_demo to GA4; Meta gets Contact once the pixel is allowed.
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="calendly.com"]'); if (!a) return;
+    try { (window.dataLayer = window.dataLayer || []).push({ event: "book_demo", cta: a.classList.contains("tp-demo") ? "sticky_bar" : "nav", page: "trooperformance_landing" }); } catch (err) {}
+    try { if (typeof window.fbq === "function") window.fbq("track", "Contact", { content_name: "Book a demo" }); } catch (err) {}
+  }, true);
 })();
 </script>
 <script>

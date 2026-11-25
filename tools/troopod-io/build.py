@@ -8,7 +8,8 @@ Output layout (served by troopod.io's nginx straight from public/):
     /trooperformance/audit.html    scan + report
     /trooperformance/assets/...    css, js, logos, email images
 Links are rewritten for that layout, the GitHub Pages "noindex" comes off the landing, canonical/og point at troopod.io,
-and troopod.io's own cookie-consent + Google Tag Manager block (read from introusa/index.html) is added to both pages.
+and troopod.io's own cookie-consent + Google Tag Manager block (read from introusa/index.html) is added to both pages,
+plus the opt-in cookie banner (tools/troopod-io/consent-banner.js, written by troopod.io's tech) at the end of each page.
 Re-run after any change here, then commit the folder in introusa.
 """
 import os, re, shutil, sys
@@ -54,6 +55,8 @@ shutil.copytree(os.path.join(SRC, "assets"), os.path.join(OUT, "assets"), ignore
 shutil.copy(os.path.join(SRC, "favicon.svg"), OUT)
 for f in ("support.js", "morphdom-umd.min.js"):
     shutil.copy(os.path.join(SRC, "design", "v2", f), OUT)
+shutil.copy(os.path.join(os.path.dirname(__file__), "consent-banner.js"), OUT)
+BANNER = '<script src="./consent-banner.js?v=20261125a"></script>\n'
 
 # landing -> index.html
 L = read(os.path.join(SRC, "design", "v2", "Landing.dc.html"))
@@ -70,6 +73,7 @@ L = must(L, "<title>", (
     f'<meta property="og:image" content="{BASE}assets/og.png">\n'
     + HEAD_TAGS + "\n<title>"), 1)
 L = must(L, "<body>", "<body>\n" + BODY_TAGS, 1)
+L = must(L, "</body>", BANNER + "</body>", 1)
 write(os.path.join(OUT, "index.html"), L)
 
 # audit page
@@ -79,6 +83,7 @@ A = must(A, "https://purrieie.github.io/trooperformance/assets/og.png", f"{BASE}
 A = must(A, 'href="design/"', 'href="./"')
 A = must(A, "<title>", HEAD_TAGS + "\n<title>", 1)
 A = must(A, "<body>", "<body>\n" + BODY_TAGS, 1)
+A = must(A, "</body>", BANNER + "</body>", 1)
 write(os.path.join(OUT, "audit.html"), A)
 
 # audit.js: no-URL visits go back to the landing in this folder
