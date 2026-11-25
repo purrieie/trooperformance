@@ -151,7 +151,7 @@
     $("#m-" + id).innerHTML = ring(score, 74, 10) + '<div class="lbl"><b>' + esc(name) + '</b><span style="color:' + (subColor || DIM) + '">' + esc(sub) + "</span></div>";
     animateRings($("#m-" + id));
   }
-  meter("speed", "Speed", null, "measuring…"); meter("search", "Search", null, "measuring…"); meter("ai", "AI answers", null, "measuring…");
+  meter("speed", "Performance", null, "measuring…"); meter("search", "Search", null, "measuring…"); meter("ai", "AI answers", null, "measuring…");
   var logEl = $("#log");
   function log(text, tag, tagColor, kind) {
     var d = doc.createElement("div"); d.className = "log-line " + (kind || "sub");
@@ -212,13 +212,13 @@
     if (m.third.length) log(m.third.length + " third-party services · " + msf(m.third.reduce(function (s, x) { return s + x.cost; }, 0)) + (m.thirdBlock ? " blocking" : " of phone CPU"), "", A);
     if (m.field) { stage("field", "done"); log("real shoppers: LCP " + sec(m.field.lcp) + " · INP " + msf(m.field.inp), m.field.scope === "site" ? "site-wide" : "this page", mcol("lcp", m.field.lcp)); }
     else { stage("field", "done"); log("real-shopper data: not enough Chrome traffic", "n/a", DIM); }
-    meter("speed", "Speed", m.perf, bandName(m.perf) + " · mobile", band(m.perf));
+    meter("speed", "Performance", m.perf, bandName(m.perf) + " · mobile", band(m.perf));
     var img = $("#shot"); var src = m.shot || (m.thumbs.length ? m.thumbs[m.thumbs.length - 1].src : "");
     if (src) { img.src = src; img.classList.add("on"); $("#beam").style.display = "none"; }
   }).catch(function (e) {
     S.psiErr.mobile = e && e.message || "failed"; stage("mobile", "err"); stage("field", "err");
     log("Google PageSpeed " + (S.psiErr.mobile === "busy" ? "is busy right now" : "didn't answer"), "retry later", A);
-    meter("speed", "Speed", null, "PageSpeed busy", A);
+    meter("speed", "Performance", null, "PageSpeed busy", A);
   }).then(tick);
   stage("field", "active");
 
@@ -285,7 +285,7 @@
     var real = !!(m && m.field && m.field.lcp);
     var oai = d && d.robots.bots.filter(function (b) { return b.ua === "OAI-SearchBot"; })[0];
     if (lcp && lcp > 2500) return { h: "Your page takes <span class=\"hl\">" + (lcp / 1000).toFixed(1) + " seconds</span> to show up on a phone.", l: real ? "That's what your real shoppers wait, per Chrome's own data. It's your biggest leak. Below is everything else, sorted by what it costs you." : "That's Google's phone test. It's your biggest leak. Below is everything else, sorted by what it costs you." };
-    if (m && m.perf != null && m.perf < 50) return { h: "Google rates your phone speed <span class=\"hl\">" + m.perf + " out of 100.</span>", l: (real ? "Real shoppers see your main content in " + (lcp / 1000).toFixed(1) + " s, but the lab test shows how slow the page is on a mid-range phone. " : "") + "Below is everything we found, sorted by what it costs you." };
+    if (m && m.perf != null && m.perf < 50) return { h: "Google rates your mobile performance <span class=\"hl\">" + m.perf + " out of 100.</span>", l: (real ? "Real shoppers see your main content in " + (lcp / 1000).toFixed(1) + " s, but the lab test shows how slow the page is on a mid-range phone. " : "") + "Below is everything we found, sorted by what it costs you." };
     if (d && d.blocked) return { h: "Your firewall turns <span class=\"hl\">automated visitors away.</span>", l: "We couldn't read the page, and AI assistants probably can't either. Here's what we could check." };
     if (oai && !oai.allowed) return { h: "ChatGPT <span class=\"hl\">can't read your store.</span>", l: "Your robots.txt blocks ChatGPT's search crawler. Below is everything we found, sorted by what it costs you." };
     if (d && d.ai.score != null && d.ai.score < 60) return { h: "AI assistants <span class=\"hl\">can barely see your store.</span>", l: "Below is everything we found, sorted by what it costs you." };
@@ -344,14 +344,14 @@
     var m = S.psi[S.device], err = S.psiErr[S.device], dom = host(URL0);
     var toggle = '<span class="devtoggle no-print" role="group" aria-label="Device"><button type="button" data-dev="mobile" aria-pressed="' + (S.device === "mobile") + '">Mobile</button><button type="button" data-dev="desktop" aria-pressed="' + (S.device === "desktop") + '">Desktop</button></span>';
     if (!m && S.device === "desktop" && S.pendingDesktop) {
-      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Speed · desktop</span>' + toggle + '</p><div class="notice">The desktop test is still running. It will show up here by itself in a few seconds.</div></div></div>';
+      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Performance · desktop</span>' + toggle + '</p><div class="notice">The desktop test is still running. It will show up here by itself in a few seconds.</div></div></div>';
     }
     if (!m) {
-      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Speed · ' + S.device + "</span>" + toggle + '</p><div class="notice">' + (err === "busy" ? "Google PageSpeed is busy right now (it limits free tests per day)." : "Google PageSpeed didn't answer for this page.") + ' Try again in a minute.<button class="btn btn-ghost btn-sm" type="button" data-retry>Run speed test again</button></div></div></div>';
+      return '<div class="panel"><div class="panel-l"><p class="panel-title"><span>Performance · ' + S.device + "</span>" + toggle + '</p><div class="notice">' + (err === "busy" ? "Google PageSpeed is busy right now (it limits free tests per day)." : "Google PageSpeed didn't answer for this page.") + ' Try again in a minute.<button class="btn btn-ghost btn-sm" type="button" data-retry>Run speed test again</button></div></div></div>';
     }
     var score = m.perf == null ? 0 : m.perf, up = uplift(score, dom), f = m.field, other = S.device === "mobile" ? S.psi.desktop : S.psi.mobile;
     var cwvPass = f ? (f.lcp != null && f.lcp <= 2500 && (f.inp == null || f.inp <= 200) && (f.cls == null || f.cls <= 0.1)) : null;
-    var head = '<div class="sp-head"><div><span class="eyebrow">Speed · ' + esc(dom) + " · tested on a " + (S.device === "mobile" ? "phone" : "desktop") + '</span><h3 class="h3" style="font-size:clamp(24px,2.6vw,32px);margin-top:8px">How fast your store feels</h3></div><div class="sp-chips">' + toggle +
+    var head = '<div class="sp-head"><div><span class="eyebrow">Performance · ' + esc(dom) + " · tested on a " + (S.device === "mobile" ? "phone" : "desktop") + '</span><h3 class="h3" style="font-size:clamp(24px,2.6vw,32px);margin-top:8px">How fast your store feels</h3></div><div class="sp-chips">' + toggle +
       (other ? '<span class="sp-chip">' + (S.device === "mobile" ? "Desktop" : "Mobile") + ' score <b style="color:' + band(other.perf) + '">' + other.perf + "</b></span>" : S.device === "mobile" && S.pendingDesktop ? '<span class="sp-chip">Desktop score <b style="color:' + DIM + '">testing\u2026</b></span>' : "") +
       (cwvPass == null ? "" : '<span class="sp-chip" style="color:' + (cwvPass ? G : R) + ";border-color:" + (cwvPass ? "rgba(76,195,138,.4)" : "rgba(239,107,87,.4)") + '">Core Web Vitals: ' + (cwvPass ? "passed" : "failed") + "</span>") + "</div></div>";
     var abandon = score >= 90 ? "A score of " + score + " is fast. Google found <b>more than half of mobile visits are abandoned</b> past 3 seconds, and you're well clear of that." : "A score of " + score + " means your page is " + (score < 50 ? "slow" : "only middling") + " on a " + (S.device === "mobile" ? "phone" : "computer") + ". Google found <b>more than half of mobile visits are abandoned</b> when a page takes over 3 seconds to load.";
@@ -535,7 +535,7 @@
 
   function fixList() {
     var items = [], m = S.psi.mobile, d = S.scan;
-    if (m) m.causes.forEach(function (c) { var im = impactOf(c); items.push({ w: Math.min(6, c.sav / 1000 * 2 + c.tbt / 1000) + (c.status === "fail" ? 1 : 0), tag: "Speed", title: c.title, why: c.plain, imp: im[0] }); });
+    if (m) m.causes.forEach(function (c) { var im = impactOf(c); items.push({ w: Math.min(6, c.sav / 1000 * 2 + c.tbt / 1000) + (c.status === "fail" ? 1 : 0), tag: "Performance", title: c.title, why: c.plain, imp: im[0] }); });
     var boost = { status: 6, firewall: 5, "OAI-SearchBot": 4.5, rawprice: 3.6, schema: 3.4, PerplexityBot: 3.2, rawtext: 3.2, offer: 3, googlebot: 6 };
     if (d) {
       d.search.checks.forEach(function (c) { if (c.status !== "pass") items.push({ w: (boost[c.id] || (c.status === "fail" ? 2.5 : 1)), tag: "Search", title: c.title, why: c.why }); });
@@ -555,7 +555,7 @@
   var EFFORT = { llms: "Quick win", "OAI-SearchBot": "Quick win", GPTBot: "Quick win", PerplexityBot: "Quick win", ClaudeBot: "Quick win", sitemap: "Quick win", canonical: "Quick win", title: "Quick win", desc: "Quick win", noindex: "Quick win", alt: "Quick win", firewall: "Hosting setting", status: "Urgent", schema: "Developer task", offer: "Developer task", rawprice: "Developer task", rawtext: "Developer task", faq: "Content", googlebot: "Urgent" };
   function planItems() {
     var items = [], m = S.psi.mobile, d = S.scan;
-    if (m) m.causes.forEach(function (c) { var im = impactOf(c); items.push({ w: Math.min(6, c.sav / 1000 * 2 + c.tbt / 1000) + (c.status === "fail" ? 1 : 0), tag: "Speed", title: c.title, why: c.plain, imp: im[0], impColor: im[1], who: c.who, effort: c.sav >= 1500 || c.tbt >= 600 ? "Big win" : "Developer task", sav: c.sav }); });
+    if (m) m.causes.forEach(function (c) { var im = impactOf(c); items.push({ w: Math.min(6, c.sav / 1000 * 2 + c.tbt / 1000) + (c.status === "fail" ? 1 : 0), tag: "Performance", title: c.title, why: c.plain, imp: im[0], impColor: im[1], who: c.who, effort: c.sav >= 1500 || c.tbt >= 600 ? "Big win" : "Developer task", sav: c.sav }); });
     var boost = { status: 6, firewall: 5, "OAI-SearchBot": 4.5, rawprice: 3.6, schema: 3.4, PerplexityBot: 3.2, rawtext: 3.2, offer: 3, googlebot: 6 };
     if (d) {
       d.search.checks.forEach(function (c) { if (c.status !== "pass") items.push({ w: (boost[c.id] || (c.status === "fail" ? 2.5 : 1)), tag: "Search", title: c.title, why: c.why, imp: c.status === "fail" ? "Google sees less of you" : "Small lift", impColor: c.status === "fail" ? R : A, who: "Developer / SEO", effort: EFFORT[c.id] || (c.status === "fail" ? "Developer task" : "Quick win") }); });
@@ -570,7 +570,7 @@
   }
   function planHtml(items) {
     var sm = planSummary(items);
-    return '<div class="fp"><div class="fp-sum"><div><b>' + sm.n + '</b><span>fixes, ranked by impact</span></div>' + (sm.secs >= 300 ? '<div><b>−' + (sm.secs / 1000).toFixed(1) + ' s</b><span>faster on a phone, Google’s estimate</span></div>' : "") + (sm.quick ? '<div><b>' + sm.quick + '</b><span>quick wins you can do this week</span></div>' : '<div><b>' + items.filter(function (x) { return x.tag !== "Speed"; }).length + '</b><span>search and AI fixes</span></div>') + "</div>" +
+    return '<div class="fp"><div class="fp-sum"><div><b>' + sm.n + '</b><span>fixes, ranked by impact</span></div>' + (sm.secs >= 300 ? '<div><b>−' + (sm.secs / 1000).toFixed(1) + ' s</b><span>faster on a phone, Google’s estimate</span></div>' : "") + (sm.quick ? '<div><b>' + sm.quick + '</b><span>quick wins you can do this week</span></div>' : '<div><b>' + items.filter(function (x) { return x.tag !== "Performance"; }).length + '</b><span>search and AI fixes</span></div>') + "</div>" +
       '<ol class="fp-list">' + items.map(function (x, i) {
         return '<li class="fp-item"><span class="fp-no">' + (i + 1 < 10 ? "0" : "") + (i + 1) + '</span><div class="fp-body"><div class="fp-top"><span class="fp-tag t-' + x.tag.replace(/\s.*/, "").toLowerCase() + '">' + x.tag + '</span><span class="fp-eff">' + esc(x.effort) + "</span></div><b>" + esc(x.title) + "</b><span>" + esc(x.why) + '</span><div class="fp-meta"><span>Impact <em style="color:' + (x.impColor || DIM) + '">' + esc(x.imp || "minor") + "</em></span><span>Who fixes it <em>" + esc(x.who || "Developer") + "</em></span></div></div></li>";
       }).join("") + "</ol></div>";
@@ -684,7 +684,7 @@
     return (id === "search" ? d.search : d.ai).checks.filter(function (c) { return c.status === "fail"; }).length;
   }
   function tabsHtml() {
-    return [["speed", "Speed"], ["search", "Search"], ["ai", "AI answers"]].map(function (t) { var n = tabCount(t[0]); return '<button type="button" role="tab" data-tab="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + (n ? '<span class="cnt">' + n + "</span>" : "") + "</button>"; }).join("");
+    return [["speed", "Performance"], ["search", "Search"], ["ai", "AI answers"]].map(function (t) { var n = tabCount(t[0]); return '<button type="button" role="tab" data-tab="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + (n ? '<span class="cnt">' + n + "</span>" : "") + "</button>"; }).join("");
   }
   function panelHtml() { return S.tab === "speed" ? speedPanel() : S.tab === "search" ? searchPanel() : aiPanel(); }
 
@@ -695,7 +695,7 @@
       '<div class="tagrow"><span class="eyebrow">Report · ' + esc(host(URL0)) + " · " + esc(date) + "</span>" + (d && d.platform ? '<span class="badge">' + esc(d.platform) + "</span>" : "") + "</div>" +
       '<h1 class="h1">' + hl.h + '</h1><p class="lead" style="max-width:580px">' + esc(hl.l) + '</p><div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" type="button" data-copy>Copy link</button><button class="btn btn-ghost btn-sm" type="button" data-print>Download PDF</button></div></div>' +
       '<div class="scores">' +
-      '<div class="score">' + ring(m ? m.perf : null, 92, 9) + "<b>Speed</b><span style=\"color:" + band(m && m.perf) + '">' + (m ? bandName(m.perf) : "No data") + '</span><span class="sub2">' + (dsk ? "desktop " + dsk.perf : S.pendingDesktop ? "desktop…" : "mobile") + "</span></div>" +
+      '<div class="score">' + ring(m ? m.perf : null, 92, 9) + "<b>Performance</b><span style=\"color:" + band(m && m.perf) + '">' + (m ? bandName(m.perf) : "No data") + '</span><span class="sub2">' + (dsk ? "desktop " + dsk.perf : S.pendingDesktop ? "desktop…" : "mobile") + "</span></div>" +
       '<div class="score">' + ring(d ? d.search.score : null, 92, 9) + "<b>Search</b><span style=\"color:" + band(d && d.search.score) + '">' + (d ? bandName(d.search.score) : "No data") + '</span><span class="sub2">' + (d ? d.search.checks.length + " checks" : "") + "</span></div>" +
       '<div class="score">' + ring(d ? d.ai.score : null, 92, 9) + "<b>AI answers</b><span style=\"color:" + band(d && d.ai.score) + '">' + (d ? bandName(d.ai.score) : "No data") + '</span><span class="sub2">' + (d ? d.ai.checks.length + " checks" : "") + "</span></div>" +
       "</div></div></section>" +

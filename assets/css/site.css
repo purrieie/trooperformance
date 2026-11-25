@@ -463,7 +463,7 @@ pre.agent { margin: 0; background: var(--bg); border: 1px solid rgba(255,255,255
 .fp-body > span { font-size: 14px; line-height: 1.55; color: var(--muted); }
 .fp-top { display: flex; gap: 6px; flex-wrap: wrap; }
 .fp-tag, .fp-eff { font-family: var(--f-mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line-2); color: var(--text-2); }
-.fp-tag.t-speed { color: #FFB4A8; border-color: rgba(239,107,87,.35); }
+.fp-tag.t-speed, .fp-tag.t-performance { color: #FFB4A8; border-color: rgba(239,107,87,.35); }
 .fp-tag.t-search { color: #F3CF8A; border-color: rgba(229,169,61,.35); }
 .fp-tag.t-ai { color: var(--purple-3); border-color: rgba(166,142,250,.4); }
 .fp-eff { border-style: dashed; }

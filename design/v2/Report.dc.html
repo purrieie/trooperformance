@@ -55,8 +55,8 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 </div>
 <div style="flex: 1 1 360px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.1); background: rgba(14,14,18,0.8); padding: 22px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; box-shadow: 0 30px 80px -40px rgba(0,0,0,0.9)">
 <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px 0">
-<svg width="92" height="92" viewBox="0 0 120 120" role="img" aria-label="Speed 38 of 100"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"></circle><circle cx="60" cy="60" r="50" fill="none" stroke="#EF6B57" stroke-width="9" stroke-linecap="round" stroke-dasharray="119.4 314.2" transform="rotate(-90 60 60)"></circle><text x="60" y="71" text-anchor="middle" font-size="32" fill="#F4F3F8" font-family="DM Mono, monospace">38</text></svg>
-<span style="font-size: 15px">Speed</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #EF6B57">Poor</span>
+<svg width="92" height="92" viewBox="0 0 120 120" role="img" aria-label="Performance 38 of 100"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"></circle><circle cx="60" cy="60" r="50" fill="none" stroke="#EF6B57" stroke-width="9" stroke-linecap="round" stroke-dasharray="119.4 314.2" transform="rotate(-90 60 60)"></circle><text x="60" y="71" text-anchor="middle" font-size="32" fill="#F4F3F8" font-family="DM Mono, monospace">38</text></svg>
+<span style="font-size: 15px">Performance</span><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #EF6B57">Poor</span>
 </div>
 <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px 0; border-left: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08)">
 <svg width="92" height="92" viewBox="0 0 120 120" role="img" aria-label="Search 71 of 100"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"></circle><circle cx="60" cy="60" r="50" fill="none" stroke="#E5A93D" stroke-width="9" stroke-linecap="round" stroke-dasharray="223.1 314.2" transform="rotate(-90 60 60)"></circle><text x="60" y="71" text-anchor="middle" font-size="32" fill="#F4F3F8" font-family="DM Mono, monospace">71</text></svg>
@@ -84,7 +84,7 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 <div class="rp-in" style="display: flex; flex-direction: column; gap: 20px">
 <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
 <div style="display: flex; flex-direction: column; gap: 10px">
-<span class="rp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Speed · {{domain}} · tested on a phone</span>
+<span class="rp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Performance · {{domain}} · tested on a phone</span>
 <h3 style="margin: 0; font-size: 30px; line-height: 1.1; font-weight: 400; letter-spacing: -0.03em">How fast your store feels</h3>
 </div>
 <div style="display: flex; gap: 8px; flex-wrap: wrap">
@@ -357,7 +357,7 @@ class Component extends DCLogic {
       ]}
     };
     const d = data[t];
-    const tabs = [['speed', 'Speed'], ['search', 'Search'], ['ai', 'AI answers']].map(([id, label]) => ({
+    const tabs = [['speed', 'Performance'], ['search', 'Search'], ['ai', 'AI answers']].map(([id, label]) => ({
       label, on: t === id,
       bg: t === id ? '#F4F3F8' : 'transparent', fg: t === id ? '#0A0A0C' : '#CFCCD9',
       pick: () => this.setState({ tab: id })
