@@ -10,7 +10,7 @@
 // Sent ones are marked sent; a failed send stays pending, so the next batch retries it.
 //
 // Resend key: RESEND_API_KEY env var, else tools/report-queue/.resend-key (git-ignored), else the outreach .env (never printed).
-// Sender: REPORT_FROM (default "TrooPerformance by Troopod <reports@troopodhq.com>"), optional REPORT_REPLY_TO, REPORT_BCC.
+// Sender: REPORT_FROM (default "Jaanya from Troopod <jaanya@troopod.io>", needs the troopod.io Resend key), REPORT_REPLY_TO, REPORT_BCC.
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -90,8 +90,8 @@ if (cmd === "send") {
     key = m ? m[1].trim() : "";
   }
   if (!key) { console.error("No Resend key found."); process.exit(1); }
-  const from = process.env.REPORT_FROM || "TrooPerformance by Troopod <reports@troopodhq.com>";
-  const replyTo = process.env.REPORT_REPLY_TO || "", bcc = (process.env.REPORT_BCC || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const from = process.env.REPORT_FROM || "Jaanya from Troopod <jaanya@troopod.io>";
+  const replyTo = process.env.REPORT_REPLY_TO || "jaanya@troopod.io", bcc = (process.env.REPORT_BCC || "").split(",").map((s) => s.trim()).filter(Boolean);
   const results = [];
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
