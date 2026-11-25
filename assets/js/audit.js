@@ -583,10 +583,18 @@
       '<div class="lk-card"><h3 class="h3">Fix these first</h3><span class="small">' + sm.n + " fixes for " + esc(dom) + (sm.secs >= 300 ? ", about " + (sm.secs / 1000).toFixed(1) + " s faster" : "") + '</span><ol class="fp-list lk-blur">' + teaserRows + "</ol></div>" +
       '<div class="lk-card"><h3 class="h3">Where you rank</h3><span class="small">You vs up to 3 competitors, same phone test</span><div class="lk-blur lk-board">' + fakeBoard + "</div></div></div>" +
       '<form class="lk-form" data-lead-form novalidate><div class="lk-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>' +
-      '<h3>Unlock your full report</h3><p>Your ' + sm.n + '-step fix plan, ranked by impact, plus your rank against up to 3 competitors. Free.</p>' +
-      '<div class="lk-fields"><div><label for="ldName">Name</label><input id="ldName" name="name" autocomplete="name" placeholder="Your name"></div><div><label for="ldEmail">Work email</label><input id="ldEmail" name="email" type="email" autocomplete="email" required placeholder="you@brand.com"></div><div><label for="ldPhone">Phone <small>optional</small></label><input id="ldPhone" name="phone" type="tel" autocomplete="tel" placeholder="+91"></div><div><label for="ldComp">Competitors <small>optional</small></label><input id="ldComp" name="comp" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="brand-a.com, brand-b.com"></div></div>' +
-      '<p class="form-error" data-lead-err role="alert" hidden></p><button class="btn btn-primary lk-btn" type="submit">Unlock full report <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>' +
-      '<span class="lk-note">Takes 10 seconds. Your details go to the Troopod team so we can help with the fixes. No spam.</span></form></div>';
+      '<h3>Unlock your full report</h3><p>Your ' + sm.n + '-step fix plan, ranked by impact, plus your rank against up to 3 competitors.</p>' +
+      '<div class="lk-fields">' +
+      '<div class="lk-f"><label for="ldName">Your name</label><input id="ldName" name="name" autocomplete="name" placeholder="Jamie Carter"><span class="lk-e" data-e="name"></span></div>' +
+      '<div class="lk-f"><label for="ldEmail">Work email</label><input id="ldEmail" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="jamie@yourbrand.com" aria-describedby="ldHint"><span class="lk-hint" id="ldHint" aria-live="polite"></span><span class="lk-e" data-e="email"></span></div>' +
+      '<div class="lk-f"><label for="ldPhone">Phone <small>(WhatsApp or text)</small></label><div class="lk-phone"><select name="cc" aria-label="Country code">' + CCS.map(function (c) { return '<option value="' + c[1] + '"' + (c[0] === defaultCC() ? " selected" : "") + ">" + c[0] + (c[1] === "other" ? "" : " " + c[1]) + "</option>"; }).join("") + '</select><input id="ldPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="' + (defaultCC() === "IN" ? "98765 43210" : "(415) 555 0132") + '"></div><span class="lk-e" data-e="phone"></span></div>' +
+      '<div class="lk-f"><label for="ldSite">Store website</label><input id="ldSite" name="website" autocapitalize="none" spellcheck="false" value="' + esc(dom) + '" placeholder="yourbrand.com"><span class="lk-e" data-e="website"></span></div>' +
+      '<div class="lk-f"><label for="ldOrders">Monthly orders</label><select id="ldOrders" name="orders"><option value="" selected disabled>Pick a range</option>' + ["Under 500", "500 to 2,000", "2,000 to 10,000", "10,000 to 25,000", "25,000 to 50,000", "50,000+"].map(function (o) { return "<option>" + o + "</option>"; }).join("") + '</select><span class="lk-e" data-e="orders"></span></div>' +
+      '<div class="lk-f"><label for="ldHeard">Where did you hear about us?</label><select id="ldHeard" name="heard_from"><option value="" selected>Pick one</option>' + ["Instagram", "Facebook", "LinkedIn", "Google", "Other"].map(function (o) { return "<option>" + o + "</option>"; }).join("") + '</select></div>' +
+      '<div class="lk-f"><label for="ldComp">Competitors to compare <small>(optional)</small></label><input id="ldComp" name="comp" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="brand-a.com, brand-b.com"></div>' +
+      '<input type="text" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true" class="lk-hp">' +
+      '</div><p class="form-error" data-lead-err role="alert" hidden></p><button class="btn btn-primary lk-btn" type="submit">Unlock full report <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>' +
+      '<span class="lk-note">Free. Work email only. No spam, ever.</span></form></div>';
   }
   function fullSection() {
     var items = planItems();
@@ -594,14 +602,65 @@
     if (!S.unlocked) return '<section class="rep-sec" id="full"><div class="wrap">' + head + lockedHtml(items) + "</div></section>";
     return '<section class="rep-sec" id="full"><div class="wrap">' + head + (items.length ? '<h3 class="h3" style="margin:0 0 14px">Fix these first</h3>' + planHtml(items) : "") + '</div></section>' + compareSection() + compsSection();
   }
+  var FREE_MAIL = ["gmail.com","googlemail.com","yahoo.com","yahoo.co.in","yahoo.in","yahoo.co.uk","ymail.com","rocketmail.com","outlook.com","outlook.in","hotmail.com","hotmail.co.in","hotmail.co.uk","live.com","live.in","msn.com","icloud.com","me.com","mac.com","aol.com","rediffmail.com","rediff.com","proton.me","protonmail.com","pm.me","tutanota.com","tuta.io","zoho.com","zohomail.com","zohomail.in","yandex.com","yandex.ru","gmx.com","gmx.net","gmx.de","mail.com","email.com","inbox.com","hey.com","fastmail.com","hushmail.com","mail.ru","web.de","qq.com","163.com","126.com","sina.com","naver.com","duck.com","mailinator.com","guerrillamail.com","guerrillamail.info","sharklasers.com","grr.la","10minutemail.com","10minutemail.net","temp-mail.org","tempmail.com","tempmail.net","tempmailo.com","yopmail.com","yopmail.net","trashmail.com","getnada.com","nada.email","dispostable.com","maildrop.cc","mintemail.com","throwawaymail.com","fakeinbox.com","emailondeck.com","mohmal.com","moakt.com","tempr.email","spamgourmet.com","mailnesia.com","mytemp.email","burnermail.io","inboxkitten.com","mailpoof.com","tmail.ws","tmpmail.org"];
+  function personalMail(email) { var d = String(email).toLowerCase().split("@")[1] || ""; return FREE_MAIL.some(function (x) { return d === x || d.slice(-(x.length + 1)) === "." + x; }); }
+  var LEAD_ERR = { bad_email: "That email doesn\u2019t look right.", personal_email: "Please use your work email, like you@yourbrand.com. Gmail, Yahoo, Outlook and other personal inboxes aren\u2019t accepted.", no_mail_domain: "That email\u2019s domain can\u2019t receive mail. Check the spelling of the part after @." };
+  function emailHint(input) {
+    var hint = $("#ldHint"); if (!hint) return;
+    var v = input.value.trim().toLowerCase(), d = v.split("@")[1] || "", site = host(URL0).replace(/^www\./, "");
+    if (!d || d.indexOf(".") < 0) { hint.textContent = ""; hint.className = "lk-hint"; return; }
+    if (personalMail(v)) { hint.textContent = "Personal inboxes aren\u2019t accepted. Use your work email."; hint.className = "lk-hint bad"; return; }
+    if (d === site || d.slice(-(site.length + 1)) === "." + site || site.slice(-(d.length + 1)) === "." + d) { hint.textContent = "\u2713 Matches " + site; hint.className = "lk-hint ok"; return; }
+    hint.textContent = "\u2713 Work email"; hint.className = "lk-hint ok";
+  }
+  var CCS = [["IN", "+91"], ["US", "+1"], ["CA", "+1"], ["UK", "+44"], ["AU", "+61"], ["AE", "+971"], ["Other", "other"]];
+  var PH_LEN = { "+1": [10, 10], "+44": [10, 10], "+61": [9, 9], "+971": [9, 9], "+91": [10, 10] };
+  function defaultCC() { var tz = ""; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {} return /Calcutta|Kolkata/.test(tz) ? "IN" : /^Europe\/London/.test(tz) ? "UK" : /^Australia\//.test(tz) ? "AU" : /Dubai/.test(tz) ? "AE" : /^America\/(Toronto|Vancouver|Edmonton|Winnipeg|Halifax)/.test(tz) ? "CA" : /^America\//.test(tz) ? "US" : "IN"; }
+  var TYPOS = { "gmial.com": "gmail.com", "gmai.com": "gmail.com", "gamil.com": "gmail.com" };
+  function attribution() {
+    var q = new URLSearchParams(location.search), out = {}, land = {};
+    try { land = JSON.parse(sessionStorage.getItem("tp_attr") || "{}") || {}; } catch (e) {}
+    ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid"].forEach(function (k) { out[k] = q.get(k) || land[k] || ""; });
+    out.referrer = land.referrer || doc.referrer || ""; out.landing_url = land.landing_url || location.href;
+    return out;
+  }
+  function leadRules(form) {
+    var el = function (n) { return form.querySelector('[name="' + n + '"]'); };
+    var ph = function () { var cc = el("cc").value, d = el("phone").value.replace(/\D/g, ""); if (cc === "+1" && d.length === 11 && d[0] === "1") d = d.slice(1); if (cc !== "+1" && cc !== "other" && d[0] === "0") d = d.slice(1); return d; };
+    return {
+      digits: ph,
+      name: function () { var v = el("name").value.trim(); if (!v) return "Tell us what to call you."; if (v.replace(/[^a-z\u00C0-\u024F]/gi, "").length < 2) return "Please enter your name."; if (/[0-9@#$%^&*()_+=<>{}\[\]\\/|~`!?;:]/.test(v)) return "Names only have letters."; return ""; },
+      email: function () { var v = el("email").value.trim().toLowerCase(), d = v.split("@")[1] || ""; if (!v) return "We need your work email."; if (!/^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/.test(v) || /\.\.|^\.|\.@|@-/.test(v)) return "That email looks a bit off. Like jamie@yourbrand.com"; if (TYPOS[d] || personalMail(v)) return LEAD_ERR.personal_email; return ""; },
+      phone: function () { var cc = el("cc").value, raw = el("phone").value, d = ph(), L = PH_LEN[cc]; if (!raw.replace(/\D/g, "")) return "We need a number we can reach you on."; if (cc === "other") return /^\+?\d[\d\s().-]{6,18}$/.test(raw.trim()) ? "" : "Add your country code, like +49 30 1234567"; if (d.length < L[0] || d.length > L[1]) return "That number should have " + L[0] + " digits. This one has " + d.length + "."; if (/^(\d)\1+$/.test(d)) return "Please enter a real number."; return ""; },
+      website: function () { var v = el("website").value.trim(); if (!v) return "We need your store website."; if (/@/.test(v)) return "That looks like an email. We need your store website, like yourbrand.com"; return clean(v) ? "" : "That doesn\u2019t look like a website. Like yourbrand.com"; },
+      orders: function () { return el("orders").value ? "" : "Pick a range, a rough guess is fine."; }
+    };
+  }
+  function fieldCheck(form, rules, n) {
+    var msg = rules[n](), box = form.querySelector('[data-e="' + n + '"]'), input = form.querySelector('[name="' + n + '"]');
+    if (box) box.textContent = msg; if (input) input.setAttribute("aria-invalid", msg ? "true" : "false");
+    var wrap = input && input.closest(".lk-f"); if (wrap) wrap.classList.toggle("bad", !!msg);
+    return !msg;
+  }
   function submitLead(form) {
+    var rules = leadRules(form), err = form.querySelector("[data-lead-err]"), btn = form.querySelector("button[type=submit]");
     var g = function (n) { return (form.querySelector('[name="' + n + '"]') || {}).value || ""; };
-    var email = g("email").trim(), err = form.querySelector("[data-lead-err]"), btn = form.querySelector("button[type=submit]");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { err.textContent = "Enter a work email so we can unlock it."; err.hidden = false; form.querySelector('[name="email"]').focus(); return; }
+    var bad = ["name", "email", "phone", "website", "orders"].filter(function (n) { return !fieldCheck(form, rules, n); });
+    if (bad.length) { var f = form.querySelector('[name="' + (bad[0] === "phone" ? "phone" : bad[0]) + '"]'); if (f) f.focus(); return; }
     var comps = g("comp").split(/[,\s]+/).map(clean).filter(Boolean).slice(0, 3);
-    err.hidden = true; btn.disabled = true; btn.textContent = "Unlocking…";
-    var body = { name: g("name"), email: email, phone: g("phone"), site: URL0, competitors: comps.map(shortUrl), speed: S.psi.mobile ? S.psi.mobile.perf : null, search: S.scan ? S.scan.search.score : null, ai: S.scan ? S.scan.ai.score : null, report: location.href };
+    var cc = g("cc"), ccLabel = form.querySelector('[name="cc"]').selectedOptions[0].textContent.slice(0, 2);
+    var phone = cc === "other" ? g("phone").trim().replace(/[^\d+]/g, "").replace(/^(?!\+)/, "+") : cc + rules.digits();
+    var site = g("website").trim().replace(/^https?:\/\//i, "").replace(/\/+$/, "").toLowerCase();
+    err.hidden = true; btn.disabled = true; btn.firstChild.textContent = "Unlocking\u2026 ";
+    var at = attribution();
+    var body = Object.assign({ name: g("name").trim(), email: g("email").trim().toLowerCase(), phone: phone, country_code: cc === "other" ? "" : cc + (cc === "+1" ? " " + ccLabel : ""), site: site, orders: g("orders"), heard_from: g("heard_from"), competitors: comps.map(shortUrl), speed: S.psi.mobile ? S.psi.mobile.perf : null, search: S.scan ? S.scan.search.score : null, ai: S.scan ? S.scan.ai.score : null, report: location.href }, at);
+    var reset = function () { btn.disabled = false; btn.firstChild.textContent = "Unlock full report "; };
     var done = function () {
+      // Google Sheet (TrooFestive Data > "TrooPerformance leads") + email alert, via the Troopod Apps Script. Doesn't block the unlock.
+      if (CFG.sheetEndpoint && !g("company_site")) {
+        var row = Object.assign({ source: "trooperformance", name: body.name, email: body.email, phone: body.phone, country_code: body.country_code, website: site, orders: body.orders, heard_from: body.heard_from, competitors: body.competitors.join(", "), speed_score: body.speed, search_score: body.search, ai_score: body.ai, report_url: body.report, page: location.href.split("#")[0], submitted_at: new Date().toISOString(), event_id: "tp-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10), user_agent: navigator.userAgent }, at);
+        try { fetch(CFG.sheetEndpoint, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(row), keepalive: true }).catch(function () {}); } catch (e) {}
+      }
       S.unlocked = true;
       try { var l = JSON.parse(localStorage.getItem(LOCK_KEY) || "[]") || []; l.push(host(URL0)); localStorage.setItem(LOCK_KEY, JSON.stringify(l.slice(-20))); } catch (e) {}
       if (comps.length) S.cmp.inputs = comps.map(shortUrl).concat(["", "", ""]).slice(0, 3);
@@ -609,12 +668,16 @@
       var nf = $("#full"); if (nf) nf.scrollIntoView({ behavior: "smooth", block: "start" });
       if (comps.length && S.psi.mobile) startCompare();
     };
+    if (g("company_site")) { done(); return; } // bots fill the hidden field: show the report, save nothing
     var url = (CFG.leadApi || (CFG.api || "").replace(/trooperformance-audit\/?$/, "trooperformance-lead"));
     timeoutFetch(url, { method: "POST", headers: { authorization: "Bearer " + CFG.anonKey, apikey: CFG.anonKey, "content-type": "application/json" }, body: JSON.stringify(body) }, 15000)
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { if (r.status === 400 && d.error === "bad_email") throw new Error("bad_email"); }); })
-      .then(done, function (e) { if (e && e.message === "bad_email") { err.textContent = "That email doesn’t look right."; err.hidden = false; btn.disabled = false; btn.textContent = "Unlock full report"; return; } done(); });
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { if (r.status === 400 && LEAD_ERR[d.error]) throw new Error(d.error); }); })
+      .then(done, function (e) {
+        var code = e && e.message;
+        if (LEAD_ERR[code]) { var box = form.querySelector('[data-e="email"]'); if (box) box.textContent = LEAD_ERR[code]; var em = form.querySelector('[name="email"]'); if (em) { em.setAttribute("aria-invalid", "true"); em.closest(".lk-f").classList.add("bad"); em.focus(); } reset(); return; }
+        done(); // network trouble: don't make the visitor pay for it
+      });
   }
-
   function tabCount(id) {
     if (id === "speed") { var m = S.psi[S.device]; return m ? m.causes.filter(function (c) { return c.status === "fail"; }).length : 0; }
     var d = S.scan; if (!d) return 0;
@@ -663,7 +726,9 @@
         runPsi(URL0, dev).then(function (m) { S.psi[dev] = m; delete S.psiErr[dev]; }).catch(function (er) { S.psiErr[dev] = er && er.message || "failed"; }).then(function () { rep.innerHTML = renderReport(); animateRings(rep); });
       }
     });
-    rep.addEventListener("input", function (e) { var i = e.target.getAttribute && e.target.getAttribute("data-cmp-in"); if (i != null) S.cmp.inputs[+i] = e.target.value; });
+    rep.addEventListener("input", function (e) { var i = e.target.getAttribute && e.target.getAttribute("data-cmp-in"); if (i != null) S.cmp.inputs[+i] = e.target.value; if (e.target.id === "ldEmail") emailHint(e.target); var lf = e.target.closest && e.target.closest("[data-lead-form]"); if (lf && e.target.name && e.target.closest(".lk-f.bad")) { var rr = leadRules(lf); if (rr[e.target.name]) fieldCheck(lf, rr, e.target.name); } });
+    rep.addEventListener("focusout", function (e) { var lf = e.target.closest && e.target.closest("[data-lead-form]"); if (lf && e.target.value && e.target.name) { var rr = leadRules(lf); if (rr[e.target.name]) fieldCheck(lf, rr, e.target.name); } });
+    rep.addEventListener("change", function (e) { if (e.target.name === "cc") { var lf = e.target.closest("[data-lead-form]"), v = e.target.value, p = lf.querySelector('[name="phone"]'); p.placeholder = v === "other" ? "+49 30 1234567" : v === "+44" ? "7700 900123" : v === "+61" ? "412 345 678" : v === "+971" ? "50 123 4567" : v === "+91" ? "98765 43210" : "(415) 555 0132"; } if (e.target.name === "orders") { var lf2 = e.target.closest("[data-lead-form]"); fieldCheck(lf2, leadRules(lf2), "orders"); } });
     rep.addEventListener("submit", function (e) { if (e.target.closest("[data-cmp-form]")) { e.preventDefault(); startCompare(); } else if (e.target.closest("[data-lead-form]")) { e.preventDefault(); submitLead(e.target.closest("[data-lead-form]")); } });
     rep.addEventListener("keydown", function (e) {
       var t = e.target.closest('[role="tab"]'); if (!t || (e.key !== "ArrowRight" && e.key !== "ArrowLeft")) return;

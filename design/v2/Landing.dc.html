@@ -518,6 +518,12 @@ class Component extends DCLogic {
 <script>
 /* Preview only: send the URL typed on this landing to the real audit (Google PageSpeed + Search/AI scan). */
 (function () {
+  // Keep ad attribution (utm, gclid, fbclid, referrer) for the lead form on the report page.
+  try {
+    var q = new URLSearchParams(location.search), a = {};
+    ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid"].forEach(function (k) { if (q.get(k)) a[k] = q.get(k); });
+    if (!sessionStorage.getItem("tp_attr") || Object.keys(a).length) { a.referrer = document.referrer || ""; a.landing_url = location.href; sessionStorage.setItem("tp_attr", JSON.stringify(a)); }
+  } catch (e) {}
   function clean(v) { v = String(v || "").trim().replace(/\s+/g, "").replace(/^https?:\/\//i, ""); return /^[a-z0-9-]+(\.[a-z0-9-]+)+(:\d+)?(\/.*)?$/i.test(v) ? v : ""; }
   function go(input) {
     var v = clean(input && input.value);
