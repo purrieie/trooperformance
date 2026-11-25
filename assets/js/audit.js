@@ -547,7 +547,7 @@
     if (!CFG.reportApi || S.cmp.finding) return;
     var h = (S.scan && S.scan.html) || {};
     S.cmp.finding = true; S.cmp.err = ""; renderCompare();
-    timeoutFetch(CFG.reportApi + "/competitors", { method: "POST", headers: { authorization: "Bearer " + CFG.anonKey, apikey: CFG.anonKey, "content-type": "application/json" }, body: JSON.stringify({ url: URL0, title: h.title || "", desc: h.desc || "", h1: h.h1 || "", platform: (S.scan && S.scan.platform) || "" }) }, 35000)
+    timeoutFetch(CFG.reportApi + "/competitors", { method: "POST", headers: { authorization: "Bearer " + CFG.anonKey, apikey: CFG.anonKey, "content-type": "application/json" }, body: JSON.stringify({ url: URL0, title: h.title || "", desc: h.desc || "", h1: h.h1 || "", platform: (S.scan && S.scan.platform) || "", price: (h.jsonld && h.jsonld.product && h.jsonld.product.price ? (h.jsonld.product.currency || "") + " " + h.jsonld.product.price : h.price || ""), text: String(h.agentText || "").slice(0, 900) }) }, 35000)
       .then(function (r) { return r.json(); })
       .then(function (d) { var list = (d && d.competitors) || []; if (!list.length) throw new Error("none"); S.cmp.inputs = list.concat(["", "", ""]).slice(0, 3); S.cmp.auto = true; })
       .catch(function () { S.cmp.err = "Couldn\u2019t find competitors automatically. Add them yourself."; })

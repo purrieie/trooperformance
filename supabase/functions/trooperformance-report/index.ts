@@ -141,17 +141,17 @@ async function handleCompetitors(req: Request) {
   const b = await req.json().catch(() => ({}));
   const site = str(b.url, 200).toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/.*$/, "");
   if (!hostOk(site)) return json({ error: "bad_url" }, 400);
-  const sys = "You name direct online competitors of a D2C (direct-to-consumer) brand. Reply with JSON only: {\"competitors\":[{\"domain\":\"brand.com\",\"name\":\"Brand\"}]}. Rules: 5 brands, most direct first. Same product category and similar price band, selling in the same country as the store. Real brands with their own online store; give the brand's own website domain (no marketplaces like amazon, flipkart, nykaa, myntra, etsy; no blogs or review sites). Never return the store itself.";
-  const user = "Store: " + site + "\nTitle: " + str(b.title, 160) + "\nDescription: " + str(b.desc, 300) + "\nMain heading: " + str(b.h1, 160) + "\nPlatform: " + str(b.platform, 30) + "\nCountry hint: " + (/\.in$/.test(site) || /₹|rs\.?\s?\d|inr/i.test(str(b.desc, 300) + str(b.title, 160)) ? "India" : "use the domain and text");
-  let out: { competitors?: { domain?: string; name?: string }[] } = {};
+  const sys = "You find the CLOSEST direct competitors of a business from its website. It can be any kind of business: a D2C/ecommerce brand, SaaS, fintech, healthtech, edtech, an agency or service firm, a marketplace, a local or B2B business. Step 1: work out what kind of business it is and its exact niche: what it sells, to whom (consumers or businesses), where, and at what price/size (e.g. 'curly and wavy haircare for Indian women, young D2C brand', 'CRO and landing-page agency for D2C brands', 'UPI payments app for small merchants in India'). Step 2: list 6 companies a buyer would genuinely compare it with: same kind of business, same specific offer, same buyers, same country or market, similar size. Prefer peers of similar size over giant incumbents, unless the business itself is a giant. Give each company's own website domain. Leave out marketplaces and app stores (amazon, flipkart, nykaa, myntra, etsy, play store) unless the business itself is a marketplace, and never list blogs, review or listing sites, or the business itself. Most direct rival first. Reply with JSON only: {\"business_type\":\"...\",\"niche\":\"...\",\"competitors\":[{\"domain\":\"company.com\",\"name\":\"Company\",\"why\":\"same offer, same buyer\"}]}";
+  const user = "Website: " + site + "\nTitle: " + str(b.title, 160) + "\nDescription: " + str(b.desc, 300) + "\nMain heading: " + str(b.h1, 160) + "\nPrice seen on page: " + (str(b.price, 40) || "unknown") + "\nPlatform: " + str(b.platform, 30) + "\nPage text (start): " + str(b.text, 900) + "\nCountry hint: " + (/\.in$/.test(site) || /₹|rs\.?\s?\d|inr/i.test(str(b.desc, 300) + str(b.title, 160) + str(b.price, 40)) ? "India" : "use the domain and text");
+  let out: { business_type?: string; niche?: string; competitors?: { domain?: string; name?: string }[] } = {};
   try { out = await groq("openai/gpt-oss-120b", [{ role: "system", content: sys }, { role: "user", content: user }]); }
   catch { try { out = await groq("llama-3.3-70b-versatile", [{ role: "system", content: sys }, { role: "user", content: user }]); } catch { return json({ error: "ai_failed" }, 502); } }
   const BAN = /(^|\.)(amazon|flipkart|nykaa|myntra|ajio|meesho|etsy|ebay|walmart|tatacliq|jiomart|snapdeal|instagram|facebook|youtube|wikipedia)\./i;
-  const seen = new Set([site]);
+  const seen = new Set([site]), isMarket = /marketplace/i.test(str(out.business_type, 60) + " " + str(out.niche, 160));
   const cands = (out.competitors || []).map((c) => str(c.domain, 80).toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/.*$/, ""))
-    .filter((d) => hostOk(d) && !BAN.test(d + ".") && !seen.has(d) && (seen.add(d), true)).slice(0, 6);
+    .filter((d) => hostOk(d) && (isMarket || !BAN.test(d + ".")) && !/(^|\.)(instagram|facebook|youtube|wikipedia|linkedin|g2|capterra|clutch|justdial|glassdoor)\./i.test(d + ".") && !seen.has(d) && (seen.add(d), true)).slice(0, 6);
   const ok = (await Promise.all(cands.map(async (d) => ((await resolves(d)) ? d : null)))).filter(Boolean).slice(0, 3);
-  return json({ competitors: ok });
+  return json({ competitors: ok, type: str(out.business_type, 60), niche: str(out.niche, 160) });
 }
 
 Deno.serve(async (req) => {
