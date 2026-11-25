@@ -50,17 +50,17 @@ a{color:#CBBEFD}a:hover{color:#FFFFFF}
 @media (max-width:767px){.tp-logo{height:calc(var(--h,22px) * .82)}.tp-track{gap:44px!important}.tp-proofrow{margin-top:32px!important;gap:20px!important}}
 /* Customer story cards (hero) */
 .tp-cs{position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.1);background:#121217;display:flex;flex-direction:column;box-sizing:border-box}
-.tp-cs-top{position:relative;padding:20px 22px 18px;display:flex;flex-direction:column;gap:14px;isolation:isolate}
+.tp-cs-top{position:relative;padding:18px 22px 20px;display:flex;flex-direction:column;gap:10px;isolation:isolate}
 .tp-cs-top::after{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.22) 1px,transparent 1.4px);background-size:9px 9px;-webkit-mask-image:linear-gradient(225deg,#000,transparent 55%);mask-image:linear-gradient(225deg,#000,transparent 55%);opacity:.55}
 .tp-cs-a .tp-cs-top{background:linear-gradient(180deg,rgba(0,77,255,.28),rgba(20,28,60,.35))}
 .tp-cs-b .tp-cs-top{background:linear-gradient(180deg,rgba(76,195,138,.24),rgba(18,40,32,.35))}
 .tp-cs-c .tp-cs-top{background:linear-gradient(180deg,rgba(139,107,247,.38),rgba(36,26,70,.4))}
 .tp-cs-c{border-color:rgba(166,142,250,.45);box-shadow:0 30px 80px -40px rgba(139,107,247,.7)}
-.tp-cs-row{display:flex;justify-content:space-between;align-items:center;gap:12px;height:38px}
-.tp-cs-eye{display:inline-flex;align-items:center;gap:9px;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;color:#CFCCD9;white-space:nowrap}
+.tp-cs-row{display:flex;justify-content:flex-end;align-items:center;gap:12px;height:50px}
+.tp-cs-eye{display:inline-flex;align-items:center;gap:9px;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;color:#CFCCD9;white-space:nowrap;margin-top:4px}
 .tp-cs-eye::before{content:"";width:18px;height:1px;background:currentColor;opacity:.7}
 .tp-cs-logo{width:auto;flex:none;opacity:.95}
-.tp-cs-name{font-size:12.5px;line-height:1.2;color:#F4F3F8;text-align:right;font-weight:500}
+.tp-cs-name{font-size:17px;line-height:1.15;color:#F4F3F8;text-align:right;font-weight:600;letter-spacing:-.01em}
 .tp-cs-h{margin:0;font-size:clamp(22px,1.85vw,27px);line-height:1.08;font-weight:500;letter-spacing:-.03em;color:#F4F3F8;text-wrap:balance}
 .tp-cs-bot{padding:16px 22px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
 .tp-cs-ba{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -130,8 +130,10 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
  #proof,#what,.tp-steps,.tp-cta{scroll-margin-top:72px}
  .tp-pages{grid-template-columns:1fr!important;gap:12px!important}
  .tp-pp{padding:18px!important}
- .tp-cs-logo{height:20px!important}
- .tp-cs-b .tp-cs-logo{height:30px!important}
+ .tp-cs-row{height:42px!important}
+ .tp-cs-a .tp-cs-logo{height:26px!important}
+ .tp-cs-b .tp-cs-logo{height:42px!important}
+ .tp-cs-name{font-size:15px!important}
  .tp-cs-top{padding:18px 18px 16px!important}
  .tp-cs-bot{padding:14px 18px 18px!important}
  .tp-what{gap:12px!important}
@@ -213,8 +215,8 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 
 <div class="tp-case tp-rise" style="margin-top: clamp(24px, 4vh, 40px); align-self: stretch; display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; text-align: left; animation-delay: .3s">
 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
-<span style="display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: rgba(139,107,247,0.18); border: 1px solid rgba(166,142,250,0.45); font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; color: #CBBEFD">Customer stories</span>
-<span class="tp-case-t" style="font-size: 15px; color: #F4F3F8">What a faster site did for these brands</span>
+<span style="display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: rgba(139,107,247,0.18); border: 1px solid rgba(166,142,250,0.45); font-family: 'DM Mono', ui-monospace, monospace; font-size: 11.5px; color: #CBBEFD">Case studies</span>
+<span class="tp-case-t" style="font-size: 15px; color: #F4F3F8">Real results from stores we sped up</span>
 </div>
 <span class="tp-case-m" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: #A09DAD">Google PageSpeed, before vs after</span>
 </div>
@@ -222,7 +224,8 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 
 <article class="tp-rise tp-cs tp-cs-a" style="animation-delay: .24s">
 <div class="tp-cs-top">
-<div class="tp-cs-row"><span class="tp-cs-eye">Performance score</span><img class="tp-cs-logo" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTMzIDMzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNi4xMzM4IDAuNjgyNjE3QzI2LjQyODEgMC42ODI4MTUgMjYuNjY2OSAwLjkyMTQ1MSAyNi42NjcgMS4yMTU4MkwyNi42NjYgMjAuNDExMUMyNi42MzcyIDIzLjczMTkgMjQuNzgxMSAyNi43Njk4IDIxLjgzNCAyOC4zMDk2TDEzLjU4MDEgMzIuNjIyMUMxMy40MjU1IDMyLjcwMjYgMTMuMjQxNCAzMi43MDI3IDEzLjA4NjkgMzIuNjIyMUw0LjgzMjAzIDI4LjMwOTZDMS44ODUwOSAyNi43Njk4IDAuMDI4ODIxNCAyMy43MzE4IDAgMjAuNDExMVYxLjIxNTgyQzcuMTQ5NDFlLTA1IDAuOTIxMzczIDAuMjM4NzU1IDAuNjgyNjg5IDAuNTMzMjAzIDAuNjgyNjE3SDI2LjEzMzhaTTQuNTYxNTIgNy45NzE2OEM0LjUwMjQ2IDcuOTcxNzEgNC40NjAyOCA4LjAyODE4IDQuNDc2NTYgOC4wODQ5Nkw3LjY1MTM3IDE5LjE1NzJDOC4zNzgzNiAyMS42OTE2IDEwLjY5NjMgMjMuNDM4NSAxMy4zMzMgMjMuNDM4NUMxNS45Njk1IDIzLjQzODMgMTguMjg2NyAyMS42OTE1IDE5LjAxMzcgMTkuMTU3MkwyMi4xODg1IDguMDg0OTZDMjIuMjA0OCA4LjAyODE2IDIyLjE2MjYgNy45NzE2OCAyMi4xMDM1IDcuOTcxNjhIMTguNTEwN0MxNy45NTU3IDcuOTcxODEgMTcuNDY3NSA4LjMzOTQ3IDE3LjMxNDUgOC44NzMwNUwxMy40MzU1IDIyLjQwMjNDMTMuNDA2IDIyLjUwNTQgMTMuMjYgMjIuNTA1NCAxMy4yMzA1IDIyLjQwMjNMOS4zNTA1OSA4Ljg3MzA1QzkuMTk3NTggOC4zMzk0NSA4LjcwOTM4IDcuOTcxNzggOC4xNTQzIDcuOTcxNjhINC41NjE1MloiIGZpbGw9IiNGRkZGRkYiPjwvcGF0aD48cGF0aCBkPSJNNzEuNjYxMSAxMS4wOTc3Qzc1LjA1NTQgMTEuMDk3NyA3Ny4zMDEgMTIuNzcwNSA3Ny41MjU0IDE1LjQxMzFINzQuMzMyQzc0LjEyMDcgMTQuMjMwMiA3My4wNzEzIDEzLjUwNzkgNzEuNTU1NyAxMy41MDc4QzcwLjA0NjMgMTMuNTA3OCA2OS4wOTI5IDE0LjE5NTkgNjkuMDkyOCAxNS4yMjg1QzY5LjA5MjggMTYuMDIyOSA2OS41Njk4IDE2LjQ0NzMgNzAuODE0NSAxNi42NTkyTDc0LjA0NDkgMTcuMTYyMUM3Ni4zNzU0IDE3LjUzMjkgNzcuNTkzOCAxOC45MDk5IDc3LjU5MzggMjEuMDAyQzc3LjU5MzcgMjMuNzI5NSA3NS4yODk4IDI1LjUzMDEgNzEuNzE0OCAyNS41MzAzQzY4LjIxNTIgMjUuNTMwMyA2NS43NDE1IDIzLjY4IDY1LjUzMTIgMjAuOTc1Nkg2OC43Mjk1QzY4Ljk3MSAyMi4yNDQ1IDcwLjE1MDEgMjMuMDY3MyA3MS44NDY3IDIzLjA2NzRDNzMuNDM1NiAyMy4wNjc0IDc0LjQ0MjMgMjIuMzUyNCA3NC40NDI0IDIxLjI0MDJDNzQuNDQyNCAyMC4zNjY0IDczLjk5MTYgMTkuOTQyMyA3Mi43NzM0IDE5LjczMDVMNjkuNjIyMSAxOS4yMjc1QzY3LjE4NTkgMTguODMwMyA2NS45NDE1IDE3LjUwNTkgNjUuOTQxNCAxNS40NDA0QzY1Ljk0MTUgMTIuODQ1NCA2OC4yMTg3IDExLjA5NzggNzEuNjYxMSAxMS4wOTc3Wk01Ny42NDM2IDExLjA5NjdDNjEuNzIxOSAxMS4wOTY4IDY0LjQ3NTYgMTMuNzQ1NSA2NC40NzU2IDE3LjcxNzhWMTcuNzcwNUM2NC40NzU2IDE4LjM1MzEgNjQuNDQ5NiAxOC44NTY0IDY0LjM3MDEgMTkuMzMzSDU0LjAxNTZDNTQuMTQ4MSAyMS42MTA0IDU1LjYwNDUgMjIuOTg3MyA1Ny44NTU1IDIyLjk4NzNDNTkuNTIzOCAyMi45ODcyIDYwLjY2MjIgMjIuMjE5MiA2MS4wODU5IDIwLjk3NDZINjQuMjY0NkM2My41NzYxIDIzLjgwODEgNjEuMTkyMyAyNS41MjkxIDU3LjgwMjcgMjUuNTI5M0M1My41NjU0IDI1LjUyOTMgNTAuODM2OSAyMi42Njk2IDUwLjgzNjkgMTguMjQ3MUM1MC44MzY5IDE0LjAwOTkgNTMuNjE4MSAxMS4wOTY3IDU3LjY0MzYgMTEuMDk2N1pNMTE1LjU1NSAxMS4wOTU3QzExOS42MzMgMTEuMDk1NyAxMjIuMzg3IDEzLjc0NDcgMTIyLjM4OCAxNy43MTY4VjE3Ljc2OTVDMTIyLjM4OCAxOC4zNTE5IDEyMi4zNjEgMTguODU1NSAxMjIuMjgxIDE5LjMzMkgxMTEuOTI3QzExMi4wNTkgMjEuNjA5NSAxMTMuNTE2IDIyLjk4NjMgMTE1Ljc2NyAyMi45ODYzQzExNy40MzUgMjIuOTg2MyAxMTguNTczIDIyLjIxODMgMTE4Ljk5NyAyMC45NzM2SDEyMi4xNzZDMTIxLjQ4NyAyMy44MDcyIDExOS4xMDQgMjUuNTI5MiAxMTUuNzE0IDI1LjUyOTNDMTExLjQ3NyAyNS41MjkzIDEwOC43NDggMjIuNjY4NiAxMDguNzQ4IDE4LjI0NjFDMTA4Ljc0OCAxNC4wMDkzIDExMS41MyAxMS4wOTU3IDExNS41NTUgMTEuMDk1N1pNODMuNjk1MyAxMS40OTIySDg2LjI2MzdWMTQuMjE2OEg4My42OTUzVjIwLjc5NzlDODMuNjk1MyAyMS44NTcgODQuMTQ1OCAyMi4zMDc1IDg1LjA0NTkgMjIuMzA3Nkg4Ni4yNjQ2VjI1LjIxQzg2LjI2NDYgMjUuMjEgODUuMzYyOCAyNS4yOTk4IDg0LjE3MjkgMjUuMjk5OEM4MS44OTU0IDI1LjI5OTggODAuNTcwNSAyNC4xMzUxIDgwLjU3MDMgMjEuOTkwMlYxNC4yMTY4SDc4LjM3M1YxMS42Nzg3SDc5LjQzMTZDODAuNDM3OSAxMS42Nzg3IDgwLjc1NTggMTEuMzM2IDgwLjc1NTkgMTAuMzU2NFY4LjIzMTQ1SDgzLjY5NTNWMTEuNDkyMlpNNDIuODM4OSAxNi44NDI4TDQ0LjI5NDkgMjAuOTczNkw0NS42OTkyIDE2Ljg2OTFMNDkuMzc5OSA2LjQ2MDk0SDUzLjAwNzhMNDUuOTkwMiAyNS4xMzE4SDQyLjU3NDJMMzUuNTU1NyA2LjQ2MDk0SDM5LjE4MzZMNDIuODM4OSAxNi44NDI4Wk0xMjcuMTkzIDI1LjEzMThIMTI0LjA2OFY2LjQ2MDk0SDEyNy4xOTNWMjUuMTMxOFpNMTMyLjM5MSAyNS4xMzE4SDEyOS4yNjZWNi40NjA5NEgxMzIuMzkxVjI1LjEzMThaTTkyLjQ2NDggMTguMTEyM0w5My40MTggMjEuNTAyTDk0LjQ1MTIgMTguMDg1OUw5Ni40Mzc1IDExLjQ5MjJIOTkuNjY4TDEwMS42NTQgMTguMDg1OUwxMDIuNjg4IDIxLjUwMkwxMDMuNjQxIDE4LjExMjNMMTA1LjU3NCAxMS40OTIySDEwOC44MDVMMTA0LjM4MyAyNS4xMzA5SDEwMS4xNTFMOTkuMTM4NyAxOC40ODM0Qzk4Ljc2OCAxNy4yOTE4IDk4LjM5NyAxNi4xNTI1IDk4LjA1MjcgMTQuOTYwOUw5Ni45NjY4IDE4LjQ4MzRMOTQuOTU0MSAyNS4xMzA5SDkxLjcyMzZMODcuMzAwOCAxMS40OTIySDkwLjUzMjJMOTIuNDY0OCAxOC4xMTIzWk01Ny42Njk5IDEzLjU4NTlDNTUuNjMwOCAxMy41ODU5IDU0LjIwMTEgMTQuODU3MiA1NC4wMTU2IDE2Ljk3NTZINjEuMjcxNUM2MS4yMTg0IDE0LjkxMDIgNTkuNzg4NCAxMy41ODYgNTcuNjY5OSAxMy41ODU5Wk0xMTUuNTgxIDEzLjU4NTlDMTEzLjU0MiAxMy41ODYgMTEyLjExMiAxNC44NTczIDExMS45MjcgMTYuOTc1NkgxMTkuMTgzQzExOS4xMjkgMTQuOTEwMiAxMTcuNyAxMy41ODU5IDExNS41ODEgMTMuNTg1OVpNNzcuNTQxIDE1LjY1MjNINzQuMzYzM1YxNS42NTE0SDc3LjU0MVYxNS42NTIzWiIgZmlsbD0iI0ZGRkZGRiI+PC9wYXRoPjwvc3ZnPg==" alt="Vestwell" style="height: 24px"></div>
+<div class="tp-cs-row"><img class="tp-cs-logo" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTMzIDMzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNi4xMzM4IDAuNjgyNjE3QzI2LjQyODEgMC42ODI4MTUgMjYuNjY2OSAwLjkyMTQ1MSAyNi42NjcgMS4yMTU4MkwyNi42NjYgMjAuNDExMUMyNi42MzcyIDIzLjczMTkgMjQuNzgxMSAyNi43Njk4IDIxLjgzNCAyOC4zMDk2TDEzLjU4MDEgMzIuNjIyMUMxMy40MjU1IDMyLjcwMjYgMTMuMjQxNCAzMi43MDI3IDEzLjA4NjkgMzIuNjIyMUw0LjgzMjAzIDI4LjMwOTZDMS44ODUwOSAyNi43Njk4IDAuMDI4ODIxNCAyMy43MzE4IDAgMjAuNDExMVYxLjIxNTgyQzcuMTQ5NDFlLTA1IDAuOTIxMzczIDAuMjM4NzU1IDAuNjgyNjg5IDAuNTMzMjAzIDAuNjgyNjE3SDI2LjEzMzhaTTQuNTYxNTIgNy45NzE2OEM0LjUwMjQ2IDcuOTcxNzEgNC40NjAyOCA4LjAyODE4IDQuNDc2NTYgOC4wODQ5Nkw3LjY1MTM3IDE5LjE1NzJDOC4zNzgzNiAyMS42OTE2IDEwLjY5NjMgMjMuNDM4NSAxMy4zMzMgMjMuNDM4NUMxNS45Njk1IDIzLjQzODMgMTguMjg2NyAyMS42OTE1IDE5LjAxMzcgMTkuMTU3MkwyMi4xODg1IDguMDg0OTZDMjIuMjA0OCA4LjAyODE2IDIyLjE2MjYgNy45NzE2OCAyMi4xMDM1IDcuOTcxNjhIMTguNTEwN0MxNy45NTU3IDcuOTcxODEgMTcuNDY3NSA4LjMzOTQ3IDE3LjMxNDUgOC44NzMwNUwxMy40MzU1IDIyLjQwMjNDMTMuNDA2IDIyLjUwNTQgMTMuMjYgMjIuNTA1NCAxMy4yMzA1IDIyLjQwMjNMOS4zNTA1OSA4Ljg3MzA1QzkuMTk3NTggOC4zMzk0NSA4LjcwOTM4IDcuOTcxNzggOC4xNTQzIDcuOTcxNjhINC41NjE1MloiIGZpbGw9IiNGRkZGRkYiPjwvcGF0aD48cGF0aCBkPSJNNzEuNjYxMSAxMS4wOTc3Qzc1LjA1NTQgMTEuMDk3NyA3Ny4zMDEgMTIuNzcwNSA3Ny41MjU0IDE1LjQxMzFINzQuMzMyQzc0LjEyMDcgMTQuMjMwMiA3My4wNzEzIDEzLjUwNzkgNzEuNTU1NyAxMy41MDc4QzcwLjA0NjMgMTMuNTA3OCA2OS4wOTI5IDE0LjE5NTkgNjkuMDkyOCAxNS4yMjg1QzY5LjA5MjggMTYuMDIyOSA2OS41Njk4IDE2LjQ0NzMgNzAuODE0NSAxNi42NTkyTDc0LjA0NDkgMTcuMTYyMUM3Ni4zNzU0IDE3LjUzMjkgNzcuNTkzOCAxOC45MDk5IDc3LjU5MzggMjEuMDAyQzc3LjU5MzcgMjMuNzI5NSA3NS4yODk4IDI1LjUzMDEgNzEuNzE0OCAyNS41MzAzQzY4LjIxNTIgMjUuNTMwMyA2NS43NDE1IDIzLjY4IDY1LjUzMTIgMjAuOTc1Nkg2OC43Mjk1QzY4Ljk3MSAyMi4yNDQ1IDcwLjE1MDEgMjMuMDY3MyA3MS44NDY3IDIzLjA2NzRDNzMuNDM1NiAyMy4wNjc0IDc0LjQ0MjMgMjIuMzUyNCA3NC40NDI0IDIxLjI0MDJDNzQuNDQyNCAyMC4zNjY0IDczLjk5MTYgMTkuOTQyMyA3Mi43NzM0IDE5LjczMDVMNjkuNjIyMSAxOS4yMjc1QzY3LjE4NTkgMTguODMwMyA2NS45NDE1IDE3LjUwNTkgNjUuOTQxNCAxNS40NDA0QzY1Ljk0MTUgMTIuODQ1NCA2OC4yMTg3IDExLjA5NzggNzEuNjYxMSAxMS4wOTc3Wk01Ny42NDM2IDExLjA5NjdDNjEuNzIxOSAxMS4wOTY4IDY0LjQ3NTYgMTMuNzQ1NSA2NC40NzU2IDE3LjcxNzhWMTcuNzcwNUM2NC40NzU2IDE4LjM1MzEgNjQuNDQ5NiAxOC44NTY0IDY0LjM3MDEgMTkuMzMzSDU0LjAxNTZDNTQuMTQ4MSAyMS42MTA0IDU1LjYwNDUgMjIuOTg3MyA1Ny44NTU1IDIyLjk4NzNDNTkuNTIzOCAyMi45ODcyIDYwLjY2MjIgMjIuMjE5MiA2MS4wODU5IDIwLjk3NDZINjQuMjY0NkM2My41NzYxIDIzLjgwODEgNjEuMTkyMyAyNS41MjkxIDU3LjgwMjcgMjUuNTI5M0M1My41NjU0IDI1LjUyOTMgNTAuODM2OSAyMi42Njk2IDUwLjgzNjkgMTguMjQ3MUM1MC44MzY5IDE0LjAwOTkgNTMuNjE4MSAxMS4wOTY3IDU3LjY0MzYgMTEuMDk2N1pNMTE1LjU1NSAxMS4wOTU3QzExOS42MzMgMTEuMDk1NyAxMjIuMzg3IDEzLjc0NDcgMTIyLjM4OCAxNy43MTY4VjE3Ljc2OTVDMTIyLjM4OCAxOC4zNTE5IDEyMi4zNjEgMTguODU1NSAxMjIuMjgxIDE5LjMzMkgxMTEuOTI3QzExMi4wNTkgMjEuNjA5NSAxMTMuNTE2IDIyLjk4NjMgMTE1Ljc2NyAyMi45ODYzQzExNy40MzUgMjIuOTg2MyAxMTguNTczIDIyLjIxODMgMTE4Ljk5NyAyMC45NzM2SDEyMi4xNzZDMTIxLjQ4NyAyMy44MDcyIDExOS4xMDQgMjUuNTI5MiAxMTUuNzE0IDI1LjUyOTNDMTExLjQ3NyAyNS41MjkzIDEwOC43NDggMjIuNjY4NiAxMDguNzQ4IDE4LjI0NjFDMTA4Ljc0OCAxNC4wMDkzIDExMS41MyAxMS4wOTU3IDExNS41NTUgMTEuMDk1N1pNODMuNjk1MyAxMS40OTIySDg2LjI2MzdWMTQuMjE2OEg4My42OTUzVjIwLjc5NzlDODMuNjk1MyAyMS44NTcgODQuMTQ1OCAyMi4zMDc1IDg1LjA0NTkgMjIuMzA3Nkg4Ni4yNjQ2VjI1LjIxQzg2LjI2NDYgMjUuMjEgODUuMzYyOCAyNS4yOTk4IDg0LjE3MjkgMjUuMjk5OEM4MS44OTU0IDI1LjI5OTggODAuNTcwNSAyNC4xMzUxIDgwLjU3MDMgMjEuOTkwMlYxNC4yMTY4SDc4LjM3M1YxMS42Nzg3SDc5LjQzMTZDODAuNDM3OSAxMS42Nzg3IDgwLjc1NTggMTEuMzM2IDgwLjc1NTkgMTAuMzU2NFY4LjIzMTQ1SDgzLjY5NTNWMTEuNDkyMlpNNDIuODM4OSAxNi44NDI4TDQ0LjI5NDkgMjAuOTczNkw0NS42OTkyIDE2Ljg2OTFMNDkuMzc5OSA2LjQ2MDk0SDUzLjAwNzhMNDUuOTkwMiAyNS4xMzE4SDQyLjU3NDJMMzUuNTU1NyA2LjQ2MDk0SDM5LjE4MzZMNDIuODM4OSAxNi44NDI4Wk0xMjcuMTkzIDI1LjEzMThIMTI0LjA2OFY2LjQ2MDk0SDEyNy4xOTNWMjUuMTMxOFpNMTMyLjM5MSAyNS4xMzE4SDEyOS4yNjZWNi40NjA5NEgxMzIuMzkxVjI1LjEzMThaTTkyLjQ2NDggMTguMTEyM0w5My40MTggMjEuNTAyTDk0LjQ1MTIgMTguMDg1OUw5Ni40Mzc1IDExLjQ5MjJIOTkuNjY4TDEwMS42NTQgMTguMDg1OUwxMDIuNjg4IDIxLjUwMkwxMDMuNjQxIDE4LjExMjNMMTA1LjU3NCAxMS40OTIySDEwOC44MDVMMTA0LjM4MyAyNS4xMzA5SDEwMS4xNTFMOTkuMTM4NyAxOC40ODM0Qzk4Ljc2OCAxNy4yOTE4IDk4LjM5NyAxNi4xNTI1IDk4LjA1MjcgMTQuOTYwOUw5Ni45NjY4IDE4LjQ4MzRMOTQuOTU0MSAyNS4xMzA5SDkxLjcyMzZMODcuMzAwOCAxMS40OTIySDkwLjUzMjJMOTIuNDY0OCAxOC4xMTIzWk01Ny42Njk5IDEzLjU4NTlDNTUuNjMwOCAxMy41ODU5IDU0LjIwMTEgMTQuODU3MiA1NC4wMTU2IDE2Ljk3NTZINjEuMjcxNUM2MS4yMTg0IDE0LjkxMDIgNTkuNzg4NCAxMy41ODYgNTcuNjY5OSAxMy41ODU5Wk0xMTUuNTgxIDEzLjU4NTlDMTEzLjU0MiAxMy41ODYgMTEyLjExMiAxNC44NTczIDExMS45MjcgMTYuOTc1NkgxMTkuMTgzQzExOS4xMjkgMTQuOTEwMiAxMTcuNyAxMy41ODU5IDExNS41ODEgMTMuNTg1OVpNNzcuNTQxIDE1LjY1MjNINzQuMzYzM1YxNS42NTE0SDc3LjU0MVYxNS42NTIzWiIgZmlsbD0iI0ZGRkZGRiI+PC9wYXRoPjwvc3ZnPg==" alt="Vestwell" style="height: 30px"></div>
+<span class="tp-cs-eye">Case study · Vestwell</span>
 <h3 class="tp-cs-h">+{{n1}}% performance score</h3>
 </div>
 <div class="tp-cs-bot">
@@ -233,7 +236,8 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 
 <article class="tp-rise tp-cs tp-cs-b" style="animation-delay: .32s">
 <div class="tp-cs-top">
-<div class="tp-cs-row"><span class="tp-cs-eye">Speed</span><img class="tp-cs-logo" src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" style="height: 38px"></div>
+<div class="tp-cs-row"><img class="tp-cs-logo" src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" style="height: 50px"></div>
+<span class="tp-cs-eye">Case study · Wellbeing Nutrition</span>
 <h3 class="tp-cs-h">{{n2}}% faster, sitewide</h3>
 </div>
 <div class="tp-cs-bot">
@@ -244,7 +248,8 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 
 <article class="tp-rise tp-cs tp-cs-c" style="animation-delay: .4s">
 <div class="tp-cs-top">
-<div class="tp-cs-row"><span class="tp-cs-eye">Conversion rate</span><span class="tp-cs-name">A billion-dollar<br>house of brands</span></div>
+<div class="tp-cs-row"><span class="tp-cs-name">A billion-dollar<br>house of brands</span></div>
+<span class="tp-cs-eye">Case study · D2C house of brands</span>
 <h3 class="tp-cs-h">+{{n3}}% conversion rate</h3>
 </div>
 <div class="tp-cs-bot">
@@ -274,7 +279,7 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 
 <section id="proof" data-k="proof" style="max-width: 1200px; margin: 0 auto; padding: 90px 28px 20px; display: flex; flex-direction: column; gap: 36px">
 <div class="rv {{rv.proof}}" style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
-<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Page by page</span>
+<span class="tp-eye" style="display: inline-flex; align-items: center; gap: 9px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12.5px; color: #A09DAD">Case studies, page by page</span>
 <h2 style="margin: 0; font-size: clamp(32px, 3.9vw, 50px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance">Not just your homepage. <span style="color: #A68EFA">The pages that actually sell.</span></h2>
 </div>
 <div class="stag tp-pages {{rv.pages}}" data-k="pages" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 14px">
