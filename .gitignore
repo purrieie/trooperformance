@@ -1,3 +1,4 @@
 
 # report queue admin token (private, local only)
 tools/report-queue/.admin-token
+tools/report-queue/.resend-key

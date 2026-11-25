@@ -9,7 +9,7 @@
 //   node tools/report-queue/queue.mjs reject 2,5             marks those as rejected without sending anything
 // Sent ones are marked sent; a failed send stays pending, so the next batch retries it.
 //
-// Resend key: RESEND_API_KEY env var, else ~/Desktop/Troopod/TrooFestive/Handoff/outreach/.env (never printed).
+// Resend key: RESEND_API_KEY env var, else tools/report-queue/.resend-key (git-ignored), else the outreach .env (never printed).
 // Sender: REPORT_FROM (default "TrooPerformance by Troopod <reports@troopodhq.com>"), optional REPORT_REPLY_TO, REPORT_BCC.
 import fs from "node:fs";
 import os from "node:os";
@@ -82,6 +82,8 @@ if (cmd === "send") {
   const skip = nums(rest.indexOf("--skip") >= 0 ? rest[rest.indexOf("--skip") + 1] : "");
   if (!rows.length) { console.log(JSON.stringify({ sent: 0, note: "nothing pending" })); process.exit(0); }
   let key = process.env.RESEND_API_KEY || "";
+  const keyFile = path.join(here, ".resend-key"); // the reports' own Resend key (git-ignored), set with: read -s K; printf %s "$K" > tools/report-queue/.resend-key
+  if (!key && fs.existsSync(keyFile)) key = fs.readFileSync(keyFile, "utf8").trim();
   if (!key) {
     const envFile = path.join(os.homedir(), "Desktop/Troopod/TrooFestive/Handoff/outreach/.env");
     const m = fs.existsSync(envFile) && fs.readFileSync(envFile, "utf8").match(/^RESEND_API_KEY=\s*"?([^"\n]+)"?/m);
