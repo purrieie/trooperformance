@@ -18,11 +18,11 @@
   function rule(base) { return '<tr><td style="padding:22px 32px 0"><img src="' + base + 'assets/email/holo-rule.png" width="536" height="3" alt="" style="display:block;width:100%;max-width:536px;height:3px;border:0"></td></tr>'; }
   function scoreTile(n, label, sub, base) {
     var c = band(n);
-    return '<td width="33%" align="center" valign="top" style="padding:6px">' +
-      '<table role="presentation" cellpadding="0" cellspacing="0" style="background:' + C.card2 + ';border:1px solid ' + C.line + ';border-radius:16px;width:100%"><tr><td align="center" style="padding:18px 6px 16px">' +
+    return '<td width="33%" align="center" valign="top" style="padding:3px">' +
+      '<table role="presentation" cellpadding="0" cellspacing="0" style="background:' + C.card2 + ';border:1px solid ' + C.line + ';border-radius:14px;width:100%"><tr><td align="center" style="padding:14px 2px 12px">' +
       // the ring is an image (assets/email/rings/<score>.png): mail apps stretch CSS circles into ovals
-      '<img src="' + base + 'assets/email/rings/' + (n == null ? "na" : Math.max(0, Math.min(100, Math.round(n)))) + '.png" width="84" height="84" alt="' + (n == null ? "no score" : n + " out of 100") + '" style="display:block;margin:0 auto;width:84px;height:84px;max-width:84px;border:0;outline:none">' +
-      '<div style="margin-top:12px;font-family:' + F + ';font-size:15px;color:' + C.text + '">' + esc(label) + '</div><div style="margin-top:3px;font-family:' + M + ';font-size:11px;color:' + c + '">' + esc(bandName(n)) + "</div>" +
+      '<img src="' + base + 'assets/email/rings/' + (n == null ? "na" : Math.max(0, Math.min(100, Math.round(n)))) + '.png" width="76" height="76" alt="' + (n == null ? "no score" : n + " out of 100") + '" style="display:block;margin:0 auto;width:76px;height:76px;max-width:76px;border:0;outline:none">' +
+      '<div style="margin-top:10px;font-family:' + F + ';font-size:14px;line-height:18px;color:' + C.text + '">' + esc(label) + '</div><div style="margin-top:3px;font-family:' + M + ';font-size:10.5px;color:' + c + '">' + esc(bandName(n)) + "</div>" +
       (sub ? '<div style="margin-top:2px;font-family:' + M + ';font-size:10.5px;color:' + C.dim + '">' + esc(sub) + "</div>" : "") +
       "</td></tr></table></td>";
   }
@@ -55,7 +55,7 @@
     rows += '<tr><td style="padding:0"><img src="' + base + 'assets/email/holo-header.png" width="600" alt="TrooPerformance site audit by Troopod" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>';
     rows += '<tr><td style="padding:30px 32px 6px"><div style="font-family:' + M + ';font-size:12px;color:' + C.muted + '">Report · ' + esc(d.date || "") + (d.platform ? " · " + esc(d.platform) : "") + '</div><div style="margin-top:10px;font-family:' + F + ';font-size:30px;line-height:36px;letter-spacing:-.03em;color:' + C.text + '">Your performance report for <span style="color:#A68EFA">' + site + "</span></div>" +
       (!print ? intro(d, site, sc, up) : '<div style="margin-top:14px;font-family:' + F + ';font-size:15.5px;line-height:24px;color:' + C.text2 + '">Everything holding ' + site + " back, with the fixes ranked by what they cost you.</div>") + "</td></tr>";
-    rows += '<tr><td style="padding:18px 18px 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+    rows += '<tr><td style="padding:16px 12px 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed"><tr>' +
       scoreTile(sc.perf, "Performance", sc.desk != null ? "desktop " + sc.desk : "phone", base) + scoreTile(sc.search, "Search", sc.searchN ? sc.searchN + " checks" : "", base) + scoreTile(sc.ai, "AI answers", sc.aiN ? sc.aiN + " checks" : "", base) +
       "</tr></table></td></tr>";
     if (up && sc.perf != null) {
