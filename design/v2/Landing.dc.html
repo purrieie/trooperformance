@@ -178,6 +178,36 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 }
 @media (prefers-reduced-motion: reduce){.tp-b,.tp-rise,.tp-draw,.tp-grow,.tp-track,.tp-bounce,.tp-wheel,.tp-pulse,.tp-f,.tp-stars,.tp-caret,.tp-gauge{animation:none!important;opacity:1!important}.tp-sticky{transition:none}}
 </style>
+<style>
+/* trusted-by strip, copied from the Troopod deck (troopoddeck.pages.dev, second-last slide) */
+.tmq{width:100%;display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);padding:22px 0;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.tmq-row{overflow:hidden}
+.tmq-track{display:flex;width:max-content;animation:mq 120s linear infinite}
+.tmq-row.rev .tmq-track{animation-direction:reverse}
+.tmq:hover .tmq-track{animation-play-state:paused}
+.tmq-i{width:224px;height:56px;display:flex;align-items:center;justify-content:center}
+.tmq-i img{opacity:.85;max-width:none}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mqB{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media screen and (max-width:768px){
+.tmq{gap:31.2px;padding:18px 0}
+.tmq-i{width:auto;height:60px;padding:0 24.2px;zoom:.78}
+.tmq-i img[data-k="vestwell"]{height:26px!important;width:auto!important;transform:translateY(0.5px)}
+.tmq-i img[data-k="fableroom"]{height:14px!important;width:auto!important;transform:translateY(0px)}
+.tmq-i img[data-k="wellbeing"]{height:52px!important;width:auto!important;transform:translateY(0.8px)}
+.tmq-i img[data-k="essor"]{height:26px!important;width:auto!important;transform:translateY(-0.6px)}
+.tmq-i img[data-k="durex"]{height:32px!important;width:auto!important;transform:translateY(-1.1px)}
+.tmq-i img[data-k="colgate"]{height:24px!important;width:auto!important;transform:translateY(0.4px)}
+.tmq-i img[data-k="titan"]{height:38px!important;width:auto!important;transform:translateY(-3.3px)}
+.tmq-i img[data-k="bsc"]{height:34px!important;width:auto!important;transform:translateY(1.2px)}
+.tmq-i img[data-k="homelane"]{height:20px!important;width:auto!important;transform:translateY(-1.8px)}
+.tmq-i img[data-k="mia"]{height:50px!important;width:auto!important;transform:translateY(0.5px)}
+.tmq-i img[data-k="uharvest"]{height:34px!important;width:auto!important;transform:translateY(-0.9px)}
+.tmq-i img[data-k="bombae"]{height:26px!important;width:auto!important;transform:translateY(0px)}
+.tmq-track{animation-duration:68s}
+}
+@media (prefers-reduced-motion:reduce){.tmq-track{animation:none!important}}
+</style>
 </helmet>
 <div style="background: #0A0A0C; color: #F4F3F8; font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip">
 
@@ -264,11 +294,8 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 
 <div class="tp-proofrow tp-rise" style="margin-top: clamp(24px, 4vh, 44px); width: 100%; display: flex; flex-direction: column; align-items: center; gap: 30px; animation-delay: .5s">
 <p style="margin: 0; font-size: 14px; color: #A09DAD">Building revenue for <strong style="color: #F4F3F8; font-weight: 500">100+ D2C brands</strong></p>
-<div class="tp-marq" style="width: 100%; overflow: hidden; -webkit-mask-image: linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); mask-image: linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)">
-<div class="tp-track" style="display: flex; align-items: center; gap: 80px; width: max-content; padding: 6px 0">
-<img src="https://purrieie.github.io/troocro/assets/logos/titan.png" alt="Titan" class="tp-logo" style="--h: 28px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/mia-by-tanishq.png" alt="Mia by Tanishq" class="tp-logo" style="--h: 30px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/durex.png" alt="Durex" class="tp-logo" style="--h: 22px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/bombay-shaving-company.png" alt="Bombay Shaving Company" class="tp-logo" style="--h: 30px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="Wellbeing Nutrition" class="tp-logo" style="--h: 34px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/essor.png" alt="ESSOR Group" class="tp-logo" style="--h: 18px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/damensch.png" alt="Damensch" class="tp-logo" style="--h: 19px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/homelane.png" alt="HomeLane" class="tp-logo" style="--h: 20px" loading="lazy" decoding="async">
-<img src="https://purrieie.github.io/troocro/assets/logos/titan.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 28px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/mia-by-tanishq.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 30px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/durex.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 22px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/bombay-shaving-company.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 30px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/wellbeing-nutrition.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 34px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/essor.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 18px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/damensch.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 19px" loading="lazy" decoding="async"><img src="https://purrieie.github.io/troocro/assets/logos/homelane.png" alt="" aria-hidden="true" class="tp-logo" style="--h: 20px" loading="lazy" decoding="async">
-</div>
+<div class="tmq" aria-label="Brands we work with">
+<div class="tmq-row"><div class="tmq-track" id="mq1"><div class="tmq-i"><img src="../../assets/logos/deck/colgate.png" alt="Colgate" data-k="colgate" style="height:27.7px;width:130.0px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/durex.png" alt="Durex" data-k="durex" style="height:39.5px;width:91.1px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/titan.png" alt="Titan" data-k="titan" style="height:48.0px;width:74.9px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/mia.png" alt="Mia by Tanishq" data-k="mia" style="height:58.0px;width:60.0px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/bsc.png" alt="Bombay Shaving Company" data-k="bsc" style="height:50.6px;width:71.2px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/homelane.png" alt="HomeLane" data-k="homelane" style="height:23.4px;width:153.9px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/wellbeing.png" alt="Wellbeing Nutrition" data-k="wellbeing" style="height:57.1px;width:63.0px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/bombae.png" alt="Bombae" data-k="bombae" style="height:28.8px;width:125.1px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/vestwell.png" alt="Vestwell" data-k="vestwell" style="height:29.5px;width:121.9px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/fableroom.png" alt="FableRoom" data-k="fableroom" style="height:15.8px;width:200.0px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/essor.png" alt="Essor" data-k="essor" style="height:28.9px;width:124.6px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/uharvest.png" alt="uHarvest" data-k="uharvest" style="height:41.8px;width:86.1px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/colgate.png" alt="" data-k="colgate" style="height:27.7px;width:130.0px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/durex.png" alt="" data-k="durex" style="height:39.5px;width:91.1px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/titan.png" alt="" data-k="titan" style="height:48.0px;width:74.9px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/mia.png" alt="" data-k="mia" style="height:58.0px;width:60.0px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/bsc.png" alt="" data-k="bsc" style="height:50.6px;width:71.2px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/homelane.png" alt="" data-k="homelane" style="height:23.4px;width:153.9px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/wellbeing.png" alt="" data-k="wellbeing" style="height:57.1px;width:63.0px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/bombae.png" alt="" data-k="bombae" style="height:28.8px;width:125.1px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/vestwell.png" alt="" data-k="vestwell" style="height:29.5px;width:121.9px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/fableroom.png" alt="" data-k="fableroom" style="height:15.8px;width:200.0px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/essor.png" alt="" data-k="essor" style="height:28.9px;width:124.6px" decoding="async"></div><div class="tmq-i"><img src="../../assets/logos/deck/uharvest.png" alt="" data-k="uharvest" style="height:41.8px;width:86.1px" decoding="async"></div></div></div>
 </div>
 <a href="#proof" aria-label="Scroll to see the page-by-page numbers" class="tp-cue" style="margin-top: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: rgba(14,14,18,0.6); color: #CFCCD9; font-size: 13px; text-decoration: none">See the page-by-page numbers<svg class="tp-bounce" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A68EFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
 </div>
@@ -608,6 +635,29 @@ class Component extends DCLogic {
     e.preventDefault(); go(e.target);
   }, true);
   document.addEventListener("submit", function (e) { e.preventDefault(); go(e.target.querySelector("input")); }, true);
+})();
+</script>
+<script>
+/* brand strip (logos from the Troopod deck): each time it comes into view it restarts with Colgate just inside the left edge */
+(function () {
+  function init() {
+    var box = document.querySelector(".tmq");
+    if (!box || !("IntersectionObserver" in window)) return;
+    var st = document.createElement("style"); document.head.appendChild(st); var flip = false;
+    function restart() {
+      var r1 = document.getElementById("mq1"); if (!r1) return;
+      var items = [].slice.call(r1.children), half = items.slice(0, items.length / 2);
+      var total = half.reduce(function (a, i) { return a + i.getBoundingClientRect().width; }, 0); if (!total) return;
+      var dur = parseFloat(getComputedStyle(r1).animationDuration) || 68;
+      var lead = items[0].querySelector("img").getBoundingClientRect().left - items[0].getBoundingClientRect().left;
+      var rowW = r1.parentElement.getBoundingClientRect().width;
+      var f = 1 - (0.1 * rowW + 4 - lead) / total; f = f - Math.floor(f);
+      flip = !flip;
+      st.textContent = "#mq1{animation-name:" + (flip ? "mqB" : "mq") + "!important;animation-delay:" + (-f * dur) + "s!important}";
+    }
+    new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) restart(); }); }, { threshold: 0.5 }).observe(box);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { setTimeout(init, 0); }); else setTimeout(init, 0);
 })();
 </script>
 </body>
