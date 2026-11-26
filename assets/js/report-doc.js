@@ -86,19 +86,6 @@
       }).join("") + "</table>");
     }
 
-    // fix plan
-    if (d.fixes && d.fixes.length) {
-      rows += '<tr><td style="' + pb + 'padding:0"></td></tr>' + rule(base) + h2("Your fix plan", "Fix these", "first");
-      rows += card(d.fixes.map(function (x, i) {
-        var tc = x.tag === "Performance" ? C.lilac : x.tag === "Search" ? "#9FE3C1" : "#7FD1C7";
-        return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"' + (i ? ' style="border-top:1px solid ' + C.line + '"' : "") + '><tr><td valign="top" width="40" style="padding:14px 0;font-family:' + M + ';font-size:15px;color:#A68EFA">' + (i < 9 ? "0" : "") + (i + 1) + '</td><td valign="top" style="padding:14px 0">' +
-          '<div>' + pill(x.tag, tc) + " " + (x.effort ? pill(x.effort, C.muted) : "") + "</div>" +
-          '<div style="margin-top:8px;font-family:' + F + ';font-size:15.5px;line-height:21px;color:' + C.text + '">' + esc(x.title) + "</div>" +
-          '<div style="margin-top:4px;font-family:' + F + ';font-size:13px;line-height:19px;color:' + C.muted + '">' + esc(x.why) + "</div>" +
-          '<div style="margin-top:6px;font-family:' + M + ';font-size:11px;color:' + C.dim + '">Impact <span style="color:' + C.text2 + '">' + esc(x.imp || "minor") + '</span> · Who fixes it <span style="color:' + C.text2 + '">' + esc(x.who || "Developer") + "</span></div></td></tr></table>";
-      }).join(""), "4px 22px");
-    }
-
     // search + AI
     if (d.search && d.search.length) {
       var sFail = d.search.filter(function (c) { return c.status !== "pass"; }), sPass = d.search.length - sFail.length;
@@ -110,6 +97,19 @@
       rows += rule(base) + h2("AI answers · score " + (sc.ai == null ? "–" : sc.ai) + "/100", "See if ChatGPT", "recommends you");
       rows += card('<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + checkRows(aFail) + "</table>" + '<div style="margin-top:10px;font-family:' + M + ';font-size:11.5px;color:' + C.good + '">✓ ' + aPass + " checks passed</div>" +
         (d.bots && d.bots.length ? '<div style="margin-top:12px;font-family:' + F + ';font-size:13px;color:' + C.text2 + '">AI crawlers your robots.txt blocks: <span style="color:' + C.bad + '">' + esc(d.bots.join(", ")) + "</span></div>" : ""));
+    }
+
+    // fix plan
+    if (d.fixes && d.fixes.length) {
+      rows += '<tr><td style="' + pb + 'padding:0"></td></tr>' + rule(base) + h2("Your fix plan", "Fix these", "first");
+      rows += card(d.fixes.map(function (x, i) {
+        var tc = x.tag === "Performance" ? C.lilac : x.tag === "Search" ? "#9FE3C1" : "#7FD1C7";
+        return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"' + (i ? ' style="border-top:1px solid ' + C.line + '"' : "") + '><tr><td valign="top" width="40" style="padding:14px 0;font-family:' + M + ';font-size:15px;color:#A68EFA">' + (i < 9 ? "0" : "") + (i + 1) + '</td><td valign="top" style="padding:14px 0">' +
+          '<div>' + pill(x.tag, tc) + " " + (x.effort ? pill(x.effort, C.muted) : "") + "</div>" +
+          '<div style="margin-top:8px;font-family:' + F + ';font-size:15.5px;line-height:21px;color:' + C.text + '">' + esc(x.title) + "</div>" +
+          '<div style="margin-top:4px;font-family:' + F + ';font-size:13px;line-height:19px;color:' + C.muted + '">' + esc(x.why) + "</div>" +
+          '<div style="margin-top:6px;font-family:' + M + ';font-size:11px;color:' + C.dim + '">Impact <span style="color:' + C.text2 + '">' + esc(x.imp || "minor") + '</span> · Who fixes it <span style="color:' + C.text2 + '">' + esc(x.who || "Developer") + "</span></div></td></tr></table>";
+      }).join(""), "4px 22px");
     }
 
     // competitors

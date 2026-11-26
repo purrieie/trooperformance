@@ -915,6 +915,17 @@
     });
   }
   if (CFG.calendly) doc.querySelectorAll("[data-calendly]").forEach(function (a) { a.href = CFG.calendly; });
+  // Header "Book a demo": while the unlock form is on the page, bring the visitor to it instead of Calendly.
+  // After they unlock (the form is gone) it opens Calendly as before.
+  var demoNav = $("[data-demo-nav]");
+  if (demoNav) demoNav.addEventListener("click", function (e) {
+    var form = $("[data-lead-form]"); if (!form) return;
+    e.preventDefault();
+    var nv = $("#nav"), navH = nv ? nv.getBoundingClientRect().height : 64;
+    win.scrollTo({ top: Math.max(0, form.getBoundingClientRect().top + win.scrollY - navH - 16), behavior: "smooth" });
+    form.classList.remove("is-flash"); void form.offsetWidth; form.classList.add("is-flash");
+    setTimeout(function () { var f = $("#ldName"); if (f && !f.value) f.focus({ preventScroll: true }); }, 650);
+  });
   // Every "Book a demo" (nav, fix plan, "Want these fixed?") opens Calendly in a new tab.
   doc.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest('a[href*="calendly.com"]'); if (!a) return;

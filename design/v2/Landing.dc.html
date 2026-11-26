@@ -176,6 +176,12 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
  .tp-sticky{position:absolute;left:16px;right:16px;top:12px;background:#1D1733!important}
  .tp-demo.hide{display:none!important}
 }
+/* "Book a demo": Troopod purple, a soft white shine sweeps across it every few seconds (same as the report page) */
+.tp-demo{position:relative;overflow:hidden;isolation:isolate;animation:tpDemoGlow 3.6s ease-in-out infinite}
+.tp-demo::after{content:"";position:absolute;top:-30%;bottom:-30%;left:-70%;width:55%;z-index:-1;pointer-events:none;background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,0) 15%,rgba(255,255,255,.42) 50%,rgba(255,255,255,0) 85%,transparent 100%);transform:skewX(-18deg);animation:tpDemoShine 3.6s ease-in-out infinite}
+@keyframes tpDemoShine{0%,50%{left:-70%}85%,100%{left:130%}}
+@keyframes tpDemoGlow{0%,45%,100%{box-shadow:0 0 0 0 rgba(139,107,247,0)}70%{box-shadow:0 0 24px 3px rgba(139,107,247,.6)}}
+@media (prefers-reduced-motion: reduce){.tp-demo,.tp-demo::after{animation:none}.tp-demo::after{display:none}}
 /* phone sticky bar, like the laptop one: logo, URL box with Check, Book a demo */
 @media (max-width:767px){
  .tp-sticky{position:static!important;flex:1 1 auto!important;padding:3px 3px 3px 12px!important}
@@ -312,7 +318,7 @@ html.io .tp-steps:not(.in) .tp-step::before{transform:scaleX(0)}
 <input id="stickyUrl" type="url" inputmode="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="yourstore.com" tabindex="{{stickyTab}}" style="flex: 1; min-width: 0; height: 36px; border: 0; outline: 0; background: transparent; font-size: 16px; color: #F4F3F8; font-family: inherit">
 <a href="Scan.dc.html" tabindex="{{stickyTab}}" class="tp-btn" style="height: 36px; padding: 0 14px; border-radius: 9px; background: #8B6BF7; color: #FFFFFF; font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap">Check<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </form>
-<a href="https://calendly.com/nj-troopod/troopod-demo" class="tp-demo {{demoCls}}" style="height: 42px; padding: 0 16px; border-radius: 10px; background: #F4F3F8; color: #0A0A0C; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; white-space: nowrap; flex: none">Book a demo</a>
+<a href="https://calendly.com/nj-troopod/troopod-demo" class="tp-demo {{demoCls}}" style="height: 42px; padding: 0 16px; border-radius: 10px; background: #8B6BF7; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; white-space: nowrap; flex: none">Book a demo</a>
 </div>
 </div>
 <div class="tp-prog" aria-hidden="true"></div>
@@ -738,6 +744,18 @@ class Component extends DCLogic {
     e.preventDefault(); go(e.target);
   }, true);
   document.addEventListener("submit", function (e) { e.preventDefault(); go(e.target.querySelector("input")); }, true);
+  // Header "Book a demo" brings the visitor to the URL box instead of Calendly: the sticky bar's box once it's showing,
+  // otherwise the hero box. The box glows and gets the cursor. (The bottom "Book a demo" still opens Calendly.)
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a.tp-demo"); if (!a) return;
+    e.preventDefault();
+    var sticky = document.querySelector(".tp-sticky.on"), input = sticky ? document.getElementById("stickyUrl") : document.getElementById("heroUrl");
+    if (!input) return;
+    var box = input.closest("form") || input;
+    if (!sticky) { var r = box.getBoundingClientRect(); window.scrollTo({ top: Math.max(0, r.top + window.scrollY - window.innerHeight / 2 + r.height / 2), behavior: "smooth" }); }
+    if (box.animate) box.animate([{ boxShadow: "0 0 0 0 rgba(166,142,250,.95)" }, { boxShadow: "0 0 0 6px rgba(166,142,250,.55)", offset: 0.35 }, { boxShadow: "0 0 0 0 rgba(166,142,250,0)" }], { duration: 1800, easing: "ease-out", delay: sticky ? 0 : 350 });
+    setTimeout(function () { input.focus({ preventScroll: true }); }, sticky ? 0 : 500);
+  }, true);
   // "Book a demo" (header and sticky bar): GTM sends book_demo to GA4; Meta gets Contact once the pixel is allowed.
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest('a[href*="calendly.com"]'); if (!a) return;

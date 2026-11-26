@@ -703,3 +703,15 @@ pre.agent { margin: 0; background: var(--bg); border: 1px solid rgba(255,255,255
 .cp-auto { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .cp-auto .btn { display: inline-flex; align-items: center; gap: 7px; }
 .cp-auto .btn[disabled] { opacity: .7; cursor: progress; }
+
+/* header "Book a demo": Troopod purple, a soft white shine sweeps across it every few seconds */
+.btn-shine { position: relative; overflow: hidden; isolation: isolate; animation: btnGlow 3.6s ease-in-out infinite; }
+.btn-shine::after { content: ""; position: absolute; top: -30%; bottom: -30%; left: -70%; width: 55%; z-index: -1; pointer-events: none;
+  background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0) 15%, rgba(255,255,255,.42) 50%, rgba(255,255,255,0) 85%, transparent 100%);
+  transform: skewX(-18deg); animation: btnShine 3.6s ease-in-out infinite; }
+@keyframes btnShine { 0%, 50% { left: -70%; } 85%, 100% { left: 130%; } }
+@keyframes btnGlow { 0%, 45%, 100% { box-shadow: 0 8px 24px -10px var(--purple-glow), inset 0 1px 0 rgba(255,255,255,.18); } 70% { box-shadow: 0 0 24px 3px rgba(139,107,247,.6), inset 0 1px 0 rgba(255,255,255,.18); } }
+@media (prefers-reduced-motion: reduce) { .btn-shine, .btn-shine::after { animation: none; } .btn-shine::after { display: none; } }
+/* the unlock form lights up when "Book a demo" brings you to it */
+.lk-form.is-flash { animation: lkFlash 1.8s ease-out; }
+@keyframes lkFlash { 0% { box-shadow: 0 0 0 0 rgba(166,142,250,.9), 0 40px 120px -40px rgba(139,107,247,.8); } 35% { box-shadow: 0 0 0 6px rgba(166,142,250,.55), 0 40px 120px -40px rgba(139,107,247,.8); } 100% { box-shadow: 0 0 0 0 rgba(166,142,250,0), 0 40px 120px -40px rgba(139,107,247,.8); } }

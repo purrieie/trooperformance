@@ -292,20 +292,23 @@
   }
 
   /* ---------- API ---------- */
+  // Jaanya, 26 Nov: the scan window shows only the stand-in page (no copy of the real site, no Google screenshot).
+  // Set to false to bring the real-page view back.
+  var SKELETON_ONLY = true;
   function start(url) {
     try { var u = new URL(url); host = u.hostname.replace(/^www\./, "") + (u.pathname.length > 1 ? u.pathname.replace(/\/$/, "") : ""); } catch (e) { host = url; }
     $("#lvUrl").textContent = "Opening " + host + "…";
     buildRoster();
     agent("reader", "run", "Opening your page");
     caption("reader", "Opening " + host);
-    load(url).then(function (html) { return html ? mount(clean(html)) : false; }).then(function (ok) {
-      $("#lvUrl").textContent = host + (ok ? "" : " · preview");
+    (SKELETON_ONLY ? Promise.resolve(false) : load(url).then(function (html) { return html ? mount(clean(html)) : false; })).then(function (ok) {
+      $("#lvUrl").textContent = host + (ok || SKELETON_ONLY ? "" : " · preview");
       if (ok) { $("#lv").classList.add("loaded"); agent("reader", null, "Loaded your live page"); }
-      else agent("reader", null, "Reading the page Google loads");
+      else agent("reader", null, SKELETON_ONLY ? "Reading your page" : "Reading the page Google loads");
       /* the reader walks the page once, top to bottom, then hands over */
       var tour = ["nav", "title", "img", "price", "content", "footer"].filter(function (r) { return rect(r); }).slice(0, ok ? 6 : 3);
       tour.forEach(function (r) { results.push({ agent: "reader", region: r, label: (RNAME[r] || r) + " mapped", kind: null, tour: true }); });
-      setTimeout(function () { results = results.filter(function (j) { return !j.tour; }); agent("reader", "done", ok ? "Mapped your page" : "Mapped from Google's view"); }, ok ? 16000 : 7000);
+      setTimeout(function () { results = results.filter(function (j) { return !j.tour; }); agent("reader", "done", ok || SKELETON_ONLY ? "Mapped your page" : "Mapped from Google's view"); }, ok ? 16000 : 7000);
       kick();
     });
     win.addEventListener("resize", function () {
@@ -318,7 +321,7 @@
   }
   function result(agentId, region, kind, label) { if (!finished) { results.push({ agent: agentId, region: region, kind: kind, label: label }); kick(); } }
   function shot(src) {
-    if (RV || !src) return;
+    if (SKELETON_ONLY || RV || !src) return;
     var im = $("#shot"); if (!im) return;
     im.src = src; im.classList.add("on"); $("#lv").classList.add("has-shot");
   }
